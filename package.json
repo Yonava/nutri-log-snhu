@@ -12,8 +12,12 @@
     "ionic:serve": "npm run serve"
   },
   "dependencies": {
+    "@capacitor/android": "^4.6.1",
     "@capacitor/app": "4.1.1",
+    "@capacitor/cli": "^4.6.1",
+    "@capacitor/core": "^4.6.1",
     "@capacitor/haptics": "4.1.0",
+    "@capacitor/ios": "^4.6.1",
     "@capacitor/keyboard": "4.1.0",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/vue": "^6.0.0",
