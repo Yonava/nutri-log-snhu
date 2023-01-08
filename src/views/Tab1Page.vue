@@ -1,11 +1,21 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :force-overscroll="false" :fullscreen="true">
       <ion-header>
         <ion-toolbar>
-          <h1 class="logo">NutriLog SNHU</h1>
-          <ion-icon :icon="person" />
-          <ion-icon :icon="notifications" />
+          <div class="toolbar-container">
+            <h1 class="logo">NutriLog SNHU</h1>
+            <div>
+              <ion-icon 
+                class="icon"
+                :icon="notifications" 
+              />
+              <ion-icon 
+                class="icon"
+                :icon="person" 
+              />
+            </div>
+          </div>
         </ion-toolbar>
       </ion-header>
       <div class="center">
@@ -54,16 +64,27 @@ export default  defineComponent({
   display: inline-block;
 }
 
-ion-toolbar {
+.toolbar-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  align-content: center;
+  text-align: center;
+  flex-direction: row;
+  margin: 0 10px;
+}
+
+.icon {
+  font-size: 30px;
+  margin: 0 15px;
+}
+
+.page {
+  overflow: hidden;
 }
 
 .logo {
-  margin-left: 10px;
   font-size: 30px;
-  font-weight: 900;
-  color: #000;
+  font-weight: 800;
 }
 </style>
