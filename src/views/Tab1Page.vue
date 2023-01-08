@@ -1,38 +1,35 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>NutriLog</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
+      <ion-header>
         <ion-toolbar>
-          <ion-title size="large">Hi, Yona</ion-title>
+          <h1 class="logo">NutriLog SNHU</h1>
+          <ion-icon :icon="person" />
+          <ion-icon :icon="notifications" />
         </ion-toolbar>
       </ion-header>
-      <div class="center" style="height: 70%; width: 100%; background: green">
-      <!-- <div class="progress-circle center" style="flex-direction: column">
-        <h1 style="font-size: 30pt">4,503</h1>
-        <p style="margin: 0">Calories</p>
-      </div> -->
-    </div>
+      <div class="center">
+        <div class="circle"></div>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonContent, IonHeader, IonToolbar, IonIcon } from '@ionic/vue';
+import { person, notifications } from 'ionicons/icons';
 import { toastController } from '@ionic/vue';
 import { ref } from 'vue';
 
 export default  defineComponent({
   name: 'Tab1Page',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+  components: { IonContent, IonPage, IonHeader, IonToolbar, IonIcon },
   setup() {
     const toastText = ref('I am a piece of toast');
     return {
+      person,
+      notifications,
       toastText,
       async presentToast() {
         const toast = await toastController.create({
@@ -48,13 +45,25 @@ export default  defineComponent({
 </script>
 
 <style scoped>
-.progress-circle {
-  width: 250px;
-  height: 250px;
+.circle {
+  height: 300px;
+  width: 300px;
+  border: 35px solid #4CAF50;
+  background-color: transparent;
   border-radius: 50%;
-  border: 20px solid var(--ion-color-primary);
-  background-color: var(--ion-color-secondary);
-  position: relative;
-  margin: 0 auto;
+  display: inline-block;
+}
+
+ion-toolbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.logo {
+  margin-left: 10px;
+  font-size: 30px;
+  font-weight: 900;
+  color: #000;
 }
 </style>
