@@ -10,9 +10,6 @@
         <ion-toolbar>
           <ion-title size="large">Scan</ion-title>
         </ion-toolbar>
-        <ion-button color="t">
-          Press
-        </ion-button>
       </ion-header>
     </ion-content>
   </ion-page>
@@ -20,9 +17,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
+import { 
+  IonPage, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonContent
+} from '@ionic/vue';
 
 export default defineComponent({
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton }
+  components: { 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonContent, 
+    IonPage, 
+  }
 });
 </script>

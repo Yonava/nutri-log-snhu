@@ -13,22 +13,27 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: '/tabs/home'
+        redirect: 'home'
       },
       {
-        path: 'home',
+        path: '/tabs/home',
         component: () => import('@/views/HomeTab.vue')
       },
       {
-        path: 'log',
-        component: () => import('@/views/LogTab.vue')
+        path: '/tabs/log',
+        component: () => import('@/views/LogTab.vue'),
       },
       {
-        path: 'scan',
+        path: '/log/edit/:id',
+        component: () => import('@/components/Log/LogItemEdit.vue'),
+        props: true
+      },
+      {
+        path: '/tabs/scan',
         component: () => import('@/views/ScanTab.vue')
       }
     ]
-  }
+  },
 ]
 
 const router = createRouter({

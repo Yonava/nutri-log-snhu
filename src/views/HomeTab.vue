@@ -28,11 +28,32 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonPage, IonContent, IonHeader, IonToolbar, IonIcon } from '@ionic/vue';
-import { person, notifications } from 'ionicons/icons';
+import { 
+  IonPage, 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonIcon,
+  IonButtons,
+  IonButton,
+  IonTitle
+} from '@ionic/vue';
+import { 
+  person, 
+  notifications 
+} from 'ionicons/icons';
 
 export default  defineComponent({
-  components: { IonContent, IonPage, IonHeader, IonToolbar, IonIcon },
+  components: { 
+    IonContent, 
+    IonPage, 
+    IonHeader, 
+    IonToolbar, 
+    IonIcon,
+    IonButtons,
+    IonButton,
+    IonTitle
+  },
   setup() {
     return {
       person,
