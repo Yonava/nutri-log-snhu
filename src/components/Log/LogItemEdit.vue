@@ -18,6 +18,7 @@ import {
   IonBackButton,
   IonButtons,
   IonToolbar,
+  IonContent,
   IonTitle,
   IonHeader
 } from '@ionic/vue';
@@ -29,6 +30,7 @@ export default {
     IonPage,
     IonBackButton,
     IonButtons,
+    IonContent,
     IonToolbar,
     IonTitle,
     IonHeader
