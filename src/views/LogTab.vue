@@ -26,7 +26,7 @@
         <ion-item
           v-for="i in 40" 
           :key="i"
-          :router-link="{ path: '/log/edit/' + i }"
+          :router-link="{ path: `/tabs/log/edit/${i}` }"
         >
           item {{ i }}
         </ion-item>

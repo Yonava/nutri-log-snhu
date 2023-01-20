@@ -16,20 +16,20 @@ const routes: Array<RouteRecordRaw> = [
         redirect: 'home'
       },
       {
-        path: '/tabs/home',
+        path: 'home',
         component: () => import('@/views/HomeTab.vue')
       },
       {
-        path: '/tabs/log',
+        path: 'log',
         component: () => import('@/views/LogTab.vue'),
       },
       {
-        path: '/log/edit/:id',
+        path: 'log/edit/:id',
         component: () => import('@/components/Log/LogItemEdit.vue'),
         props: true
       },
       {
-        path: '/tabs/scan',
+        path: 'scan',
         component: () => import('@/views/ScanTab.vue')
       }
     ]
