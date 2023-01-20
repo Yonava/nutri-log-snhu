@@ -8,7 +8,7 @@
         <ion-title>Edit Log Entry</ion-title>
       </ion-toolbar>
     </ion-header>
-    this is the detail view for item {{ id }}
+    <ion-content>this is the detail view for item {{ id }}</ion-content>
   </ion-page>
 </template>
 
