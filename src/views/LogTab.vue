@@ -23,23 +23,34 @@
           <ion-title size="large">Log Entries</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-item
-        v-for="i in foodItems" 
-        :key="i"
-        :router-link="{ path: `/tabs/log/edit/${i.name}` }"
-        button
-      >
-        <div class="item-parent">
-          <p style="margin: 0; font-size: 9pt">
-            {{ new Date().toLocaleTimeString([], { timeStyle: 'short' }) }} |
-            {{ i.calories }} cals |
-            {{ Math.floor(Math.random() * 50) }}g carbs |
-            {{ Math.floor(Math.random() * 50) }}g protein |
-            {{ Math.floor(Math.random() * 50) }}g fat
-          </p>
-          <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
+        <div
+          v-for="i in items" 
+          :key="i.name"
+          class="parent-container"
+        >
+          <ion-item
+            v-if="i.name"
+            :router-link="{ path: `/tabs/log/edit/${i.name}` }"
+            button
+          >
+            <div class="item-parent">
+              <p style="margin: 0; font-size: 9pt">
+                {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
+                {{ i.calories }} cals |
+                {{ Math.floor(Math.random() * 50) }}g carbs |
+                {{ Math.floor(Math.random() * 50) }}g protein |
+                {{ Math.floor(Math.random() * 50) }}g fat
+              </p>
+              <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
+            </div>
+          </ion-item>
+          <div 
+            class="date-item-parent"
+            v-else
+          >
+            <h5 style="margin: 0">{{ i.day }} {{ Math.floor(Math.random() * 30) + 1 }}, 2023</h5>
+          </div>
         </div>
-      </ion-item>
     </ion-content>
   </ion-page>
 </template>
@@ -76,12 +87,14 @@ export default defineComponent({
     IonIcon
   },
   setup() {
-    const foodItems = ref([
+    const timeStamp = new Date();
+    const items = ref([
       { name: 'apple', calories: 100 },
       { name: 'banana', calories: 200 },
       { name: 'orange', calories: 300 },
       { name: 'grape', calories: 400 },
       { name: 'pear', calories: 500 },
+      { day: 'wed' },
       { name: 'pineapple', calories: 600 },
       { name: 'mango', calories: 700 },
       { name: 'watermelon', calories: 800 },
@@ -91,6 +104,7 @@ export default defineComponent({
       { name: 'blackberry', calories: 1200 },
       { name: 'kiwi', calories: 1300 },
       { name: 'lemon', calories: 1400 },
+      { day: 'tues' },
       { name: 'lime', calories: 1500 },
       { name: 'cherry', calories: 1600 },
       { name: 'peach', calories: 1700 },
@@ -106,6 +120,7 @@ export default defineComponent({
       { name: 'broccoli', calories: 2700 },
       { name: 'cauliflower', calories: 2800 },
       { name: 'celery', calories: 2900 },
+      { day: 'thurs' },
       { name: 'spinach', calories: 3000 },
       { name: 'lettuce', calories: 3100 },
       { name: 'cucumber', calories: 3200 },
@@ -135,6 +150,7 @@ export default defineComponent({
       { name: 'jackfruit', calories: 5600 },
       { name: 'pomelo', calories: 5700 },
       { name: 'starfruit', calories: 5800 },
+      { day: 'fri' },
       { name: 'tangerine', calories: 5900 },
       { name: 'persimmon', calories: 6000 },
       { name: 'guava', calories: 6100 },
@@ -144,17 +160,33 @@ export default defineComponent({
       arrowForward,
       add,
       remove,
-      foodItems
+      items,
+      timeStamp
     }
   }
 });
 </script>
 
 <style scoped>
+.parent-container {
+  position: relative;
+}
+
 .item-parent {
   display: flex;
   align-items: left;
   flex-direction: column;
   padding: 5px 0px;
+}
+
+.date-item-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--ion-color-step-100);
+  padding: 7px 0px;
+  position: sticky;
+  top: 0;
 }
 </style>
