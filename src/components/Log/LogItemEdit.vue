@@ -1,15 +1,15 @@
 <template>
   <ion-page>
     <ion-content>
-      <ion-header>
+    <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-back-button default-href="/tabs/log"></ion-back-button>
           </ion-buttons>
           <ion-title>{{ id }}</ion-title>
         </ion-toolbar>
-          this is the detail view for {{ id }}
       </ion-header>
+      this is the detail view for {{ id }}
     </ion-content>
   </ion-page>
 </template>
@@ -20,9 +20,9 @@ import {
   IonBackButton,
   IonButtons,
   IonToolbar,
+  IonContent,
   IonTitle,
-  IonHeader,
-  IonContent
+  IonHeader
 } from '@ionic/vue';
 
 import { useRoute } from 'vue-router';
@@ -32,10 +32,10 @@ export default {
     IonPage,
     IonBackButton,
     IonButtons,
+    IonContent,
     IonToolbar,
     IonTitle,
-    IonHeader,
-    IonContent
+    IonHeader
   },
   setup() {
     const route = useRoute();
