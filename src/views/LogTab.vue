@@ -29,7 +29,16 @@
         :router-link="{ path: `/tabs/log/edit/${i.name}` }"
         button
       >
-        <h3 style="text-transform: capitalize">{{ i.name }}</h3>
+        <div class="item-parent">
+          <p style="margin: 0; font-size: 9pt">
+            {{ new Date().toLocaleTimeString([], { timeStyle: 'short' }) }} |
+            {{ i.calories }} cals |
+            {{ Math.floor(Math.random() * 50) }}g carbs |
+            {{ Math.floor(Math.random() * 50) }}g protein |
+            {{ Math.floor(Math.random() * 50) }}g fat
+          </p>
+          <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
+        </div>
       </ion-item>
     </ion-content>
   </ion-page>
@@ -140,3 +149,12 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.item-parent {
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  padding: 5px 0px;
+}
+</style>
