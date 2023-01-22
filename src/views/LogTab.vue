@@ -23,34 +23,37 @@
           <ion-title size="large">Log Entries</ion-title>
         </ion-toolbar>
       </ion-header>
-        <div
-          v-for="i in items" 
-          :key="i.name"
-          class="parent-container"
+      <div
+        v-for="(i) in items" 
+        :key="i.name"
+        :style="i.day ? { position: 'sticky', top: 0, zIndex: 2 } : {}"
+        class="parent-container"
+      >
+        <ion-item
+          v-if="i.name"
+          :router-link="{ path: `/tabs/log/edit/${i.name}` }"
+          button
         >
-          <ion-item
-            v-if="i.name"
-            :router-link="{ path: `/tabs/log/edit/${i.name}` }"
-            button
-          >
-            <div class="item-parent">
-              <p style="margin: 0; font-size: 9pt">
-                {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
-                {{ i.calories }} cals |
-                {{ Math.floor(Math.random() * 50) }}g carbs |
-                {{ Math.floor(Math.random() * 50) }}g protein |
-                {{ Math.floor(Math.random() * 50) }}g fat
-              </p>
-              <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
-            </div>
-          </ion-item>
-          <div 
-            class="date-item-parent"
-            v-else
-          >
-            <h5 style="margin: 0">{{ i.day }} {{ Math.floor(Math.random() * 30) + 1 }}, 2023</h5>
+          <div class="item-parent">
+            <p style="margin: 0; font-size: 9pt">
+              {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
+              {{ i.calories }} cals |
+              {{ Math.floor(Math.random() * 50) }}g carbs |
+              {{ Math.floor(Math.random() * 50) }}g protein |
+              {{ Math.floor(Math.random() * 50) }}g fat
+            </p>
+            <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
           </div>
+        </ion-item>
+        <div 
+          class="date-item-parent"
+          v-else
+        >
+          <h5 style="margin: 0">
+            {{ i.day }} {{ Math.floor(Math.random() * 30) + 1 }}, 2023
+          </h5>
         </div>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -120,7 +123,7 @@ export default defineComponent({
       { name: 'broccoli', calories: 2700 },
       { name: 'cauliflower', calories: 2800 },
       { name: 'celery', calories: 2900 },
-      { day: 'thurs' },
+      { day: 'thur' },
       { name: 'spinach', calories: 3000 },
       { name: 'lettuce', calories: 3100 },
       { name: 'cucumber', calories: 3200 },
@@ -184,9 +187,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: var(--ion-color-step-100);
+  background: linear-gradient(var(--ion-color-primary), var(--ion-color-tertiary-shade));
   padding: 7px 0px;
-  position: sticky;
-  top: 0;
 }
 </style>
