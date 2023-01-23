@@ -7,7 +7,7 @@
         >
           <ion-button 
             v-if="!removeItemsState"
-            @click="items.unshift({ name: 'new item', calories: 0 })"
+            @click="addPopOver"
           >
             add
             <ion-icon 
@@ -104,6 +104,7 @@
 </template>
 
 <script lang="ts">
+import AddPopOver from '@/components/Log/AddPopOver.vue';
 import { 
   defineComponent, 
   ref 
@@ -118,6 +119,7 @@ import {
   IonButtons,
   IonItem,
   IonIcon,
+  popoverController
 } from '@ionic/vue';
 import { 
   arrowForward,
@@ -189,6 +191,16 @@ export default defineComponent({
         }
       })
     }
+
+    async function addPopOver(e: Event) {
+      const popover = await popoverController.create({
+        component: AddPopOver,
+        event: e,
+        translucent: true,
+        dismissOnSelect: true
+      });
+      return await popover.present();
+    }
     
     const items = ref([
       { name: 'apple', calories: 100 },
@@ -230,7 +242,8 @@ export default defineComponent({
       checkmarkOutline,
       undoStack,
       undo,
-      itemClicked
+      itemClicked,
+      addPopOver
     }
   }
 });
@@ -269,6 +282,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  color: white;
   background: linear-gradient(var(--ion-color-primary), var(--ion-color-tertiary-shade));
   padding: 7px 0px;
 }
