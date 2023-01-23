@@ -3,22 +3,50 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons 
-          @click="items.unshift({ name: 'new item', calories: 0 })"
           slot="end"
         >
-          <ion-button>
+          <ion-button 
+            v-if="!removeItemsState"
+            @click="items.unshift({ name: 'new item', calories: 0 })"
+          >
             add
-            <ion-icon slot="end" :icon="add"></ion-icon>
+            <ion-icon 
+              :icon="add"
+              slot="end" 
+            ></ion-icon>
+          </ion-button>
+          <ion-button 
+            v-else
+            @click="undo"
+            :disabled="undoStack.length === 0"
+          >
+            undo
+            <ion-icon 
+              slot="end" 
+              :icon="arrowUndoOutline"
+            ></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title>Log</ion-title>
+        <ion-title>
+          Log
+        </ion-title>
         <ion-buttons 
           @click="removeItemsState = !removeItemsState"
           slot="start"
         >
-          <ion-button>
+          <ion-button v-if="!removeItemsState">
             remove
-            <ion-icon slot="start" :icon="remove"></ion-icon>
+            <ion-icon 
+              slot="start" 
+              :icon="remove"
+            ></ion-icon>
+          </ion-button>
+          <ion-button v-else>
+            done
+            <ion-icon 
+              slot="start" 
+              :icon="checkmarkOutline"
+            ></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -95,7 +123,9 @@ import {
   arrowForward,
   add,
   remove,
-  removeCircleOutline
+  removeCircleOutline,
+  arrowUndoOutline,
+  checkmarkOutline
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -117,11 +147,30 @@ export default defineComponent({
       calories: number;
     }
 
+    interface UndoItems {
+      name: string;
+      calories: number;
+      index: number;
+    }
+
     const removeItemsState = ref(false);
     const timeStamp = new Date();
 
     function removeItem(item: Item) {
-      items.value.splice(items.value.indexOf(item), 1);
+      const index = items.value.indexOf(item);
+      undoStack.value.push({ name: item.name, calories: item.calories, index });
+      items.value.splice(index, 1);
+    }
+
+    const undoStack = ref<UndoItems[]>([]);
+
+    function undo() {
+      const poppedItem = undoStack.value.pop();
+      if (!poppedItem) return;
+      items.value.splice(poppedItem.index, 0, { 
+        name: poppedItem.name, 
+        calories: poppedItem.calories 
+      });
     }
     
     const items = ref([
@@ -149,19 +198,7 @@ export default defineComponent({
       { name: 'apricot', calories: 2100 },
       { name: 'papaya', calories: 2200 },
       { name: 'nectarine', calories: 2300 },
-      { name: 'persimmon', calories: 2400 },
-      { name: 'pomegranate', calories: 2500 },
-      { name: 'tangerine', calories: 2600 },
-      { name: 'cantaloupe', calories: 2700 },
-      { name: 'honeydew', calories: 2800 },
-      { name: 'guava', calories: 2900 },
-      { name: 'fig', calories: 3000 },
-      { name: 'date', calories: 3100 },
-      { name: 'durian', calories: 3200 },
-      { name: 'jackfruit', calories: 3300 },
-      { name: 'lychee', calories: 3400 },
-      { name: 'mangosteen', calories: 3500 },
-      { name: 'olive', calories: 3600 }
+      { name: 'persimmon', calories: 2400 }
     ]);
     return {
       arrowForward,
@@ -171,27 +208,29 @@ export default defineComponent({
       items,
       timeStamp,
       removeItemsState,
-      removeItem
+      removeItem,
+      arrowUndoOutline,
+      checkmarkOutline,
+      undoStack,
+      undo
     }
   }
 });
 </script>
 
 <style scoped>
-
 .fade-move,
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s;
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: scale(0.01) translateX(-200px);
+  transform: scaleY(0.01) translate(30px, 0);
 }
 
-.fade-enter-to,
 .fade-leave-active {
   position: absolute;
 }
