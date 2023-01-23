@@ -2,7 +2,10 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="end">
+        <ion-buttons 
+          @click="items.unshift({ name: 'new item', calories: 0 })"
+          slot="end"
+        >
           <ion-button>
             add
             <ion-icon slot="end" :icon="add"></ion-icon>
@@ -26,50 +29,57 @@
           <ion-title size="large">Log Entries</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div
-        v-for="(i) in items" 
-        :key="i.name"
-        :style="i.month ? { position: 'sticky', top: 0, zIndex: 2 } : {}"
-        class="parent-container"
-      >
-        <ion-item
-          v-if="i.name"
-          :router-link="{ path: `/tabs/log/edit/${i.name}` }"
-          :class="removeItemsState ? '' : 'push-item'"
-          style="transition: all 0.2s ease-in-out; width: 113%"
-          button
+      <TransitionGroup name="fade">
+        <div
+          v-for="i in items"
+          :key="i"
+          :style="i.month ? { position: 'sticky', top: 0, zIndex: 2 } : {}"
         >
-          <ion-icon
-            :icon="remove"
-            slot="start"
-            style="color: red"
-          ></ion-icon>
-          <div class="item-parent">
-            <p style="margin: 0; font-size: 8pt">
-              {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
-              {{ i.calories }} cals |
-              43g carbs |
-              43g protein |
-              43g fat
-            </p>
-            <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
+          <ion-item
+            v-if="i.name"
+            :router-link="{ path: `/tabs/log/edit/${i.name}` }"
+            :class="removeItemsState ? '' : 'push-item'"
+            style="transition: all 0.2s ease-in-out; width: 113%"
+            button
+          >
+            <ion-icon
+              :icon="removeCircleOutline"
+              @click.stop="removeItem(i)"
+              slot="start"
+              style="color: red"
+            ></ion-icon>
+            <div class="item-parent">
+              <p style="margin: 0; font-size: 8pt">
+                {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
+                {{ i.calories }} cals |
+                43g carbs |
+                43g protein |
+                43g fat
+              </p>
+              <h2 style="text-transform: capitalize; margin: 0">
+                {{ i.name }}
+              </h2>
+            </div>
+          </ion-item>
+          <div 
+            class="date-item-parent"
+            v-else
+          >
+            <h5 style="margin: 0">
+              {{ i.month }} 3, 2023
+            </h5>
           </div>
-        </ion-item>
-        <div 
-          class="date-item-parent"
-          v-else
-        >
-          <h5 style="margin: 0">
-            {{ i.month }} 3, 2023
-          </h5>
         </div>
-      </div>
+      </TransitionGroup>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { 
+  defineComponent, 
+  ref 
+} from 'vue';
 import { 
   IonPage, 
   IonHeader, 
@@ -84,7 +94,8 @@ import {
 import { 
   arrowForward,
   add,
-  remove
+  remove,
+  removeCircleOutline
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -100,8 +111,19 @@ export default defineComponent({
     IonIcon
   },
   setup() {
+
+    interface Item {
+      name: string;
+      calories: number;
+    }
+
     const removeItemsState = ref(false);
     const timeStamp = new Date();
+
+    function removeItem(item: Item) {
+      items.value.splice(items.value.indexOf(item), 1);
+    }
+    
     const items = ref([
       { name: 'apple', calories: 100 },
       { name: 'banana', calories: 200 },
@@ -145,17 +167,33 @@ export default defineComponent({
       arrowForward,
       add,
       remove,
+      removeCircleOutline,
       items,
       timeStamp,
-      removeItemsState
+      removeItemsState,
+      removeItem
     }
   }
 });
 </script>
 
 <style scoped>
-.parent-container {
-  position: relative;
+
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0.01) translateX(-200px);
+}
+
+.fade-enter-to,
+.fade-leave-active {
+  position: absolute;
 }
 
 .item-parent {
