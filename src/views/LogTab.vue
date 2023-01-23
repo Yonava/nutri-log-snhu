@@ -65,7 +65,7 @@
         >
           <ion-item
             v-if="i.name"
-            :router-link="{ path: `/tabs/log/edit/${i.name}` }"
+            @click="itemClicked(i)"
             :class="removeItemsState ? '' : 'push-item'"
             style="transition: all 0.2s ease-in-out; width: 113%"
             button
@@ -127,6 +127,7 @@ import {
   arrowUndoOutline,
   checkmarkOutline
 } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: { 
@@ -141,6 +142,8 @@ export default defineComponent({
     IonIcon
   },
   setup() {
+
+    const router = useRouter();
 
     interface Item {
       name: string;
@@ -158,7 +161,11 @@ export default defineComponent({
 
     function removeItem(item: Item) {
       const index = items.value.indexOf(item);
-      undoStack.value.push({ name: item.name, calories: item.calories, index });
+      undoStack.value.push({ 
+        name: item.name, 
+        calories: item.calories, 
+        index 
+      });
       items.value.splice(index, 1);
     }
 
@@ -171,6 +178,16 @@ export default defineComponent({
         name: poppedItem.name, 
         calories: poppedItem.calories 
       });
+    }
+
+    function itemClicked(item: Item) {
+      removeItemsState.value ? undefined :
+      router.push({ 
+        name: 'LogEditDetail', 
+        params: { 
+          itemId: item.name  
+        }
+      })
     }
     
     const items = ref([
@@ -212,7 +229,8 @@ export default defineComponent({
       arrowUndoOutline,
       checkmarkOutline,
       undoStack,
-      undo
+      undo,
+      itemClicked
     }
   }
 });
