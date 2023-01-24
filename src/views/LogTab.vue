@@ -63,32 +63,13 @@
           :key="i"
           :style="itemStyle(i)"
         >
-          <ion-item
+          <LogItem 
             v-if="i.name"
+            :item="i"
+            :remove-items-state="removeItemsState"
             @click="itemClicked(i)"
-            :class="removeItemsState ? '' : 'push-item'"
-            :style="{ transition: 'all 0.2s ease-in-out', width: '113%' }"
-            button
-          >
-            <ion-icon
-              :icon="removeCircleOutline"
-              @click.stop="removeItem(i)"
-              slot="start"
-              style="color: red"
-            ></ion-icon>
-            <div class="item-parent">
-              <p style="margin: 0; font-size: 8pt">
-                {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
-                {{ i.calories }} cals |
-                43g carbs |
-                43g protein |
-                43g fat
-              </p>
-              <h2 style="text-transform: capitalize; margin: 0">
-                {{ i.name }}
-              </h2>
-            </div>
-          </ion-item>
+            @remove-item="removeItem(i)"
+          />
           <div 
             class="date-item-parent"
             v-else
@@ -105,10 +86,10 @@
 
 <script lang="ts">
 import AddPopOver from '@/components/Log/AddPopOver.vue';
+import LogItem from '@/components/Log/LogItem.vue';
 import { 
   defineComponent, 
-  ref,
-  computed
+  ref
 } from 'vue';
 import { 
   IonPage, 
@@ -118,7 +99,6 @@ import {
   IonContent, 
   IonButton, 
   IonButtons,
-  IonItem,
   IonIcon,
   popoverController
 } from '@ionic/vue';
@@ -126,11 +106,15 @@ import {
   arrowForward,
   add,
   remove,
-  removeCircleOutline,
   arrowUndoOutline,
   checkmarkOutline
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
+import { 
+  Item, 
+  UndoItem, 
+  DateItem 
+} from '@/components/Log/Types';
 
 export default defineComponent({
   components: { 
@@ -141,37 +125,22 @@ export default defineComponent({
     IonPage, 
     IonButton, 
     IonButtons,
-    IonItem,
-    IonIcon
+    IonIcon,
+    LogItem
   },
   setup() {
 
     const router = useRouter();
 
-    interface Item {
-      name: string;
-      calories: number;
-    }
-
-    interface DateItem {
-      month: string;
-    }
-
-    interface UndoItems {
-      name: string;
-      calories: number;
-      index: number;
-    }
-
     const removeItemsState = ref(false);
-    const timeStamp = new Date();
-    const undoStack = ref<UndoItems[]>([]);
+    const undoStack = ref<UndoItem[]>([]);
 
     function removeItem(item: Item) {
       const index = items.value.indexOf(item);
       undoStack.value.push({ 
         name: item.name, 
         calories: item.calories, 
+        _id: item._id,
         index 
       });
       items.value.splice(index, 1);
@@ -181,10 +150,8 @@ export default defineComponent({
     function undo() {
       const poppedItem = undoStack.value.pop();
       if (!poppedItem) return;
-      items.value.splice(poppedItem.index, 0, { 
-        name: poppedItem.name, 
-        calories: poppedItem.calories 
-      });
+      const { index, ...item } = poppedItem;
+      items.value.splice(index, 0, item);
     }
 
     function itemClicked(item: Item) {
@@ -216,41 +183,67 @@ export default defineComponent({
     }
     
     const items = ref([
-      { name: 'apple', calories: 100 },
-      { name: 'banana', calories: 200 },
-      { name: 'orange', calories: 300 },
-      { name: 'grape', calories: 400 },
-      { name: 'pear', calories: 500 },
-      { month: 'may' },
-      { name: 'pineapple', calories: 600 },
-      { name: 'mango', calories: 700 },
-      { name: 'watermelon', calories: 800 },
-      { name: 'strawberry', calories: 900 },
-      { name: 'blueberry', calories: 1000 },
-      { name: 'raspberry', calories: 1100 },
-      { name: 'blackberry', calories: 1200 },
-      { name: 'kiwi', calories: 1300 },
-      { name: 'lemon', calories: 1400 },
-      { name: 'lime', calories: 1500 },
-      { name: 'coconut', calories: 1600 },
-      { name: 'avocado', calories: 1700 },
-      { name: 'peach', calories: 1800 },
-      { name: 'plum', calories: 1900 },
-      { name: 'cherry', calories: 2000 },
-      { name: 'apricot', calories: 2100 },
-      { name: 'papaya', calories: 2200 },
-      { name: 'nectarine', calories: 2300 },
-      { name: 'persimmon', calories: 2400 }
+      { name: 'pizza', calories: 324, _id: '1a' },
+      { name: 'burger', calories: 324, _id: '2a' },
+      { name: 'fries', calories: 324, _id: '3a' },
+      { name: 'chicken', calories: 324, _id: '4a' },
+      { name: 'salad', calories: 324, _id: '5a' },
+      { name: 'sushi', calories: 324, _id: '6a' },
+      { name: 'tacos', calories: 324, _id: '7a' },
+      { name: 'burrito', calories: 324, _id: '8a' },
+      { name: 'pasta', calories: 324, _id: '9a' },
+      { name: 'sandwich', calories: 324, _id: '10a' },
+      { name: 'steak', calories: 324, _id: '11a' },
+      { name: 'chips', calories: 324, _id: '12a' },
+      { name: 'ice cream', calories: 324, _id: '13a' },
+      { name: 'cake', calories: 324, _id: '14a' },
+      { name: 'cookies', calories: 324, _id: '15a' },
+      { month: 'sep' },
+      { name: 'donuts', calories: 324, _id: '16a' },
+      { name: 'milkshake', calories: 324, _id: '17a' },
+      { name: 'hot dog', calories: 324, _id: '18a' },
+      { name: 'chocolate', calories: 324, _id: '19a' },
+      { name: 'candy', calories: 324, _id: '20a' },
+      { name: 'popcorn', calories: 324, _id: '21a' },
+      { name: 'chips', calories: 324, _id: '22a' },
+      { name: 'ice cream', calories: 324, _id: '23a' },
+      { name: 'cake', calories: 324, _id: '24a' },
+      { name: 'cookies', calories: 324, _id: '25a' },
+      { month: 'oct' },
+      { name: 'donuts', calories: 324, _id: '26a' },
+      { name: 'milkshake', calories: 324, _id: '27a' },
+      { name: 'hot dog', calories: 324, _id: '28a' },
+      { name: 'chocolate', calories: 324, _id: '29a' },
+      { name: 'candy', calories: 324, _id: '30a' },
+      { name: 'popcorn', calories: 324, _id: '31a' },
+      { name: 'chips', calories: 324, _id: '32a' },
+      { name: 'ice cream', calories: 324, _id: '33a' },
+      { name: 'cake', calories: 324, _id: '34a' },
+      { name: 'cookies', calories: 324, _id: '35a' },
+      { month: 'nov' },
+      { name: 'donuts', calories: 324, _id: '36a' },
+      { name: 'milkshake', calories: 324, _id: '37a' },
+      { name: 'hot dog', calories: 324, _id: '38a' },
+      { name: 'chocolate', calories: 324, _id: '39a' },
+      { name: 'candy', calories: 324, _id: '40a' },
+      { name: 'popcorn', calories: 324, _id: '41a' },
+      { name: 'chips', calories: 324, _id: '42a' },
+      { name: 'ice cream', calories: 324, _id: '43a' },
+      { name: 'cake', calories: 324, _id: '44a' },
+      { name: 'cookies', calories: 324, _id: '45a' },
+      { month: 'dec' },
+      { name: 'donuts', calories: 324, _id: '46a' },
+      { name: 'milkshake', calories: 324, _id: '47a' },
+      { name: 'hot dog', calories: 324, _id: '48a' },
+      { name: 'chocolate', calories: 324, _id: '49a' },
     ]);
     return {
-      removeCircleOutline,
       arrowForward,
       arrowUndoOutline,
       add,
       remove,
       removeItemsState,
       items,
-      timeStamp,
       checkmarkOutline,
       undoStack,
       itemStyle,
@@ -278,17 +271,6 @@ export default defineComponent({
 
 .fade-leave-active {
   position: absolute;
-}
-
-.item-parent {
-  display: flex;
-  align-items: left;
-  flex-direction: column;
-  padding: 5px 0px;
-}
-
-.push-item {
-  transform: translateX(-12%);
 }
 
 .date-item-parent {
