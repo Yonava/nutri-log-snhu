@@ -181,6 +181,7 @@ export default defineComponent({
       { name: 'burrito', calories: 324, _id: '8a' },
       { name: 'pasta', calories: 324, _id: '9a' },
       { name: 'sandwich', calories: 324, _id: '10a' },
+      { month: 'jul'},
       { name: 'steak', calories: 324, _id: '11a' },
       { name: 'chips', calories: 324, _id: '12a' },
       { name: 'ice cream', calories: 324, _id: '13a' },
