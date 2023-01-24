@@ -2,8 +2,8 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.nutrilog.app',
-  appName: 'nutri-log',
-  webDir: 'public',
+  appName: 'nutrilog',
+  webDir: 'dist',
   bundledWebRuntime: false
 };
 
