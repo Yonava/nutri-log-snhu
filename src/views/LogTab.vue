@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header title="log">
+    <default-header title="Log">
       <template #left>
         <div @click="removeItemsState = !removeItemsState">
           <ion-button v-if="!removeItemsState">
@@ -147,7 +147,7 @@ export default defineComponent({
       router.push({ 
         name: 'LogEditDetail', 
         params: { 
-          itemId: item._id  
+          item: item.name
         }
       })
     }
