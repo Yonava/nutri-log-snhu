@@ -61,13 +61,13 @@
         <div
           v-for="i in items"
           :key="i"
-          :style="i.month ? { position: 'sticky', top: 0, zIndex: 2 } : {}"
+          :style="itemStyle(i)"
         >
           <ion-item
             v-if="i.name"
             @click="itemClicked(i)"
             :class="removeItemsState ? '' : 'push-item'"
-            style="transition: all 0.2s ease-in-out; width: 113%"
+            :style="{ transition: 'all 0.2s ease-in-out', width: '113%' }"
             button
           >
             <ion-icon
@@ -107,7 +107,8 @@
 import AddPopOver from '@/components/Log/AddPopOver.vue';
 import { 
   defineComponent, 
-  ref 
+  ref,
+  computed
 } from 'vue';
 import { 
   IonPage, 
@@ -152,6 +153,10 @@ export default defineComponent({
       calories: number;
     }
 
+    interface DateItem {
+      month: string;
+    }
+
     interface UndoItems {
       name: string;
       calories: number;
@@ -160,6 +165,7 @@ export default defineComponent({
 
     const removeItemsState = ref(false);
     const timeStamp = new Date();
+    const undoStack = ref<UndoItems[]>([]);
 
     function removeItem(item: Item) {
       const index = items.value.indexOf(item);
@@ -171,7 +177,6 @@ export default defineComponent({
       items.value.splice(index, 1);
     }
 
-    const undoStack = ref<UndoItems[]>([]);
 
     function undo() {
       const poppedItem = undoStack.value.pop();
@@ -200,6 +205,14 @@ export default defineComponent({
         dismissOnSelect: true
       });
       return await popover.present();
+    }
+
+    function itemStyle(item: Item | DateItem) {
+      if ('month' in item) {
+        return { position: 'sticky', top: 0, zIndex: 2 };
+      } else {
+        return {};
+      }
     }
     
     const items = ref([
@@ -230,20 +243,21 @@ export default defineComponent({
       { name: 'persimmon', calories: 2400 }
     ]);
     return {
+      removeCircleOutline,
       arrowForward,
+      arrowUndoOutline,
       add,
       remove,
-      removeCircleOutline,
+      removeItemsState,
       items,
       timeStamp,
-      removeItemsState,
-      removeItem,
-      arrowUndoOutline,
       checkmarkOutline,
       undoStack,
+      itemStyle,
+      removeItem,
       undo,
       itemClicked,
-      addPopOver
+      addPopOver  
     }
   }
 });

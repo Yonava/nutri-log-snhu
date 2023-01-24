@@ -37,7 +37,5 @@ export default {
     IonTitle,
     IonHeader
   },
-  setup() {
-  }
 }
 </script>
