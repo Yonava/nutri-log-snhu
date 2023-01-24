@@ -138,9 +138,7 @@ export default defineComponent({
     function removeItem(item: Item) {
       const index = items.value.indexOf(item);
       undoStack.value.push({ 
-        name: item.name, 
-        calories: item.calories, 
-        _id: item._id,
+        ...item,
         index 
       });
       items.value.splice(index, 1);
@@ -159,7 +157,7 @@ export default defineComponent({
       router.push({ 
         name: 'LogEditDetail', 
         params: { 
-          itemId: item.name  
+          itemId: item._id  
         }
       })
     }

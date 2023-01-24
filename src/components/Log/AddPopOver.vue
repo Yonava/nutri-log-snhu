@@ -1,16 +1,16 @@
 <template>
-  <ion-content class="ion-padding">
+  <ion-content>
     <ion-item 
       @click="$router.push({ name: 'AddCatalog' })"
       button
     >
-      <h5 class="title-tag">from catalog</h5>
+      <h5 class="title-tag">From Catalog</h5>
     </ion-item>
     <ion-item 
       @click="$router.push({ name: 'AddCustom' })"
       button
     >
-      <h5 class="title-tag">custom item</h5>
+      <h5 class="title-tag">Custom Item</h5>
     </ion-item>
   </ion-content>
 </template>

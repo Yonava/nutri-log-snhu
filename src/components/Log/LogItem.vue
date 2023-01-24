@@ -12,7 +12,7 @@
     ></ion-icon>
     <div class="item-parent">
       <p style="margin: 0; font-size: 8pt">
-        {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
+        {{ time }} |
         {{ item.calories }} cals |
         43g carbs |
         43g protein |
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { IonIcon, IonItem } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import { removeCircleOutline } from 'ionicons/icons';
 import { Item } from '@/components/Log/Types';
 
@@ -58,8 +58,13 @@ export default defineComponent({
 
     const timeStamp = new Date();
 
+    const time = computed(() => {
+      return timeStamp.toLocaleTimeString([], { timeStyle: 'short' })
+    })
+
     return {
       timeStamp,
+      time,
       removeCircleOutline,
       removeItem,
     };
