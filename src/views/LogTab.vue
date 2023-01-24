@@ -1,39 +1,8 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons 
-          slot="end"
-        >
-          <ion-button 
-            v-if="!removeItemsState"
-            @click="addPopOver"
-          >
-            add
-            <ion-icon 
-              :icon="add"
-              slot="end" 
-            ></ion-icon>
-          </ion-button>
-          <ion-button 
-            v-else
-            @click="undo"
-            :disabled="undoStack.length === 0"
-          >
-            undo
-            <ion-icon 
-              slot="end" 
-              :icon="arrowUndoOutline"
-            ></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>
-          Log
-        </ion-title>
-        <ion-buttons 
-          @click="removeItemsState = !removeItemsState"
-          slot="start"
-        >
+    <default-header title="log">
+      <template #left>
+        <div @click="removeItemsState = !removeItemsState">
           <ion-button v-if="!removeItemsState">
             remove
             <ion-icon 
@@ -48,9 +17,32 @@
               :icon="checkmarkOutline"
             ></ion-icon>
           </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
+        </div>
+      </template>
+      <template #right>
+        <ion-button 
+          v-if="!removeItemsState"
+          @click="addPopOver"
+        >
+          add
+          <ion-icon 
+            :icon="add"
+            slot="end" 
+          ></ion-icon>
+        </ion-button>
+        <ion-button 
+          v-else
+          @click="undo"
+          :disabled="undoStack.length === 0"
+        >
+          undo
+          <ion-icon 
+            slot="end" 
+            :icon="arrowUndoOutline"
+          ></ion-icon>
+        </ion-button>
+      </template>
+    </default-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -92,14 +84,13 @@ import {
   ref
 } from 'vue';
 import { 
-  IonPage, 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
+  IonPage,  
   IonContent, 
   IonButton, 
-  IonButtons,
   IonIcon,
+  IonToolbar,
+  IonTitle,
+  IonHeader,
   popoverController
 } from '@ionic/vue';
 import { 
@@ -118,15 +109,14 @@ import {
 
 export default defineComponent({
   components: { 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
     IonContent, 
     IonPage, 
     IonButton, 
-    IonButtons,
     IonIcon,
-    LogItem
+    LogItem, 
+    IonHeader,
+    IonToolbar,
+    IonTitle,
   },
   setup() {
 
