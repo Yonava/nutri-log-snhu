@@ -10,19 +10,22 @@
                 </ion-toolbar>
             </ion-header>
 
-            <div class="center">
-                <div class="sign-in-box">
-                    <span id="sign-in-text">Sign In</span>
-                    <ion-button color="danger" class="sign-in-btn">Sign In with Google</ion-button>
-                    <ion-button color="primary" class="sign-in-btn">Sign In with Facebook</ion-button>
-                    <ion-button color="dark" class="sign-in-btn">Sign In with Apple</ion-button>
-                </div>
-            </div>
+            <Authenticator>
+                <template v-slot="{ user }">
+                    <h1>Hello {{ user.username }}!</h1>
+                    <button @click="signOut">Sign Out</button>
+                    <br>
+                    <button @click="deleteUser">Delete User</button>
+                </template>
+            </Authenticator>
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
+import { Authenticator } from '@aws-amplify/ui-vue';
+import { Hub, Auth, I18n } from 'aws-amplify';
+import '@aws-amplify/ui-vue/styles.css';
 import { defineComponent } from 'vue';
 
 import {
@@ -30,9 +33,14 @@ import {
     IonContent,
     IonToolbar,
     IonHeader,
-    IonTitle,
-    IonButton
+    IonTitle
 } from '@ionic/vue';
+
+// Typographical changes for the UI
+I18n.putVocabulariesForLanguage('en', {
+    'Sign in': 'Sign In',
+    'Forgot your password? ': 'Reset Password',
+});
 
 export default defineComponent({
     components: {
@@ -41,10 +49,40 @@ export default defineComponent({
         IonToolbar,
         IonHeader,
         IonTitle,
-        IonButton
+        Authenticator
     },
     setup() {
         return {
+        }
+    },
+    mounted() {
+        // Listen for Auth events
+        const AuthListener = (data: any) => {
+            switch (data.payload.event) {
+                case 'signIn':
+                    console.log('User signed in.');
+                    break;
+                case 'signOut':
+                    console.log('User signed out.');
+                    break;
+            }
+        }
+
+        Hub.listen('auth', AuthListener);
+    },
+    methods: {
+        async signOut() {
+            await Auth.signOut();
+        },
+        async deleteUser() {
+            try {
+                const user = await Auth.currentAuthenticatedUser();
+                await Auth.deleteUser();
+                console.log(`User ${user.username} deleted.`);
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
     }
 });
