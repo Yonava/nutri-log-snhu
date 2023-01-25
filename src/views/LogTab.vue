@@ -1,185 +1,265 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="end">
-          <ion-button>
-            add
-            <ion-icon slot="start" :icon="add"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>Log</ion-title>
-        <ion-buttons slot="start">
-          <ion-button>
+    <default-header title="Log">
+      <template #left>
+        <div @click="removeItemsState = !removeItemsState">
+          <ion-button v-if="!removeItemsState">
             remove
-            <ion-icon slot="start" :icon="remove"></ion-icon>
+            <ion-icon 
+              slot="start" 
+              :icon="remove"
+            ></ion-icon>
           </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
+          <ion-button v-else>
+            done
+            <ion-icon 
+              slot="start" 
+              :icon="checkmarkOutline"
+            ></ion-icon>
+          </ion-button>
+        </div>
+      </template>
+      <template #right>
+        <ion-button 
+          v-if="!removeItemsState"
+          @click="addPopOver"
+        >
+          add
+          <ion-icon 
+            :icon="add"
+            slot="end" 
+          ></ion-icon>
+        </ion-button>
+        <ion-button 
+          v-else
+          @click="undo"
+          :disabled="undoStack.length === 0"
+        >
+          undo
+          <ion-icon 
+            slot="end" 
+            :icon="arrowUndoOutline"
+          ></ion-icon>
+        </ion-button>
+      </template>
+    </default-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Log Entries</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div
-        v-for="(i) in items" 
-        :key="i.name"
-        :style="i.day ? { position: 'sticky', top: 0, zIndex: 2 } : {}"
-        class="parent-container"
-      >
-        <ion-item
-          v-if="i.name"
-          :router-link="{ path: `/tabs/log/edit/${i.name}` }"
-          button
+      <TransitionGroup name="fade">
+        <div
+          v-for="i in items"
+          :key="i"
+          :style="itemStyle(i)"
         >
-          <div class="item-parent">
-            <p style="margin: 0; font-size: 9pt">
-              {{ timeStamp.toLocaleTimeString([], { timeStyle: 'short' }) }} |
-              {{ i.calories }} cals |
-              {{ Math.floor(Math.random() * 50) }}g carbs |
-              {{ Math.floor(Math.random() * 50) }}g protein |
-              {{ Math.floor(Math.random() * 50) }}g fat
-            </p>
-            <h2 style="text-transform: capitalize; margin: 0">{{ i.name }}</h2>
+          <LogItem 
+            v-if="i.name"
+            :item="i"
+            :remove-items-state="removeItemsState"
+            @click="itemClicked(i)"
+            @remove-item="removeItem(i)"
+          />
+          <div 
+            class="date-item-parent"
+            v-else
+          >
+            <h5 style="margin: 0">
+              {{ i.month }} 3, 2023
+            </h5>
           </div>
-        </ion-item>
-        <div 
-          class="date-item-parent"
-          v-else
-        >
-          <h5 style="margin: 0">
-            {{ i.day }} {{ Math.floor(Math.random() * 30) + 1 }}, 2023
-          </h5>
         </div>
-      </div>
+      </TransitionGroup>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import AddPopOver from '@/components/Log/AddPopOver.vue';
+import LogItem from '@/components/Log/LogItem.vue';
 import { 
-  IonPage, 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
+  defineComponent, 
+  ref
+} from 'vue';
+import { 
+  IonPage,  
   IonContent, 
   IonButton, 
-  IonButtons,
-  IonItem,
   IonIcon,
+  IonToolbar,
+  IonTitle,
+  IonHeader,
+  popoverController
 } from '@ionic/vue';
 import { 
   arrowForward,
   add,
-  remove
+  remove,
+  arrowUndoOutline,
+  checkmarkOutline
 } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
+import { 
+  Item, 
+  UndoItem, 
+  DateItem 
+} from '@/components/Log/Types';
 
 export default defineComponent({
   components: { 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
     IonContent, 
     IonPage, 
     IonButton, 
-    IonButtons,
-    IonItem,
-    IonIcon
+    IonIcon,
+    LogItem, 
+    IonHeader,
+    IonToolbar,
+    IonTitle,
   },
   setup() {
-    const timeStamp = new Date();
+
+    const router = useRouter();
+
+    const removeItemsState = ref(false);
+    const undoStack = ref<UndoItem[]>([]);
+
+    function removeItem(item: Item) {
+      const index = items.value.indexOf(item);
+      undoStack.value.push({ 
+        ...item,
+        index 
+      });
+      items.value.splice(index, 1);
+    }
+
+
+    function undo() {
+      const poppedItem = undoStack.value.pop();
+      if (!poppedItem) return;
+      const { index, ...item } = poppedItem;
+      items.value.splice(index, 0, item);
+    }
+
+    function itemClicked(item: Item) {
+      removeItemsState.value ? undefined :
+      router.push({ 
+        name: 'LogEditDetail', 
+        params: { 
+          item: item.name
+        }
+      })
+    }
+
+    async function addPopOver(e: Event) {
+      const popover = await popoverController.create({
+        component: AddPopOver,
+        event: e,
+        translucent: true,
+        dismissOnSelect: true
+      });
+      return await popover.present();
+    }
+
+    function itemStyle(item: Item | DateItem) {
+      if ('month' in item) {
+        return { position: 'sticky', top: 0, zIndex: 2 };
+      } else {
+        return {};
+      }
+    }
+    
     const items = ref([
-      { name: 'apple', calories: 100 },
-      { name: 'banana', calories: 200 },
-      { name: 'orange', calories: 300 },
-      { name: 'grape', calories: 400 },
-      { name: 'pear', calories: 500 },
-      { day: 'wed' },
-      { name: 'pineapple', calories: 600 },
-      { name: 'mango', calories: 700 },
-      { name: 'watermelon', calories: 800 },
-      { name: 'strawberry', calories: 900 },
-      { name: 'blueberry', calories: 1000 },
-      { name: 'raspberry', calories: 1100 },
-      { name: 'blackberry', calories: 1200 },
-      { name: 'kiwi', calories: 1300 },
-      { name: 'lemon', calories: 1400 },
-      { day: 'tues' },
-      { name: 'lime', calories: 1500 },
-      { name: 'cherry', calories: 1600 },
-      { name: 'peach', calories: 1700 },
-      { name: 'plum', calories: 1800 },
-      { name: 'apricot', calories: 1900 },
-      { name: 'nectarine', calories: 2000 },
-      { name: 'pomegranate', calories: 2100 },
-      { name: 'coconut', calories: 2200 },
-      { name: 'avocado', calories: 2300 },
-      { name: 'tomato', calories: 2400 },
-      { name: 'potato', calories: 2500 },
-      { name: 'carrot', calories: 2600 },
-      { name: 'broccoli', calories: 2700 },
-      { name: 'cauliflower', calories: 2800 },
-      { name: 'celery', calories: 2900 },
-      { day: 'thur' },
-      { name: 'spinach', calories: 3000 },
-      { name: 'lettuce', calories: 3100 },
-      { name: 'cucumber', calories: 3200 },
-      { name: 'onion', calories: 3300 },
-      { name: 'garlic', calories: 3400 },
-      { name: 'ginger', calories: 3500 },
-      { name: 'pepper', calories: 3600 },
-      { name: 'cabbage', calories: 3700 },
-      { name: 'squash', calories: 3800 },
-      { name: 'zucchini', calories: 3900 },
-      { name: 'asparagus', calories: 4000 },
-      { name: 'mushroom', calories: 4100 },
-      { name: 'eggplant', calories: 4200 },
-      { name: 'artichoke', calories: 4300 },
-      { name: 'sweet potato', calories: 4400 },
-      { name: 'yam', calories: 4500 },
-      { name: 'corn', calories: 4600 },
-      { name: 'beet', calories: 4700 },
-      { name: 'radish', calories: 4800 },
-      { name: 'turnip', calories: 4900 },
-      { name: 'rutabaga', calories: 5000 },
-      { name: 'cantaloupe', calories: 5100 },
-      { name: 'honeydew', calories: 5200 },
-      { name: 'grapefruit', calories: 5300 },
-      { name: 'papaya', calories: 5400 },
-      { name: 'durian', calories: 5500 },
-      { name: 'jackfruit', calories: 5600 },
-      { name: 'pomelo', calories: 5700 },
-      { name: 'starfruit', calories: 5800 },
-      { day: 'fri' },
-      { name: 'tangerine', calories: 5900 },
-      { name: 'persimmon', calories: 6000 },
-      { name: 'guava', calories: 6100 },
-      { name: 'lychee', calories: 6200 }
+      { name: 'pizza', calories: 324, _id: '1a' },
+      { name: 'burger', calories: 324, _id: '2a' },
+      { name: 'fries', calories: 324, _id: '3a' },
+      { name: 'chicken', calories: 324, _id: '4a' },
+      { name: 'salad', calories: 324, _id: '5a' },
+      { name: 'sushi', calories: 324, _id: '6a' },
+      { name: 'tacos', calories: 324, _id: '7a' },
+      { name: 'burrito', calories: 324, _id: '8a' },
+      { name: 'pasta', calories: 324, _id: '9a' },
+      { name: 'sandwich', calories: 324, _id: '10a' },
+      { month: 'jul'},
+      { name: 'steak', calories: 324, _id: '11a' },
+      { name: 'chips', calories: 324, _id: '12a' },
+      { name: 'ice cream', calories: 324, _id: '13a' },
+      { name: 'cake', calories: 324, _id: '14a' },
+      { name: 'cookies', calories: 324, _id: '15a' },
+      { month: 'sep' },
+      { name: 'donuts', calories: 324, _id: '16a' },
+      { name: 'milkshake', calories: 324, _id: '17a' },
+      { name: 'hot dog', calories: 324, _id: '18a' },
+      { name: 'chocolate', calories: 324, _id: '19a' },
+      { name: 'candy', calories: 324, _id: '20a' },
+      { name: 'popcorn', calories: 324, _id: '21a' },
+      { name: 'chips', calories: 324, _id: '22a' },
+      { name: 'ice cream', calories: 324, _id: '23a' },
+      { name: 'cake', calories: 324, _id: '24a' },
+      { name: 'cookies', calories: 324, _id: '25a' },
+      { month: 'oct' },
+      { name: 'donuts', calories: 324, _id: '26a' },
+      { name: 'milkshake', calories: 324, _id: '27a' },
+      { name: 'hot dog', calories: 324, _id: '28a' },
+      { name: 'chocolate', calories: 324, _id: '29a' },
+      { name: 'candy', calories: 324, _id: '30a' },
+      { name: 'popcorn', calories: 324, _id: '31a' },
+      { name: 'chips', calories: 324, _id: '32a' },
+      { name: 'ice cream', calories: 324, _id: '33a' },
+      { name: 'cake', calories: 324, _id: '34a' },
+      { name: 'cookies', calories: 324, _id: '35a' },
+      { month: 'nov' },
+      { name: 'donuts', calories: 324, _id: '36a' },
+      { name: 'milkshake', calories: 324, _id: '37a' },
+      { name: 'hot dog', calories: 324, _id: '38a' },
+      { name: 'chocolate', calories: 324, _id: '39a' },
+      { name: 'candy', calories: 324, _id: '40a' },
+      { name: 'popcorn', calories: 324, _id: '41a' },
+      { name: 'chips', calories: 324, _id: '42a' },
+      { name: 'ice cream', calories: 324, _id: '43a' },
+      { name: 'cake', calories: 324, _id: '44a' },
+      { name: 'cookies', calories: 324, _id: '45a' },
+      { month: 'dec' },
+      { name: 'donuts', calories: 324, _id: '46a' },
+      { name: 'milkshake', calories: 324, _id: '47a' },
+      { name: 'hot dog', calories: 324, _id: '48a' },
+      { name: 'chocolate', calories: 324, _id: '49a' },
     ]);
     return {
       arrowForward,
+      arrowUndoOutline,
       add,
       remove,
+      removeItemsState,
       items,
-      timeStamp
+      checkmarkOutline,
+      undoStack,
+      itemStyle,
+      removeItem,
+      undo,
+      itemClicked,
+      addPopOver  
     }
   }
 });
 </script>
 
 <style scoped>
-.parent-container {
-  position: relative;
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
-.item-parent {
-  display: flex;
-  align-items: left;
-  flex-direction: column;
-  padding: 5px 0px;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+.fade-leave-active {
+  position: absolute;
 }
 
 .date-item-parent {
@@ -187,6 +267,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  color: white;
   background: linear-gradient(var(--ion-color-primary), var(--ion-color-tertiary-shade));
   padding: 7px 0px;
 }

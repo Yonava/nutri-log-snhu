@@ -24,9 +24,20 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/LogTab.vue'),
       },
       {
-        path: 'log/edit/:id',
+        name: 'LogEditDetail',
+        path: 'log/edit/:item',
         component: () => import('@/components/Log/LogItemEdit.vue'),
         props: true
+      },
+      {
+        name: 'AddCustom',
+        path: 'log/addCustom',
+        component: () => import('@/components/Log/AddCustom.vue')
+      },
+      {
+        name: 'AddCatalog',
+        path: 'log/addCatalog',
+        component: () => import('@/components/Log/AddCatalog.vue')
       },
       {
         path: 'scan',
