@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">nutri-log</string>
-    <string name="title_activity_main">nutri-log</string>
+    <string name="app_name">nutrilog</string>
+    <string name="title_activity_main">nutrilog</string>
     <string name="package_name">com.nutrilog.app</string>
     <string name="custom_url_scheme">com.nutrilog.app</string>
 </resources>
