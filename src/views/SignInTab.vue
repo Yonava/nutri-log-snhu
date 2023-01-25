@@ -5,9 +5,7 @@
             :fullscreen="true"
         >
             <ion-header>
-                <ion-toolbar>
-                    <ion-title>NutriLog SNHU</ion-title>
-                </ion-toolbar>
+                <h3 class="center">NutriLog SNHU</h3>
             </ion-header>
 
             <Authenticator>
@@ -31,9 +29,7 @@ import { defineComponent } from 'vue';
 import {
     IonPage,
     IonContent,
-    IonToolbar,
-    IonHeader,
-    IonTitle
+    IonHeader
 } from '@ionic/vue';
 
 // Typographical changes for the UI
@@ -46,9 +42,7 @@ export default defineComponent({
     components: {
         IonPage,
         IonContent,
-        IonToolbar,
         IonHeader,
-        IonTitle,
         Authenticator
     },
     setup() {
