@@ -22,6 +22,7 @@
       <div class="center">
         <div class="circle"></div>
       </div>
+      <ion-button class="center" router-link="/signin">Sign in</ion-button>
     </ion-content>
   </ion-page>
 </template>
