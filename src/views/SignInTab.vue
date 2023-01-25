@@ -45,19 +45,15 @@ export default defineComponent({
         IonHeader,
         Authenticator
     },
-    setup() {
-        return {
-        }
-    },
     mounted() {
         // Listen for Auth events
         const AuthListener = (data: any) => {
             switch (data.payload.event) {
                 case 'signIn':
-                    console.log('User signed in.');
+                    // Do sign in stuff
                     break;
                 case 'signOut':
-                    console.log('User signed out.');
+                    // Do sign out stuff
                     break;
             }
         }
@@ -70,9 +66,7 @@ export default defineComponent({
         },
         async deleteUser() {
             try {
-                const user = await Auth.currentAuthenticatedUser();
                 await Auth.deleteUser();
-                console.log(`User ${user.username} deleted.`);
             }
             catch (error) {
                 console.log(error);
