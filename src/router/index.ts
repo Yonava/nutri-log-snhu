@@ -45,6 +45,10 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: '/signin',
+    component: () => import('@/views/SignInTab.vue')
+  }
 ]
 
 const router = createRouter({
