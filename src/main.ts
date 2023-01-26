@@ -28,9 +28,11 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import store from './store'
+
 Amplify.configure(awsExports);
 
-const app = createApp(App)
+const app = createApp(App).use(store)
   .use(IonicVue)
   .use(router);
 
