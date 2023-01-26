@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { Item } from '@/types/Log'
+import { UnloggedItem } from '@/types/Log'
 import { State } from '@/types/Vuex'
 
 export default createStore<State>({
@@ -26,7 +26,22 @@ export default createStore<State>({
       iron: 0
     },
     log: [],
-
+    macronutrientCalibrations: {
+      targetCalories: 0,
+      targetCarbs: 0,
+      targetSugar: 0,
+      targetAddedSugar: 0,
+      targetFiber: 0,
+      targetFat: 0,
+      targetSaturatedFat: 0,
+      targetTransFat: 0,
+      targetProtein: 0,
+      targetSodium: 0,
+      targetCholesterol: 0,
+      targetPotassium: 0,
+      targetCalcium: 0,
+      targetIron: 0
+    }
   },
   getters: {
     caloriesHidden: state => state.caloriesHidden,
@@ -37,8 +52,12 @@ export default createStore<State>({
     toggleCaloriesHidden(state) {
       state.caloriesHidden = !state.caloriesHidden
     },
-    addLogItem(state, item: Item) {
-      state.log.push(item)
+    addLogItem(state, item: UnloggedItem) {
+      const addItem = { 
+        ...item, 
+        dateAdded: new Date() 
+      }
+      state.log.push(addItem)
     }
   },
   actions: {

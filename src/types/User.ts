@@ -1,4 +1,4 @@
-import { Item } from './Log';
+import { UnloggedItem, LoggedItem } from './Log';
 
 export interface User {
   _id: string;
@@ -7,8 +7,8 @@ export interface User {
   email: string;
   credentials: string;
   macronutrientCalibrations: MacronutrientCalibrations;
-  customItems: Item[];
-  log: Item[];
+  customItems: UnloggedItem[];
+  log: LoggedItem[];
 }
 
 export interface MacronutrientCalibrations {
