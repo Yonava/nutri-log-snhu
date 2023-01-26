@@ -1,14 +1,16 @@
 import { UnloggedItem, LoggedItem } from './Log';
 
+export interface UserDetail extends User {
+  macronutrientCalibrations: MacronutrientCalibrations;
+  customItems: UnloggedItem[];
+  log: LoggedItem[];
+}
+
 export interface User {
   _id: string;
   firstName: string;
   lastName: string;
   email: string;
-  credentials: string;
-  macronutrientCalibrations: MacronutrientCalibrations;
-  customItems: UnloggedItem[];
-  log: LoggedItem[];
 }
 
 export interface MacronutrientCalibrations {

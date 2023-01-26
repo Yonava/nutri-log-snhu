@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
-import { UnloggedItem } from '@/types/Log'
 import { State } from '@/types/Vuex'
+import { MacronutrientCalibrations } from '@/types/User'
+import Log from './modules/Log'
+import Auth from './modules/Auth'
 
 export default createStore<State>({
   state: {
@@ -25,7 +27,6 @@ export default createStore<State>({
       calcium: 0,
       iron: 0
     },
-    log: [],
     macronutrientCalibrations: {
       targetCalories: 0,
       targetCarbs: 0,
@@ -46,22 +47,24 @@ export default createStore<State>({
   getters: {
     caloriesHidden: state => state.caloriesHidden,
     todaysNutrients: state => state.todaysNutrients,
-    log: state => state.log
   },
   mutations: {
     toggleCaloriesHidden(state) {
       state.caloriesHidden = !state.caloriesHidden
     },
-    addLogItem(state, item: UnloggedItem) {
-      const addItem = { 
-        ...item, 
-        dateAdded: new Date() 
-      }
-      state.log.push(addItem)
-    }
   },
   actions: {
+    toggleCaloriesHidden({ commit }) {
+      // HTTP request to update user's caloriesHidden setting
+      commit('toggleCaloriesHidden')
+    },
+    updateMacronutrientCalibrations({ commit }, calibrations: MacronutrientCalibrations) {
+      // HTTP request to update user's macronutrient calibrations
+      commit('updateMacronutrientCalibrations', calibrations)
+    },
   },
   modules: {
+    Log,
+    Auth
   }
 })

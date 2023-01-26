@@ -1,11 +1,19 @@
 import { LoggedItem } from './Log'
-import { MacronutrientCalibrations } from './User'
+import { User, MacronutrientCalibrations } from './User'
 
 export interface State {
   caloriesHidden: boolean,
   todaysNutrients: NutritionData,
-  log: LoggedItem[],
   macronutrientCalibrations: MacronutrientCalibrations
+}
+
+export interface LogState {
+  log: LoggedItem[]
+}
+
+export interface AuthState {
+  user: User | null,
+  token: string | null
 }
 
 export interface NutritionData {
