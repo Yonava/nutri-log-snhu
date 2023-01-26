@@ -29,7 +29,7 @@
 import { IonIcon, IonItem } from '@ionic/vue';
 import { defineComponent, computed } from 'vue';
 import { removeCircleOutline } from 'ionicons/icons';
-import { Item } from '@/components/Log/Types';
+import { Item } from '@/types/Types';
 
 export default defineComponent({
   name: 'LogItem',

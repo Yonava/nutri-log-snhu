@@ -105,7 +105,7 @@ import {
   Item, 
   UndoItem, 
   DateItem 
-} from '@/components/Log/Types';
+} from '@/types/Types';
 
 export default defineComponent({
   components: { 
