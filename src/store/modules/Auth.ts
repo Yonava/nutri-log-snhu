@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-
 import { AuthState } from '@/types/Vuex'
 
 export default createStore<AuthState>({
@@ -9,7 +8,8 @@ export default createStore<AuthState>({
   },
   getters: {
     user: state => state.user,
-    token: state => state.token
+    token: state => state.token,
+    loggedIn: state => !!state.user
   },
   mutations: {
     setUser(state, user) {

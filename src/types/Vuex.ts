@@ -36,3 +36,16 @@ export interface NutritionData {
   calcium: number,
   iron: number
 }
+
+export interface AllergenData {
+  dairy: boolean,
+  egg: boolean,
+  gluten: boolean,
+  peanut: boolean,
+  seafood: boolean,
+  sesame: boolean,
+  shellfish: boolean,
+  soy: boolean,
+  treeNut: boolean,
+  wheat: boolean
+}

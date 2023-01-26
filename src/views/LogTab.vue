@@ -102,9 +102,9 @@ import {
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { 
-  Item, 
+  LoggedItem, 
   UndoItem, 
-  DateItem 
+  DateTag 
 } from '@/types/Log';
 
 export default defineComponent({
@@ -125,7 +125,7 @@ export default defineComponent({
     const removeItemsState = ref(false);
     const undoStack = ref<UndoItem[]>([]);
 
-    function removeItem(item: Item) {
+    function removeItem(item: LoggedItem) {
       const index = items.value.indexOf(item);
       undoStack.value.push({ 
         ...item,
@@ -142,7 +142,7 @@ export default defineComponent({
       items.value.splice(index, 0, item);
     }
 
-    function itemClicked(item: Item) {
+    function itemClicked(item: LoggedItem) {
       removeItemsState.value ? undefined :
       router.push({ 
         name: 'LogEditDetail', 
@@ -162,70 +162,16 @@ export default defineComponent({
       return await popover.present();
     }
 
-    function itemStyle(item: Item | DateItem) {
+    function itemStyle(item: LoggedItem | DateTag) {
       if ('month' in item) {
         return { position: 'sticky', top: 0, zIndex: 2 };
       } else {
         return {};
       }
     }
+
+
     
-    const items = ref([
-      { name: 'pizza', calories: 324, _id: '1a' },
-      { name: 'burger', calories: 324, _id: '2a' },
-      { name: 'fries', calories: 324, _id: '3a' },
-      { name: 'chicken', calories: 324, _id: '4a' },
-      { name: 'salad', calories: 324, _id: '5a' },
-      { name: 'sushi', calories: 324, _id: '6a' },
-      { name: 'tacos', calories: 324, _id: '7a' },
-      { name: 'burrito', calories: 324, _id: '8a' },
-      { name: 'pasta', calories: 324, _id: '9a' },
-      { name: 'sandwich', calories: 324, _id: '10a' },
-      { month: 'jul'},
-      { name: 'steak', calories: 324, _id: '11a' },
-      { name: 'chips', calories: 324, _id: '12a' },
-      { name: 'ice cream', calories: 324, _id: '13a' },
-      { name: 'cake', calories: 324, _id: '14a' },
-      { name: 'cookies', calories: 324, _id: '15a' },
-      { month: 'sep' },
-      { name: 'donuts', calories: 324, _id: '16a' },
-      { name: 'milkshake', calories: 324, _id: '17a' },
-      { name: 'hot dog', calories: 324, _id: '18a' },
-      { name: 'chocolate', calories: 324, _id: '19a' },
-      { name: 'candy', calories: 324, _id: '20a' },
-      { name: 'popcorn', calories: 324, _id: '21a' },
-      { name: 'chips', calories: 324, _id: '22a' },
-      { name: 'ice cream', calories: 324, _id: '23a' },
-      { name: 'cake', calories: 324, _id: '24a' },
-      { name: 'cookies', calories: 324, _id: '25a' },
-      { month: 'oct' },
-      { name: 'donuts', calories: 324, _id: '26a' },
-      { name: 'milkshake', calories: 324, _id: '27a' },
-      { name: 'hot dog', calories: 324, _id: '28a' },
-      { name: 'chocolate', calories: 324, _id: '29a' },
-      { name: 'candy', calories: 324, _id: '30a' },
-      { name: 'popcorn', calories: 324, _id: '31a' },
-      { name: 'chips', calories: 324, _id: '32a' },
-      { name: 'ice cream', calories: 324, _id: '33a' },
-      { name: 'cake', calories: 324, _id: '34a' },
-      { name: 'cookies', calories: 324, _id: '35a' },
-      { month: 'nov' },
-      { name: 'donuts', calories: 324, _id: '36a' },
-      { name: 'milkshake', calories: 324, _id: '37a' },
-      { name: 'hot dog', calories: 324, _id: '38a' },
-      { name: 'chocolate', calories: 324, _id: '39a' },
-      { name: 'candy', calories: 324, _id: '40a' },
-      { name: 'popcorn', calories: 324, _id: '41a' },
-      { name: 'chips', calories: 324, _id: '42a' },
-      { name: 'ice cream', calories: 324, _id: '43a' },
-      { name: 'cake', calories: 324, _id: '44a' },
-      { name: 'cookies', calories: 324, _id: '45a' },
-      { month: 'dec' },
-      { name: 'donuts', calories: 324, _id: '46a' },
-      { name: 'milkshake', calories: 324, _id: '47a' },
-      { name: 'hot dog', calories: 324, _id: '48a' },
-      { name: 'chocolate', calories: 324, _id: '49a' },
-    ]);
     return {
       arrowForward,
       arrowUndoOutline,
