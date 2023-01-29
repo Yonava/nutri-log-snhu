@@ -30,7 +30,7 @@ import './theme/variables.css';
 
 import store from './store'
 
-import { SplashScreen } from '@capacitor/splash-screen';
+import './initState';
 
 Amplify.configure(awsExports);
 
@@ -40,13 +40,6 @@ const app = createApp(App)
   .use(router);
 
 app.component('default-header', DefaultHeader);
-
-// app.config.globalProperties.$SplashScreen = SplashScreen;
-// app.config.globalProperties.$SplashScreeen.setSplashScreen({
-//   image: '../public/assets/icon/icon.png',
-//   resizeMode: 'contain',
-//   backgroundColor: '#ffffff'
-// })
 
 router.isReady().then(() => {
   app.mount('#app');
