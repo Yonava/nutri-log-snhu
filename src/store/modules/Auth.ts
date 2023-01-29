@@ -3,6 +3,9 @@ import { AuthState } from '@/types/Vuex'
 
 const Auth: Module<AuthState, any> = {
   state: {
+    // TODO: initial user state should be null
+    // send a request to check if the user is logged in
+    // if yes, set the user state
     user: null,
     token: null
   },
@@ -14,7 +17,7 @@ const Auth: Module<AuthState, any> = {
       return state.token
     },
     isLoggedIn(state) {
-      return true
+      return !!state.user
     }
   },
   mutations: {
