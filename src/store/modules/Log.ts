@@ -1,13 +1,13 @@
-import { createStore } from 'vuex'
-import { UnloggedItem, LoggedItem } from '@/types/Log'
-import { LogState } from '@/types/Vuex'
+import { Module } from 'vuex';
+import { LogState } from '@/types/Vuex';
+import { LoggedItem, UnloggedItem } from '@/types/Log';
 
-export default createStore<LogState>({
+const Log: Module<LogState, any> = {
   state: {
     log: []
   },
   getters: {
-    log: state => state.log
+    log: state => state.log,
   },
   mutations: {
     addLogItem(state, item: LoggedItem) {
@@ -29,7 +29,7 @@ export default createStore<LogState>({
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    postLoggedItem({ commit }, item: UnloggedItem) {
+    async postLoggedItem({ commit }, item: UnloggedItem) {
       const loggedItem = {
         ...item,
         dateAdded: new Date()
@@ -46,4 +46,6 @@ export default createStore<LogState>({
       commit('updateLogItem', { _id, item })
     }
   },
-})
+};
+
+export default Log;

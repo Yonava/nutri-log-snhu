@@ -125,22 +125,22 @@ export default defineComponent({
     const removeItemsState = ref(false);
     const undoStack = ref<UndoItem[]>([]);
 
-    function removeItem(item: LoggedItem) {
-      const index = items.value.indexOf(item);
-      undoStack.value.push({ 
-        ...item,
-        index 
-      });
-      items.value.splice(index, 1);
-    }
+    // function removeItem(item: LoggedItem) {
+    //   const index = items.value.indexOf(item);
+    //   undoStack.value.push({ 
+    //     ...item,
+    //     index 
+    //   });
+    //   items.value.splice(index, 1);
+    // }
 
 
-    function undo() {
-      const poppedItem = undoStack.value.pop();
-      if (!poppedItem) return;
-      const { index, ...item } = poppedItem;
-      items.value.splice(index, 0, item);
-    }
+    // function undo() {
+    //   const poppedItem = undoStack.value.pop();
+    //   if (!poppedItem) return;
+    //   const { index, ...item } = poppedItem;
+    //   items.value.splice(index, 0, item);
+    // }
 
     function itemClicked(item: LoggedItem) {
       removeItemsState.value ? undefined :
@@ -178,12 +178,9 @@ export default defineComponent({
       add,
       remove,
       removeItemsState,
-      items,
       checkmarkOutline,
       undoStack,
       itemStyle,
-      removeItem,
-      undo,
       itemClicked,
       addPopOver  
     }

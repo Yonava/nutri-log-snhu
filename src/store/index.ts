@@ -5,6 +5,7 @@ import Log from './modules/Log'
 import Auth from './modules/Auth'
 
 export default createStore<State>({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     caloriesHidden: false,
     todaysNutrients: {
