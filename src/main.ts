@@ -30,8 +30,6 @@ import './theme/variables.css';
 
 import store from './store'
 
-import './initState';
-
 Amplify.configure(awsExports);
 
 const app = createApp(App)
@@ -44,3 +42,5 @@ app.component('default-header', DefaultHeader);
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+import './initState';

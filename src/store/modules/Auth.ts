@@ -12,6 +12,9 @@ const Auth: Module<AuthState, any> = {
     },
     token(state) {
       return state.token
+    },
+    isLoggedIn(state) {
+      return true
     }
   },
   mutations: {
