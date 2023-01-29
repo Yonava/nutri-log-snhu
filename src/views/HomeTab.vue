@@ -1,5 +1,21 @@
 <template>
-  <ion-page>
+  <ion-menu content-id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button default-href="home"></ion-back-button>
+        </ion-buttons>
+          <ion-title>Profile</ion-title>
+      </ion-toolbar>
+    </ion-header>
+      <ion-content class="ion-padding">
+        <ion-button expand="block">Adjust Daily Targets</ion-button>
+        <ion-button expand="block">Hide Calories</ion-button>
+        <ion-button expand="block">Terms of Use</ion-button>
+        <ion-button expand="block">Delete Account</ion-button>
+      </ion-content>
+  </ion-menu>
+  <ion-page id="main-content">
     <ion-content 
       :force-overscroll="false" 
       :fullscreen="true"
@@ -12,9 +28,11 @@
             </ion-button>
           </ion-buttons>
           <ion-buttons slot="primary">
-            <ion-button>
-              <ion-icon slot="icon-only" :icon="person"></ion-icon>
-            </ion-button>
+            <ion-menu-toggle>
+              <ion-button>
+                <ion-icon slot="icon-only" :icon="person"></ion-icon>
+              </ion-button>
+            </ion-menu-toggle>
           </ion-buttons>
           <ion-title>NutriLog SNHU</ion-title>
         </ion-toolbar>
@@ -37,7 +55,10 @@ import {
   IonIcon,
   IonButtons,
   IonButton,
-  IonTitle
+  IonTitle,
+  IonMenu,
+  IonMenuToggle,
+  IonBackButton
 } from '@ionic/vue';
 import { 
   person, 
@@ -45,16 +66,19 @@ import {
 } from 'ionicons/icons';
 
 export default  defineComponent({
-  components: { 
-    IonContent, 
-    IonPage, 
-    IonHeader, 
-    IonToolbar, 
+  components: {
+    IonContent,
+    IonPage,
+    IonHeader,
+    IonToolbar,
     IonIcon,
     IonButtons,
     IonButton,
-    IonTitle
-  },
+    IonTitle,
+    IonMenu,
+    IonMenuToggle,
+    IonBackButton
+},
   setup() {
     return {
       person,
