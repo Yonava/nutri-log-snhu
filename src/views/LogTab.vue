@@ -60,9 +60,7 @@
           <h2>
             No items logged yet
           </h2>
-          <ion-button 
-            @click="addPopOver"
-          >
+          <ion-button @click="addPopOver">
             add
             <ion-icon 
               :icon="add"

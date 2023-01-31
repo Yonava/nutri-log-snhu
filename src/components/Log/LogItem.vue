@@ -12,11 +12,11 @@
     ></ion-icon>
     <div class="item-parent">
       <p style="margin: 0; font-size: 8pt">
-        {{ time }} |
+        {{ toDateTimeString(item.dateAdded) }} |
         {{ item.calories }} cals |
-        43g carbs |
-        43g protein |
-        43g fat
+        {{ item.macro.carbohydrates.total }}g carbs |
+        {{ item.macro.protein }}g protein |
+        {{ item.macro.fat.total }}g fat
       </p>
       <h2 style="text-transform: capitalize; margin: 0">
         {{ item.name }}
@@ -27,8 +27,8 @@
 
 <script lang="ts">
 import { IonIcon, IonItem } from '@ionic/vue';
-import { defineComponent, computed } from 'vue';
-import { removeCircleOutline } from 'ionicons/icons';
+import { defineComponent } from 'vue';
+import { removeCircleOutline, time } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'LogItem',
@@ -55,16 +55,14 @@ export default defineComponent({
       emit('remove-item', i);
     };
 
-    const timeStamp = new Date();
-
-    const time = computed(() => {
-      return timeStamp.toLocaleTimeString([], { timeStyle: 'short' })
-    })
+    const toDateTimeString = (date: Date) => {
+      const timeStamp = new Date(date);
+      return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
+    };
 
     return {
-      timeStamp,
-      time,
       removeCircleOutline,
+      toDateTimeString,
       removeItem,
     };
   },
