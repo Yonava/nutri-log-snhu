@@ -3,7 +3,10 @@
     <default-header title="Log">
       <template #left>
         <div @click="removeItemsState = !removeItemsState">
-          <ion-button v-if="!removeItemsState">
+          <ion-button 
+            v-if="!removeItemsState"
+            :disabled="items.length === 0"
+          >
             remove
             <ion-icon 
               slot="start" 
@@ -50,6 +53,23 @@
         </ion-toolbar>
       </ion-header>
       <TransitionGroup name="fade">
+        <div 
+          v-if="items.length === 0" 
+          class="center"
+        >
+          <h2>
+            No items logged yet
+          </h2>
+          <ion-button 
+            @click="addPopOver"
+          >
+            add
+            <ion-icon 
+              :icon="add"
+              slot="end" 
+            ></ion-icon>
+          </ion-button>
+        </div>
         <div
           v-for="i in items"
           :key="i"
@@ -83,6 +103,7 @@ import {
   defineComponent, 
   ref
 } from 'vue';
+import { useStore } from 'vuex';
 import { 
   IonPage,  
   IonContent, 
@@ -121,6 +142,9 @@ export default defineComponent({
   setup() {
 
     const router = useRouter();
+    const store = useStore();
+
+    const items = store.getters.log;
 
     const removeItemsState = ref(false);
     const undoStack = ref<UndoItem[]>([]);
@@ -170,9 +194,8 @@ export default defineComponent({
       }
     }
 
-
-    
     return {
+      items,
       arrowForward,
       arrowUndoOutline,
       add,
