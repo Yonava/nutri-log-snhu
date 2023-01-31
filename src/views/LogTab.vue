@@ -147,22 +147,22 @@ export default defineComponent({
     const removeItemsState = ref(false);
     const undoStack = ref<UndoItem[]>([]);
 
-    // function removeItem(item: LoggedItem) {
-    //   const index = items.value.indexOf(item);
-    //   undoStack.value.push({ 
-    //     ...item,
-    //     index 
-    //   });
-    //   items.value.splice(index, 1);
-    // }
+    function removeItem(item: LoggedItem) {
+      const index = items.indexOf(item);
+      store.dispatch("deleteLoggedItem", item._id);
+      undoStack.value.push({ 
+        ...item,
+        index 
+      });
+    }
 
 
-    // function undo() {
-    //   const poppedItem = undoStack.value.pop();
-    //   if (!poppedItem) return;
-    //   const { index, ...item } = poppedItem;
-    //   items.value.splice(index, 0, item);
-    // }
+    function undo() {
+      const poppedItem = undoStack.value.pop();
+      if (!poppedItem) return;
+      const { index, ...item } = poppedItem;
+      store.dispatch("postLoggedItem", { item, insertIndex: index });
+    }
 
     function itemClicked(item: LoggedItem) {
       store.commit("setSelectedLogItem", item);
@@ -199,6 +199,8 @@ export default defineComponent({
       removeItemsState,
       checkmarkOutline,
       undoStack,
+      undo,
+      removeItem,
       itemStyle,
       itemClicked,
       addPopOver  

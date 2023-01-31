@@ -10,20 +10,25 @@ async function init() {
   store.commit("setCatalog", catalogItems.data);
 
   if (localStorage.getItem("userId")) {
-    const user = await axios.get(`/users/${localStorage.getItem("userId")}`);
-    const { 
-      log, 
-      email, 
-      firstName, 
-      lastName, 
-      macronutrientCalibrations, 
-      customItems,
-      _id
-    } = user.data;
-    store.commit("setUser", { email, firstName, lastName, _id });
-    store.commit("setLog", log);
-    store.commit("setCustomItems", customItems);
-    store.commit("setMacronutrientCalibrations", macronutrientCalibrations);
+    let user;
+    try {
+      user = await axios.get(`/users/${localStorage.getItem("userId")}`);
+      const { 
+        log, 
+        email, 
+        firstName, 
+        lastName, 
+        macronutrientCalibrations, 
+        customItems,
+        _id
+      } = user.data;
+      store.commit("setUser", { email, firstName, lastName, _id });
+      store.commit("setLog", log);
+      store.commit("setCustomItems", customItems);
+      store.commit("setMacronutrientCalibrations", macronutrientCalibrations);
+    } catch (err) {
+      console.warn(err)
+    }
   }
 
   SplashScreen.hide();

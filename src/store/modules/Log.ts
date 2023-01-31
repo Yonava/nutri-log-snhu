@@ -19,13 +19,14 @@ const Log: Module<LogState, any> = {
     setSelectedLogItem(state, item: LoggedItem | null) {
       state.selectedLogItem = item
     },
-    addLogItem(state, item: LoggedItem) {
-      state.log.unshift(item)
+    addLogItem(state, { loggedItem, insertIndex }: { loggedItem: LoggedItem, insertIndex: number }) {
+      state.log.splice(insertIndex, 0, loggedItem)
     },
     appendLogItems(state, items: LoggedItem[]) {
       state.log.push(...items)
     },
-    removeLogItem(state, index: number) {
+    removeLogItem(state, id: string) {
+      const index = state.log.findIndex(item => item._id === id)
       state.log.splice(index, 1)
     },
     updateLogItem(state, { _id, item }: { _id: string, item: LoggedItem }) {
@@ -44,24 +45,25 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async postLoggedItem({ commit, getters }, item: DisplayItem) {
+    async postLoggedItem({ commit, getters }, { item, insertIndex }: { item: LoggedItem, insertIndex: number}) {
       const loggedItem = {
         ...item,
         dateAdded: new Date()
       }
-      // HTTP request to post item to database
-      // get userid from vuex getters
-      const userId = getters.userId;
       try {
-        await axios.put(`/users/${userId}/log`, loggedItem)
+        await axios.put(`/users/${getters.userId}/log`, loggedItem)
       } catch {
         console.error('Error posting logged item to database')
       }
-      commit('addLogItem', loggedItem)
+      commit('addLogItem', { loggedItem, insertIndex })
     },
-    deleteLoggedItem({ commit }, index: number) {
-      // HTTP request to delete item from database
-      commit('removeLogItem', index)
+    async deleteLoggedItem({ commit, getters }, id: string) {
+      try {
+        await axios.put(`/users/${getters.userId}/log/${id}`)
+      } catch {
+        console.error('Error deleting logged item from database')
+      }
+      commit('removeLogItem', id)
     },
     updateLoggedItem({ commit }, { _id, item }: { _id: string, item: LoggedItem }) {
       // HTTP request to update item in database

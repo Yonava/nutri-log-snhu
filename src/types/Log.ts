@@ -2,16 +2,19 @@ export interface LoggedItem extends DisplayItem {
   dateAdded: Date;
 }
 
-export interface DisplayItem {
+export interface DisplayItem extends UnloggedItem {
+  measurement: {
+    value: number;
+    unit: string;
+  },
+}
+
+export interface UnloggedItem {
   _id: string,
   name: string,
   type: string,
   time: "breakfast" | "lunch" | "dinner" | "snack" | null,
   calories: number;
-  measurement: {
-    value: number;
-    unit: string;
-  },
   macro: Macronutrients;
   allergens: Allergens;
 }
