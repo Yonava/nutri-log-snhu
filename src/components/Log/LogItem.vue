@@ -1,7 +1,7 @@
 <template>
   <ion-item
     :class="removeItemsState ? '' : 'push-item'"
-    :style="{ transition: 'all 0.2s ease-in-out', width: '113%' }"
+    style="-webkit-transition: 0.2s ease-in-out; width: 113%"
     button
   >
     <ion-icon
@@ -28,7 +28,7 @@
 <script lang="ts">
 import { IonIcon, IonItem } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { removeCircleOutline, time } from 'ionicons/icons';
+import { removeCircleOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'LogItem',

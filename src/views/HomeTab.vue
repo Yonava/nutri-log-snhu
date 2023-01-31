@@ -20,15 +20,17 @@
         </ion-toolbar>
       </ion-header>
       <div class="center">
-        <div class="circle"></div>
+        <div class="circle" :style="{ opacity: circleOpacity }"></div>
       </div>
+      {{ circleOpacity }}
+      <ion-button @click="circleOpacity = circleOpacity ? 0 : 1">toggle circle</ion-button>
       <ion-button class="center" router-link="/signin">Sign in</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { 
   IonPage, 
   IonContent, 
@@ -56,7 +58,9 @@ export default  defineComponent({
     IonTitle
   },
   setup() {
+    const circleOpacity = ref(1);
     return {
+      circleOpacity,
       person,
       notifications,
     }
@@ -72,6 +76,7 @@ export default  defineComponent({
   background-color: transparent;
   border-radius: 50%;
   display: inline-block;
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .icon {

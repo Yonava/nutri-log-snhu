@@ -1,10 +1,9 @@
 <template>
   <ion-page>
-    <ion-content :force-overscroll="false" :fullscreen="true">
-      <ion-header>
+    <ion-content :force-overscroll="false">
+      <ion-header style="margin-top: 20px">
         <h3 class="center">NutriLog SNHU</h3>
       </ion-header>
-
       <Authenticator>
         <template v-slot="{ user }">
           <h1>Hello {{ user.username }}!</h1>
@@ -13,17 +12,20 @@
           <button @click="deleteUser">Delete User</button>
         </template>
       </Authenticator>
+      <input type="text" v-model="userId">
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
+<script>
 import { Authenticator } from "@aws-amplify/ui-vue";
 import { Hub, Auth, I18n } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
 import { IonPage, IonContent, IonHeader } from "@ionic/vue";
+
+import axios from "axios";
 
 // Typographical changes for the UI
 I18n.putVocabulariesForLanguage("en", {
@@ -38,9 +40,14 @@ export default defineComponent({
     IonHeader,
     Authenticator,
   },
+  data() {
+    return {
+      userId: "",
+    }
+  },
   mounted() {
     // Listen for Auth events
-    const AuthListener = (data: any) => {
+    const AuthListener = (data) => {
       switch (data.payload.event) {
         case "signIn":
           // Do sign in stuff
@@ -63,6 +70,24 @@ export default defineComponent({
       } catch (error) {
         console.log(error);
       }
+    },
+  },
+  watch: {
+    userId(newVal) {
+      if (newVal.length < 10) return;
+      axios
+        .get(`/users/${newVal}`)
+        .then((res) => {
+          this.$store.commit("setUser", res.data);
+          this.$router.push('/');
+          localStorage.setItem("userId", newVal);
+          setTimeout(() => {
+            location.reload();
+          }, 100);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 });
