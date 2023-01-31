@@ -11,7 +11,19 @@ async function init() {
 
   if (localStorage.getItem("userId")) {
     const user = await axios.get(`/users/${localStorage.getItem("userId")}`);
-    store.commit("setUser", user.data);
+    const { 
+      log, 
+      email, 
+      firstName, 
+      lastName, 
+      macronutrientCalibrations, 
+      customItems,
+      _id
+    } = user.data;
+    store.commit("setUser", { email, firstName, lastName, _id });
+    store.commit("setLog", log);
+    store.commit("setCustomItems", customItems);
+    store.commit("setMacronutrientCalibrations", macronutrientCalibrations);
   }
 
   SplashScreen.hide();

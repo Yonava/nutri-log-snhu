@@ -58,10 +58,10 @@ export default createStore<State>({
     toggleCaloriesHidden(state) {
       state.caloriesHidden = !state.caloriesHidden
     },
-    updateMacronutrientCalibrations(state, calibrations: MacronutrientCalibrations) {
+    setMacronutrientCalibrations(state, calibrations: MacronutrientCalibrations) {
       state.macronutrientCalibrations = calibrations
     },
-    updateTodaysNutrients(state, nutrients) {
+    setTodaysNutrients(state, nutrients) {
       state.todaysNutrients = nutrients
     },
     setCatalog(state, catalog) {

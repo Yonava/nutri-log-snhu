@@ -1,5 +1,6 @@
 import { Module } from 'vuex'
 import { AuthState } from '@/types/Vuex'
+import { User } from '@/types/User'
 
 const Auth: Module<AuthState, any> = {
   state: {
@@ -21,7 +22,7 @@ const Auth: Module<AuthState, any> = {
     }
   },
   mutations: {
-    setUser(state, user) {
+    setUser(state, user: User) {
       state.user = user
     }
   },

@@ -1,13 +1,15 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, UnloggedItem } from '@/types/Log';
+import { LoggedItem, UnloggedItem, DisplayItem } from '@/types/Log';
 
 const Log: Module<LogState, any> = {
   state: {
-    log: []
+    log: [],
+    customItems: [],
   },
   getters: {
     log: state => state.log,
+    customItems: state => state.customItems,
   },
   mutations: {
     addLogItem(state, item: LoggedItem) {
@@ -22,6 +24,12 @@ const Log: Module<LogState, any> = {
     updateLogItem(state, { _id, item }: { _id: string, item: LoggedItem }) {
       const index = state.log.findIndex(item => item._id === _id)
       state.log.splice(index, 1, item)
+    },
+    setLog(state, log: LoggedItem[]) {
+      state.log = log
+    },
+    setCustomItems(state, customItems: DisplayItem[]) {
+      state.customItems = customItems
     }
   },
   actions: {

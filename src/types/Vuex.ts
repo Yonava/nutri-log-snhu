@@ -10,7 +10,8 @@ export interface State {
 }
 
 export interface LogState {
-  log: LoggedItem[]
+  log: LoggedItem[],
+  customItems: DisplayItem[],
 }
 
 export interface AuthState {
