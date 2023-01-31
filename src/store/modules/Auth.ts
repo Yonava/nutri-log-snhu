@@ -14,6 +14,9 @@ const Auth: Module<AuthState, any> = {
     user(state) {
       return state.user
     },
+    userId(state) {
+      return state.user?._id
+    },
     token(state) {
       return state.token
     },

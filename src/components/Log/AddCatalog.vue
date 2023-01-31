@@ -19,7 +19,7 @@
           @click="goToDetail(item)"
         >
           <ion-icon 
-            @click.stop="addItem(item._id)"
+            @click.stop="addItem(item)"
             :icon="addCircleOutline" 
             color="success" 
             slot="start"
@@ -71,8 +71,8 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    function addItem(id: string) {
-      console.log(id)
+    function addItem(item: DisplayItem) {
+      store.dispatch("postLoggedItem", item)
     }
 
     function goToDetail(item: DisplayItem) {

@@ -1,6 +1,8 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, UnloggedItem, DisplayItem } from '@/types/Log';
+import { LoggedItem, DisplayItem } from '@/types/Log';
+
+import axios from 'axios';
 
 const Log: Module<LogState, any> = {
   state: {
@@ -18,7 +20,7 @@ const Log: Module<LogState, any> = {
       state.selectedLogItem = item
     },
     addLogItem(state, item: LoggedItem) {
-      state.log.push(item)
+      state.log.unshift(item)
     },
     appendLogItems(state, items: LoggedItem[]) {
       state.log.push(...items)
@@ -42,12 +44,19 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async postLoggedItem({ commit }, item: UnloggedItem) {
+    async postLoggedItem({ commit, getters }, item: DisplayItem) {
       const loggedItem = {
         ...item,
         dateAdded: new Date()
       }
       // HTTP request to post item to database
+      // get userid from vuex getters
+      const userId = getters.userId;
+      try {
+        await axios.put(`/users/${userId}/log`, loggedItem)
+      } catch {
+        console.error('Error posting logged item to database')
+      }
       commit('addLogItem', loggedItem)
     },
     deleteLoggedItem({ commit }, index: number) {

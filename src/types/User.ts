@@ -1,8 +1,8 @@
-import { UnloggedItem, LoggedItem } from './Log';
+import { DisplayItem, LoggedItem } from './Log';
 
 export interface UserDetail extends User {
   macronutrientCalibrations: MacronutrientCalibrations;
-  customItems: UnloggedItem[];
+  customItems: DisplayItem[];
   log: LoggedItem[];
 }
 
