@@ -149,7 +149,6 @@ export default defineComponent({
 
     function removeItem(item: LoggedItem) {
       const index = items.indexOf(item);
-      console.log(index)
       store.dispatch("deleteLoggedItem", item.dateAdded);
       undoStack.value.push({ 
         ...item,
@@ -157,12 +156,9 @@ export default defineComponent({
       });
     }
 
-
     function undo() {
       const poppedItem = undoStack.value.pop();
-      if (!poppedItem) return;
-      const { index, ...item } = poppedItem;
-      store.dispatch("postLoggedItem", { item, insertIndex: index });
+      store.dispatch("reAddLoggedItem", poppedItem);
     }
 
     function itemClicked(item: LoggedItem) {

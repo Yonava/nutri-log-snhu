@@ -72,7 +72,7 @@ export default {
     const router = useRouter();
 
     function addItem(item: DisplayItem) {
-      store.dispatch("postLoggedItem", { item, insertIndex: 0 })
+      store.dispatch("postLoggedItem", item)
     }
 
     function goToDetail(item: DisplayItem) {

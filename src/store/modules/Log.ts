@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, DisplayItem } from '@/types/Log';
+import { LoggedItem, DisplayItem, UndoItem } from '@/types/Log';
 
 import axios from 'axios';
 
@@ -34,7 +34,8 @@ const Log: Module<LogState, any> = {
       state.log.splice(index, 1, item)
     },
     setLog(state, log: LoggedItem[]) {
-      state.log = log
+      const sortedLogByISO = log.sort((a, b) => a.dateAdded > b.dateAdded ? -1 : 1)
+      state.log = sortedLogByISO
     },
     setCustomItems(state, customItems: DisplayItem[]) {
       state.customItems = customItems
@@ -45,7 +46,16 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async postLoggedItem({ commit, getters }, { item, insertIndex }: { item: LoggedItem, insertIndex: number}) {
+    async reAddLoggedItem({ commit, getters }, item: UndoItem) {
+      const { index, ...loggedItem } = item;
+      try {
+        await axios.put(`/users/${getters.userId}/log`, loggedItem)
+      } catch {
+        console.error('Error posting logged item to database')
+      }
+      commit('addLogItem', { loggedItem, insertIndex: index })
+    },
+    async postLoggedItem({ commit, getters }, item) {
       const loggedItem = {
         ...item,
         dateAdded: new Date().toISOString(),
@@ -55,7 +65,7 @@ const Log: Module<LogState, any> = {
       } catch {
         console.error('Error posting logged item to database')
       }
-      commit('addLogItem', { loggedItem, insertIndex })
+      commit('addLogItem', { loggedItem, insertIndex: 0 })
     },
     async deleteLoggedItem({ commit, getters }, dateAdded: Date) {
       try {
