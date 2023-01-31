@@ -25,8 +25,8 @@ const Log: Module<LogState, any> = {
     appendLogItems(state, items: LoggedItem[]) {
       state.log.push(...items)
     },
-    removeLogItem(state, id: string) {
-      const index = state.log.findIndex(item => item._id === id)
+    removeLogItem(state, dateAdded: Date) {
+      const index = state.log.findIndex(item => item.dateAdded === dateAdded)
       state.log.splice(index, 1)
     },
     updateLogItem(state, { _id, item }: { _id: string, item: LoggedItem }) {
@@ -48,7 +48,7 @@ const Log: Module<LogState, any> = {
     async postLoggedItem({ commit, getters }, { item, insertIndex }: { item: LoggedItem, insertIndex: number}) {
       const loggedItem = {
         ...item,
-        dateAdded: new Date()
+        dateAdded: new Date().toISOString(),
       }
       try {
         await axios.put(`/users/${getters.userId}/log`, loggedItem)
@@ -57,13 +57,13 @@ const Log: Module<LogState, any> = {
       }
       commit('addLogItem', { loggedItem, insertIndex })
     },
-    async deleteLoggedItem({ commit, getters }, id: string) {
+    async deleteLoggedItem({ commit, getters }, dateAdded: Date) {
       try {
-        await axios.put(`/users/${getters.userId}/log/${id}`)
+        await axios.put(`/users/${getters.userId}/log/${dateAdded}`)
       } catch {
         console.error('Error deleting logged item from database')
       }
-      commit('removeLogItem', id)
+      commit('removeLogItem', dateAdded)
     },
     updateLoggedItem({ commit }, { _id, item }: { _id: string, item: LoggedItem }) {
       // HTTP request to update item in database
