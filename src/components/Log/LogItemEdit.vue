@@ -1,12 +1,12 @@
 <template>
   <ion-page>
     <ion-content>
-      <default-header :title="item">
+      <default-header :title="item.name">
         <template #left>
           <ion-back-button default-href="/tabs/log"></ion-back-button>
         </template>
       </default-header>
-      Detail view for {{ item }}
+      {{ item }}
     </ion-content>
   </ion-page>
 </template>
@@ -17,8 +17,7 @@ import {
   IonBackButton,
   IonContent,
 } from '@ionic/vue';
-
-import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
   components: {
@@ -27,8 +26,8 @@ export default {
     IonContent,
   },
   setup() {
-    const route = useRoute();
-    const { item } = route.params;
+    const store = useStore();
+    const item = store.getters.selectedLogItem;
 
     return {
       item

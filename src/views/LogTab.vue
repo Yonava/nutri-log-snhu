@@ -167,12 +167,10 @@ export default defineComponent({
     // }
 
     function itemClicked(item: LoggedItem) {
+      store.commit("setSelectedLogItem", item);
       removeItemsState.value ? undefined :
       router.push({ 
-        name: 'LogEditDetail', 
-        params: { 
-          item: item.name
-        }
+        name: 'LogEditDetail'
       })
     }
 

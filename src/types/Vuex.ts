@@ -12,6 +12,7 @@ export interface State {
 export interface LogState {
   log: LoggedItem[],
   customItems: DisplayItem[],
+  selectedLogItem: LoggedItem | null,
 }
 
 export interface AuthState {

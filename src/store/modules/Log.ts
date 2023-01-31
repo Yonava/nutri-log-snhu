@@ -6,12 +6,17 @@ const Log: Module<LogState, any> = {
   state: {
     log: [],
     customItems: [],
+    selectedLogItem: null,
   },
   getters: {
     log: state => state.log,
     customItems: state => state.customItems,
+    selectedLogItem: state => state.selectedLogItem,
   },
   mutations: {
+    setSelectedLogItem(state, item: LoggedItem | null) {
+      state.selectedLogItem = item
+    },
     addLogItem(state, item: LoggedItem) {
       state.log.push(item)
     },
