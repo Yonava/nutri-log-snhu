@@ -21,7 +21,8 @@ import {
   IonHeader, 
   IonToolbar, 
   IonButton,
-  IonTitle
+  IonTitle,
+  IonMenu
 } from '@ionic/vue';
 
 export default  defineComponent({
@@ -30,7 +31,8 @@ export default  defineComponent({
     IonHeader,
     IonToolbar,
     IonButton,
-    IonTitle
+    IonTitle,
+    IonMenu
 },
 });
 </script>
