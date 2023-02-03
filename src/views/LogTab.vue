@@ -3,7 +3,10 @@
     <default-header title="Log">
       <template #left>
         <div @click="removeItemsState = !removeItemsState">
-          <ion-button v-if="!removeItemsState">
+          <ion-button 
+            v-if="!removeItemsState"
+            :disabled="items.length === 0"
+          >
             remove
             <ion-icon 
               slot="start" 
@@ -50,6 +53,21 @@
         </ion-toolbar>
       </ion-header>
       <TransitionGroup name="fade">
+        <div 
+          v-if="items.length === 0" 
+          class="center"
+        >
+          <h2>
+            No items logged yet
+          </h2>
+          <ion-button @click="addPopOver">
+            add
+            <ion-icon 
+              :icon="add"
+              slot="end" 
+            ></ion-icon>
+          </ion-button>
+        </div>
         <div
           v-for="i in items"
           :key="i"
@@ -83,6 +101,7 @@ import {
   defineComponent, 
   ref
 } from 'vue';
+import { useStore } from 'vuex';
 import { 
   IonPage,  
   IonContent, 
@@ -102,10 +121,10 @@ import {
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { 
-  Item, 
+  LoggedItem, 
   UndoItem, 
-  DateItem 
-} from '@/components/Log/Types';
+  DateTag 
+} from '@/types/Log';
 
 export default defineComponent({
   components: { 
@@ -121,34 +140,32 @@ export default defineComponent({
   setup() {
 
     const router = useRouter();
+    const store = useStore();
+
+    const items = store.getters.log;
 
     const removeItemsState = ref(false);
     const undoStack = ref<UndoItem[]>([]);
 
-    function removeItem(item: Item) {
-      const index = items.value.indexOf(item);
+    function removeItem(item: LoggedItem) {
+      const index = items.indexOf(item);
+      store.dispatch("deleteLoggedItem", item.dateAdded);
       undoStack.value.push({ 
         ...item,
         index 
       });
-      items.value.splice(index, 1);
     }
-
 
     function undo() {
       const poppedItem = undoStack.value.pop();
-      if (!poppedItem) return;
-      const { index, ...item } = poppedItem;
-      items.value.splice(index, 0, item);
+      store.dispatch("reAddLoggedItem", poppedItem);
     }
 
-    function itemClicked(item: Item) {
+    function itemClicked(item: LoggedItem) {
+      store.commit("setSelectedLogItem", item);
       removeItemsState.value ? undefined :
       router.push({ 
-        name: 'LogEditDetail', 
-        params: { 
-          item: item.name
-        }
+        name: 'LogEditDetail'
       })
     }
 
@@ -162,82 +179,26 @@ export default defineComponent({
       return await popover.present();
     }
 
-    function itemStyle(item: Item | DateItem) {
+    function itemStyle(item: LoggedItem | DateTag) {
       if ('month' in item) {
         return { position: 'sticky', top: 0, zIndex: 2 };
       } else {
         return {};
       }
     }
-    
-    const items = ref([
-      { name: 'pizza', calories: 324, _id: '1a' },
-      { name: 'burger', calories: 324, _id: '2a' },
-      { name: 'fries', calories: 324, _id: '3a' },
-      { name: 'chicken', calories: 324, _id: '4a' },
-      { name: 'salad', calories: 324, _id: '5a' },
-      { name: 'sushi', calories: 324, _id: '6a' },
-      { name: 'tacos', calories: 324, _id: '7a' },
-      { name: 'burrito', calories: 324, _id: '8a' },
-      { name: 'pasta', calories: 324, _id: '9a' },
-      { name: 'sandwich', calories: 324, _id: '10a' },
-      { month: 'jul'},
-      { name: 'steak', calories: 324, _id: '11a' },
-      { name: 'chips', calories: 324, _id: '12a' },
-      { name: 'ice cream', calories: 324, _id: '13a' },
-      { name: 'cake', calories: 324, _id: '14a' },
-      { name: 'cookies', calories: 324, _id: '15a' },
-      { month: 'sep' },
-      { name: 'donuts', calories: 324, _id: '16a' },
-      { name: 'milkshake', calories: 324, _id: '17a' },
-      { name: 'hot dog', calories: 324, _id: '18a' },
-      { name: 'chocolate', calories: 324, _id: '19a' },
-      { name: 'candy', calories: 324, _id: '20a' },
-      { name: 'popcorn', calories: 324, _id: '21a' },
-      { name: 'chips', calories: 324, _id: '22a' },
-      { name: 'ice cream', calories: 324, _id: '23a' },
-      { name: 'cake', calories: 324, _id: '24a' },
-      { name: 'cookies', calories: 324, _id: '25a' },
-      { month: 'oct' },
-      { name: 'donuts', calories: 324, _id: '26a' },
-      { name: 'milkshake', calories: 324, _id: '27a' },
-      { name: 'hot dog', calories: 324, _id: '28a' },
-      { name: 'chocolate', calories: 324, _id: '29a' },
-      { name: 'candy', calories: 324, _id: '30a' },
-      { name: 'popcorn', calories: 324, _id: '31a' },
-      { name: 'chips', calories: 324, _id: '32a' },
-      { name: 'ice cream', calories: 324, _id: '33a' },
-      { name: 'cake', calories: 324, _id: '34a' },
-      { name: 'cookies', calories: 324, _id: '35a' },
-      { month: 'nov' },
-      { name: 'donuts', calories: 324, _id: '36a' },
-      { name: 'milkshake', calories: 324, _id: '37a' },
-      { name: 'hot dog', calories: 324, _id: '38a' },
-      { name: 'chocolate', calories: 324, _id: '39a' },
-      { name: 'candy', calories: 324, _id: '40a' },
-      { name: 'popcorn', calories: 324, _id: '41a' },
-      { name: 'chips', calories: 324, _id: '42a' },
-      { name: 'ice cream', calories: 324, _id: '43a' },
-      { name: 'cake', calories: 324, _id: '44a' },
-      { name: 'cookies', calories: 324, _id: '45a' },
-      { month: 'dec' },
-      { name: 'donuts', calories: 324, _id: '46a' },
-      { name: 'milkshake', calories: 324, _id: '47a' },
-      { name: 'hot dog', calories: 324, _id: '48a' },
-      { name: 'chocolate', calories: 324, _id: '49a' },
-    ]);
+
     return {
+      items,
       arrowForward,
       arrowUndoOutline,
       add,
       remove,
       removeItemsState,
-      items,
       checkmarkOutline,
       undoStack,
-      itemStyle,
-      removeItem,
       undo,
+      removeItem,
+      itemStyle,
       itemClicked,
       addPopOver  
     }

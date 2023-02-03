@@ -1,7 +1,7 @@
 <template>
   <ion-item
     :class="removeItemsState ? '' : 'push-item'"
-    :style="{ transition: 'all 0.2s ease-in-out', width: '113%' }"
+    style="-webkit-transition: 0.2s ease-in-out; width: 113%"
     button
   >
     <ion-icon
@@ -12,11 +12,11 @@
     ></ion-icon>
     <div class="item-parent">
       <p style="margin: 0; font-size: 8pt">
-        {{ time }} |
+        {{ toDateTimeString(item.dateAdded) }} |
         {{ item.calories }} cals |
-        43g carbs |
-        43g protein |
-        43g fat
+        {{ item.macro.carbohydrates.total }}g carbs |
+        {{ item.macro.protein }}g protein |
+        {{ item.macro.fat.total }}g fat
       </p>
       <h2 style="text-transform: capitalize; margin: 0">
         {{ item.name }}
@@ -27,9 +27,8 @@
 
 <script lang="ts">
 import { IonIcon, IonItem } from '@ionic/vue';
-import { defineComponent, computed } from 'vue';
+import { defineComponent } from 'vue';
 import { removeCircleOutline } from 'ionicons/icons';
-import { Item } from '@/components/Log/Types';
 
 export default defineComponent({
   name: 'LogItem',
@@ -52,20 +51,18 @@ export default defineComponent({
     'item-clicked'
   ],
   setup(props, { emit }) {
-    const removeItem = (i: Item) => {
+    const removeItem = (i: any) => {
       emit('remove-item', i);
     };
 
-    const timeStamp = new Date();
-
-    const time = computed(() => {
-      return timeStamp.toLocaleTimeString([], { timeStyle: 'short' })
-    })
+    const toDateTimeString = (date: Date) => {
+      const timeStamp = new Date(date);
+      return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
+    };
 
     return {
-      timeStamp,
-      time,
       removeCircleOutline,
+      toDateTimeString,
       removeItem,
     };
   },

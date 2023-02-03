@@ -25,9 +25,8 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: 'LogEditDetail',
-        path: 'log/edit/:item',
-        component: () => import('@/components/Log/LogItemEdit.vue'),
-        props: true
+        path: 'log/edit',
+        component: () => import('@/components/Log/LogItemEdit.vue')
       },
       {
         name: 'AddCustom',
@@ -38,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'AddCatalog',
         path: 'log/addCatalog',
         component: () => import('@/components/Log/AddCatalog.vue')
+      },
+      {
+        name: 'AddCatalogDetail',
+        path: 'log/addCatalog/detail',
+        component: () => import('@/components/Log/AddCatalogDetail.vue')
       },
       {
         path: 'scan',
