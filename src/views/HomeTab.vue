@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="main">
     <ion-content 
       :force-overscroll="false" 
       :fullscreen="true"
@@ -12,9 +12,9 @@
             </ion-button>
           </ion-buttons>
           <ion-buttons slot="primary">
-            <ion-button>
-              <ion-icon slot="icon-only" :icon="person"></ion-icon>
-            </ion-button>
+              <ion-button @click="openMenu()">
+                <ion-icon slot="icon-only" :icon="person"></ion-icon>
+              </ion-button>
           </ion-buttons>
           <ion-title>NutriLog SNHU</ion-title>
         </ion-toolbar>
@@ -45,18 +45,24 @@ import {
   person, 
   notifications 
 } from 'ionicons/icons';
+import { menuController } from '@ionic/vue';
 
 export default  defineComponent({
-  components: { 
-    IonContent, 
-    IonPage, 
-    IonHeader, 
-    IonToolbar, 
+  components: {
+    IonContent,
+    IonPage,
+    IonHeader,
+    IonToolbar,
     IonIcon,
     IonButtons,
     IonButton,
     IonTitle
-  },
+},
+methods:{
+openMenu() {
+  menuController.open("app-menu")
+}
+},
   setup() {
     const circleOpacity = ref(1);
     return {

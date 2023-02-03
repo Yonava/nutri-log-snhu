@@ -1,18 +1,22 @@
 <template>
-  <ion-app>
-    <ion-router-outlet />
-  </ion-app>
+    <ion-app>
+      <ProfileMenu></ProfileMenu>
+      <ion-router-outlet id="main-content"/>
+    </ion-app>
+    <ion-menu-controller></ion-menu-controller>
 </template>
 
 <script lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import ProfileMenu from './components/ProfileMenu/ProfileMenu.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     IonApp,
-    IonRouterOutlet
+    IonRouterOutlet,
+    ProfileMenu
   }
 });
 </script>
