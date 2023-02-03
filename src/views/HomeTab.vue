@@ -24,7 +24,7 @@
       </div>
       {{ circleOpacity }}
       <ion-button @click="circleOpacity = circleOpacity ? 0 : 1">toggle circle</ion-button>
-      <ion-button class="center" router-link="/signin">Sign in</ion-button>
+      <ion-button class="center" router-link="/signin">{{ $store.getters.isLoggedIn ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}` : 'Sign In' }}</ion-button>
     </ion-content>
   </ion-page>
 </template>
