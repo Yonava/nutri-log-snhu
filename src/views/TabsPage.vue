@@ -1,13 +1,6 @@
 <template>
   <ion-page>
-    <ion-menu content-id="home-tab-content" menu-id="profile-menu">
-      <ion-header>
-        <ion-toolbar color="tertiary">
-          <ion-title>Menu Content</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">This is the menu content.</ion-content>
-    </ion-menu>
+    <ProfileMenu />
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
@@ -32,6 +25,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import ProfileMenu from '@/components/Profile/ProfileMenu.vue';
 import { 
   IonTabBar,  
   IonTabButton, 
@@ -56,7 +50,8 @@ export default defineComponent({
     IonTabButton, 
     IonIcon, 
     IonPage, 
-    IonRouterOutlet 
+    IonRouterOutlet,
+    ProfileMenu,
   },
   setup() {
     return {
