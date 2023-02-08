@@ -9,7 +9,7 @@ async function init() {
 
   axios.defaults.baseURL = "https://nutri-log-server.herokuapp.com/api";
 
-  vuexStore.dispatch("configClientStore");
+  await vuexStore.dispatch("configClientStore");
 
   const catalogItems = await axios.get("/items");
   vuexStore.commit("setCatalog", catalogItems.data);

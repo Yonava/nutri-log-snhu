@@ -21,6 +21,10 @@ export interface AuthState {
   token: string | null
 }
 
+export interface ToastState {
+
+}
+
 export interface NutritionData {
   calories: number,
   carbs: number,

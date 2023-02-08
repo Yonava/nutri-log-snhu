@@ -1,5 +1,13 @@
 <template>
   <ion-page>
+    <ion-menu content-id="home-tab-content" menu-id="profile-menu">
+      <ion-header>
+        <ion-toolbar color="tertiary">
+          <ion-title>Menu Content</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">This is the menu content.</ion-content>
+    </ion-menu>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
@@ -31,7 +39,7 @@ import {
   IonLabel, 
   IonIcon, 
   IonPage, 
-  IonRouterOutlet 
+  IonRouterOutlet,
 } from '@ionic/vue';
 import { 
   scanOutline, 

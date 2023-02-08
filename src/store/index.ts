@@ -1,9 +1,10 @@
 import { createStore } from 'vuex'
 import { State } from '@/types/Vuex'
+import { Storage, Drivers } from "@ionic/storage"
 import { MacronutrientCalibrations } from '@/types/User'
 import Log from './modules/Log'
 import Auth from './modules/Auth'
-import { Storage, Drivers } from "@ionic/storage";
+import Toast from './modules/Toast'
 
 export default createStore<State>({
   strict: process.env.NODE_ENV !== 'production',
@@ -102,6 +103,7 @@ export default createStore<State>({
   },
   modules: {
     Log,
-    Auth
+    Auth,
+    Toast
   }
 })
