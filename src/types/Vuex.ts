@@ -7,6 +7,7 @@ export interface State {
   macronutrientCalibrations: MacronutrientCalibrations,
   catalog: DisplayItem[],
   selectedCatalogItem: DisplayItem | null,
+  clientStore: Object | null
 }
 
 export interface LogState {
@@ -18,6 +19,10 @@ export interface LogState {
 export interface AuthState {
   user: User | null,
   token: string | null
+}
+
+export interface ToastState {
+
 }
 
 export interface NutritionData {

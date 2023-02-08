@@ -1,8 +1,10 @@
 import { createStore } from 'vuex'
 import { State } from '@/types/Vuex'
+import { Storage, Drivers } from "@ionic/storage"
 import { MacronutrientCalibrations } from '@/types/User'
 import Log from './modules/Log'
 import Auth from './modules/Auth'
+import Toast from './modules/Toast'
 
 export default createStore<State>({
   strict: process.env.NODE_ENV !== 'production',
@@ -45,14 +47,16 @@ export default createStore<State>({
       targetPotassium: 0,
       targetCalcium: 0,
       targetIron: 0
-    }
+    },
+    clientStore: null
   },
   getters: {
     caloriesHidden: state => state.caloriesHidden,
     todaysNutrients: state => state.todaysNutrients,
     macronutrientCalibrations: state => state.macronutrientCalibrations,
     catalog: state => state.catalog,
-    selectedCatalogItem: state => state.selectedCatalogItem
+    selectedCatalogItem: state => state.selectedCatalogItem,
+    getClientStore: state => state.clientStore
   },
   mutations: {
     toggleCaloriesHidden(state) {
@@ -69,6 +73,9 @@ export default createStore<State>({
     },
     setSelectedCatalogItem(state, item) {
       state.selectedCatalogItem = item
+    },
+    setClientStore(state, store) {
+      state.clientStore = store
     }
   },
   actions: {
@@ -80,9 +87,23 @@ export default createStore<State>({
       // HTTP request to update user's macronutrient calibrations
       commit('updateMacronutrientCalibrations', calibrations)
     },
+    async configClientStore({ commit }) {
+      const clientStore = new Storage({
+        name: 'clientStore',
+        driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+      })
+      try {
+        await clientStore.create()
+        console.log('clientStore created')
+      } catch (err) {
+        console.log(err)
+      }
+      commit('setClientStore', clientStore)
+    },
   },
   modules: {
     Log,
-    Auth
+    Auth,
+    Toast
   }
 })
