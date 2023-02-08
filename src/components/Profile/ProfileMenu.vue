@@ -3,29 +3,30 @@
     content-id="home-tab-content" 
     menu-id="profile-menu"
   >
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Profile</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content>
       <div class="main-container">
-        <div>
-          <div 
-            v-for="button in buttons"
-            :key="button.text"
-            class="center"
-          >
-            <ion-button class="nav-button">
-              {{ button.text }}
-            </ion-button>
-          </div>
+        <div class="headline-content center">
+          <h1 class="header-text">Hi, {{ firstName }}</h1>
+          <div style="background: orange; width: 120px; height: 120px; border-radius: 50%"></div>
         </div>
-        <div class="center">
-          <ion-button 
-            color="danger" 
-            style="width: 90%"
-          >Logout</ion-button>
+        <div class="action-content">
+          <div>
+            <div 
+              v-for="button in buttons"
+              :key="button.text"
+              class="center"
+            >
+              <ion-button class="nav-button">
+                {{ button.text }}
+              </ion-button>
+            </div>
+          </div>
+          <div class="center">
+            <ion-button 
+              color="danger" 
+              style="width: 90%"
+            >Logout</ion-button>
+          </div>
         </div>
       </div>
     </ion-content>
@@ -33,26 +34,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import {
   IonContent,
-  IonHeader,
-  IonToolbar,
   IonButton,
-  IonTitle,
   IonMenu
 } from "@ionic/vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
     IonContent,
-    IonHeader,
-    IonToolbar,
     IonButton,
-    IonTitle,
     IonMenu
   },
   setup() {
+    const store = useStore();
+    const firstName = computed(() => {
+      return store.getters.isLoggedIn ? store.getters.user.firstName : "";
+    });
     const buttons = [
       { text: "Adjust Daily Targets" },
       { text: "Hide Calories" },
@@ -60,6 +60,8 @@ export default defineComponent({
     ];
 
     return {
+      firstName,
+      store,
       buttons
     };
   }
@@ -73,9 +75,25 @@ export default defineComponent({
 }
 .main-container {
   display: flex; 
-  justify-content: space-between; 
   flex-direction: column;
   height: 100%;
-  padding: 10px 0px 10px 0px;
+  padding: 15px 0px 15px 0px;
+}
+
+.headline-content {
+  height: 30%;
+}
+
+.action-content {
+  height: 70%;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-text {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 10px;
 }
 </style>

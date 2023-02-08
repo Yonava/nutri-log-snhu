@@ -19,7 +19,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { IonButton } from "@ionic/vue";
-import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
@@ -27,10 +26,8 @@ export default defineComponent({
   },
   setup() {
     const circleOpacity = ref(1);
-    const store = useStore();
     return {
       circleOpacity,
-      store,
     };
   },
 });
