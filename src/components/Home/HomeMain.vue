@@ -1,19 +1,21 @@
 <template>
   <ion-content content-id="home-tab-content">
+    <div class="center">
     <div @click="randomPercent" class="radial-bar">
       <div class="radial-bar__circle">
-        <div class="radial-bar__mask js-radial-mask">
-          <div class="radial-bar__fill js-radial-fill"></div>
+        <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__mask js-radial-mask">
+          <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fill"></div>
         </div>
         <div class="radial-bar__mask">
           <div class="radial-bar__fill js-radial-fill"></div>
-          <div class="radial-bar__fill js-radial-fix"></div>
+          <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fix"></div>
         </div>
       </div>
       <div class="radial-bar__inset">
         <div class="radial-bar__percent js-radial-percent">
         </div>
       </div>
+    </div>
     </div>
     {{ percent }}
     Calories: {{ $store.getters.todaysCalorieData }}
@@ -59,6 +61,7 @@ export default defineComponent({
 
 <style scoped>
 .radial-bar { 
+  transform: scale(3);
   margin: 50px;
   width: 80px;
   height: 80px;
