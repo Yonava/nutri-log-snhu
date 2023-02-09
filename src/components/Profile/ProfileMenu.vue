@@ -1,5 +1,6 @@
 <template>
   <ion-menu 
+    type="push"
     content-id="home-tab-content" 
     menu-id="profile-menu"
   >
@@ -95,5 +96,9 @@ export default defineComponent({
   font-size: 2.5rem;
   font-weight: 800;
   margin: 10px;
+}
+
+ion-content {
+  --overflow: hidden;
 }
 </style>

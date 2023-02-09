@@ -1,28 +1,34 @@
 <template>
-  <div class="center">
-    <div 
-      :style="{ opacity: circleOpacity }"
-      class="circle" 
-    ></div>
-  </div>
-  {{ circleOpacity }}
-  <ion-button @click="circleOpacity = circleOpacity ? 0 : 1"
-    >toggle circle</ion-button
-  >
-  <ion-button class="center" router-link="/signin">{{
-    $store.getters.isLoggedIn
-      ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
-      : "Sign In"
-  }}</ion-button>
+  <ion-content content-id="home-tab-content">
+    <div class="center">
+      <div 
+        :style="{ opacity: circleOpacity }"
+        class="circle" 
+      ></div>
+    </div>
+    {{ circleOpacity }}
+    <ion-button @click="circleOpacity = circleOpacity ? 0 : 1"
+      >toggle circle</ion-button
+    >
+    <ion-button class="center" router-link="/signin">{{
+      $store.getters.isLoggedIn
+        ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
+        : "Sign In"
+    }}</ion-button>
+  </ion-content>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { IonButton } from "@ionic/vue";
+import { 
+  IonButton,
+  IonContent,
+} from "@ionic/vue";
 
 export default defineComponent({
   components: {
     IonButton,
+    IonContent,
   },
   setup() {
     const circleOpacity = ref(1);
@@ -42,5 +48,8 @@ export default defineComponent({
   border-radius: 50%;
   display: inline-block;
   transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+ion-content {
+  --overflow: hidden;
 }
 </style>
