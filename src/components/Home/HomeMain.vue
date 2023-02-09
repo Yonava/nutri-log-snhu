@@ -1,23 +1,31 @@
 <template>
   <ion-content content-id="home-tab-content">
     <div class="center">
-    <div @click="randomPercent" class="radial-bar">
-      <div class="radial-bar__circle">
-        <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__mask js-radial-mask">
-          <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fill"></div>
+    <div 
+      class="center"
+      style="width: 100%; height: 350px;"
+    >
+      <div 
+        @click="randomPercent" 
+        class="radial-bar"
+      >
+        <div class="radial-bar__circle">
+          <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__mask js-radial-mask">
+            <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fill"></div>
+          </div>
+          <div class="radial-bar__mask">
+            <div class="radial-bar__fill js-radial-fill"></div>
+            <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fix"></div>
+          </div>
         </div>
-        <div class="radial-bar__mask">
-          <div class="radial-bar__fill js-radial-fill"></div>
-          <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fix"></div>
-        </div>
-      </div>
-      <div class="radial-bar__inset">
-        <div class="radial-bar__percent js-radial-percent">
+        <div class="radial-bar__inset">
+          <div class="radial-bar__percent">
+            {{ percent }}%
+          </div>
         </div>
       </div>
     </div>
     </div>
-    {{ percent }}
     Calories: {{ $store.getters.todaysCalorieData }}
     Carbs: {{ $store.getters.todaysCarbData }}
     Protein: {{ $store.getters.todaysProteinData }}
@@ -61,11 +69,10 @@ export default defineComponent({
 
 <style scoped>
 .radial-bar { 
-  transform: scale(3);
-  margin: 50px;
+  transform: scale(3.5);
   width: 80px;
   height: 80px;
-  background-color: #cccccc;
+  background-color: var(--ion-color-step-100);
   border-radius: 50%;
 }
 
@@ -88,7 +95,7 @@ export default defineComponent({
   transition: transform 1s;
   border-radius: 50%;
   clip: rect(0px, 40px, 80px, 0px);
-  background-color: #669900;
+  background-color: var(--ion-color-primary);
   width: 80px;
   height: 80px;
   position: absolute;
@@ -100,7 +107,7 @@ export default defineComponent({
   position: absolute;
   margin-left: 5px;
   margin-top: 5px;
-  background-color: #fbfbfb;
+  background-color: var(--ion-color-step-50);
   border-radius: 50%;
   display: table-cell;
 }
@@ -110,8 +117,9 @@ export default defineComponent({
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  color: #669900;
-  font-size: 22px;
+  color: var(--ion-color-step-900);
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 ion-content {
   --overflow: hidden;
