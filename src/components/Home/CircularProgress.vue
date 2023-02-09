@@ -1,18 +1,37 @@
 <template>
   <div class="radial-bar">
     <div class="radial-bar__circle">
-      <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__mask js-radial-mask">
-        <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fill"></div>
+      <div 
+        :style="{ 
+          transform: `rotate(${1.8 * percent}deg)` 
+        }" 
+        class="radial-bar__mask js-radial-mask"
+      >
+        <div 
+          :style="{ 
+            transform: `rotate(${1.8 * percent}deg)` 
+          }" 
+          class="radial-bar__fill js-radial-fill"
+        ></div>
       </div>
       <div class="radial-bar__mask">
-        <div class="radial-bar__fill js-radial-fill"></div>
-        <div :style="{ transform: `rotate(${1.8 * percent}deg)` }" class="radial-bar__fill js-radial-fix"></div>
+        <div 
+          :style="{ 
+            backgroundColor: color ? color : 'var(--ion-color-primary)' 
+          }" 
+          class="radial-bar__fill js-radial-fill"
+        ></div>
+        <div 
+          :style="{ 
+            transform: `rotate(${1.8 * percent}deg)`, 
+            backgroundColor: color ? color : 'var(--ion-color-primary)' 
+          }" 
+          class="radial-bar__fill js-radial-fix"
+        ></div>
       </div>
     </div>
     <div class="radial-bar__inset">
-      <div class="radial-bar__percent">
-        {{ percent }}%
-      </div>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -24,6 +43,10 @@ export default {
     percent: {
       type: Number,
       required: true,
+    },
+    color: {
+      type: String,
+      required: false,
     },
   },
 };
@@ -57,7 +80,6 @@ export default {
   transition: transform 1s;
   border-radius: 50%;
   clip: rect(0px, 40px, 80px, 0px);
-  background-color: var(--ion-color-primary);
   width: 80px;
   height: 80px;
   position: absolute;
@@ -72,15 +94,5 @@ export default {
   background-color: var(--ion-color-step-50);
   border-radius: 50%;
   display: table-cell;
-}
-
-.radial-bar__percent {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ion-color-step-900);
-  font-size: 1.2rem;
-  font-weight: 700;
 }
 </style>
