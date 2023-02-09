@@ -1,6 +1,6 @@
 <template>
   <ion-item
-    style="width: 113%;"
+    style="width: 114%;"
     button
   >
     <ion-icon
