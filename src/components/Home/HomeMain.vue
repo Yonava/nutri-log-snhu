@@ -1,19 +1,15 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <div class="center">
-    <div 
-      @click="randomPercent" 
-      class="center"
-      style="width: 100%; height: 350px;"
-    >
-      <CircularProgress :percent="percent" />
-    </div>
-    </div>
-    Calories: {{ $store.getters.todaysCalorieData }}
-    Carbs: {{ $store.getters.todaysCarbData }}
-    Protein: {{ $store.getters.todaysProteinData }}
-    Fat: {{ $store.getters.todaysFatData }}
-    Sugar: {{ $store.getters.todaysSugarData }}
+    <ion-slides class="center">
+      <ion-slide 
+        v-for="component in macroComponents"
+        :key="component"
+        class="center"
+        style="width: 100%; height: 350px;"
+      >
+        <component :is="component" />
+      </ion-slide>
+    </ion-slides>
     <ion-button class="center" router-link="/signin">{{
       $store.getters.isLoggedIn
         ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
@@ -23,30 +19,52 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { 
   IonButton,
   IonContent,
+  IonSlide,
+  IonSlides,
 } from "@ionic/vue";
-import CircularProgress from "@/components/Home/CircularProgress.vue";
+import CalorieProgress from "./Macros/CalorieProgress.vue";
+import CarbProgress from "./Macros/CarbProgress.vue";
+import ProteinProgress from "./Macros/ProteinProgress.vue";
+import FatProgress from "./Macros/FatProgress.vue";
+import SugarProgress from "./Macros/SugarProgress.vue";
+import SodiumProgress from "./Macros/SodiumProgress.vue";
+import PotasProgress from "./Macros/PotasProgress.vue";
+import FiberProgress from "./Macros/FiberProgress.vue";
 
 export default defineComponent({
   components: {
     IonButton,
     IonContent,
-    CircularProgress,
+    IonSlide,
+    IonSlides,
+    CalorieProgress,
+    CarbProgress,
+    ProteinProgress,
+    FatProgress,
+    SugarProgress,
+    SodiumProgress,
+    PotasProgress,
+    FiberProgress,
   },
   setup() {
 
-    const percent = ref(0);
-    
-    function randomPercent() {
-      return percent.value = Math.floor(Math.random() * 100);
-    }
+    const macroComponents = [
+      "CalorieProgress",
+      "CarbProgress",
+      "ProteinProgress",
+      "FatProgress",
+      "SugarProgress",
+      "SodiumProgress",
+      "PotasProgress",
+      "FiberProgress",
+    ];
 
     return {
-      randomPercent,
-      percent,
+      macroComponents,
     };
   },
 });
