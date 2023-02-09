@@ -53,10 +53,10 @@ export default defineComponent({
   setup() {
 
     const macroComponents = [
+      "FatProgress",
       "CalorieProgress",
       "CarbProgress",
       "ProteinProgress",
-      "FatProgress",
       "SugarProgress",
       "SodiumProgress",
       "PotasProgress",

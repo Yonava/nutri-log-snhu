@@ -1,6 +1,36 @@
 <template>
   <div>
-    <CircularProgress :percent="percent" />
+    <CircularProgress 
+      :percent="fatData.percent"
+      color="var(--ion-color-danger)"
+    >
+      <div style="transform: translateY(15%)">
+        <div style="font-weight: 200; font-size: 0.4rem">
+          total
+        </div>
+        <div @click="animateCountUp" style="font-weight: 700; font-size: 0.9rem">
+          {{ fatData.total }}g
+        </div>
+        <div class="center" style="flex-direction: row; margin-top: 2px">
+          <div style="margin: 0px 3px" class="center">
+            <div style="font-weight: 200; font-size: 0.4rem">
+              saturated
+            </div>
+            <div style="font-weight: 700; font-size: 0.7rem">
+              {{ fatData.totalSaturated }}g
+            </div>
+          </div>
+          <div style="margin: 0px 3px" class="center">
+            <div style="font-weight: 200; font-size: 0.4rem">
+              trans
+            </div>
+            <div style="font-weight: 700; font-size: 0.7rem">
+              {{ fatData.totalTrans }}g
+            </div>
+          </div>
+        </div>
+      </div>
+    </CircularProgress>
   </div>
 </template>
 
@@ -11,7 +41,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const percent = computed(() => {
-  return store.getters.todaysCalorieData.percent;
+const fatData = computed(() => {
+  return store.getters.todaysFatData;
 });
 </script>

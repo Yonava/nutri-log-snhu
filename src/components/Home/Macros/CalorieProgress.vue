@@ -15,7 +15,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();

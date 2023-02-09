@@ -6,10 +6,10 @@
     >
       <div style="transform: translateY(50%)">
         <div @click="animateCountUp" style="font-weight: 700; font-size: 1.3rem">
-          {{ carbData.total }}
+          {{ carbData.total }}g
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
-          total
+          total carbs
         </div>
       </div>
     </CircularProgress>
@@ -18,7 +18,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
