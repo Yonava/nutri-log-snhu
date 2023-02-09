@@ -14,6 +14,15 @@ const Log: Module<LogState, any> = {
     log: state => state.log,
     customItems: state => state.customItems,
     selectedLogItem: state => state.selectedLogItem,
+    todaysLog: state => state.log.filter(item => {
+      const date = new Date(item.dateAdded)
+      const today = new Date()
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      )
+    }),
   },
   mutations: {
     setSelectedLogItem(state, item: LoggedItem | null) {

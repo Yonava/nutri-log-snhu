@@ -198,16 +198,20 @@ export default defineComponent({
     }
 
     function showRemoveButton() {
+      const parent = document.querySelector('#parent-transform');
+      if (!parent) return;
       createAnimation()
-        .addElement(document.querySelector('#parent-transform')!)
+        .addElement(parent)
         .duration(150)
         .fromTo('transform', 'translateX(-14%)', 'translateX(0%)')
         .play();
     }
 
     function hideRemoveButton() {
+      const parent = document.querySelector('#parent-transform');
+      if (!parent) return;
       createAnimation()
-        .addElement(document.querySelector('#parent-transform')!)
+        .addElement(parent)
         .duration(150)
         .fromTo('transform', 'translateX(0%)', 'translateX(-14%)')
         .play();

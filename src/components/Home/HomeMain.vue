@@ -10,6 +10,11 @@
     <ion-button @click="circleOpacity = circleOpacity ? 0 : 1"
       >toggle circle</ion-button
     >
+    Calories: {{ $store.getters.todaysCalorieData }}
+    Carbs: {{ $store.getters.todaysCarbData }}
+    Protein: {{ $store.getters.todaysProteinData }}
+    Fat: {{ $store.getters.todaysFatData }}
+    Sugar: {{ $store.getters.todaysSugarData }}
     <ion-button class="center" router-link="/signin">{{
       $store.getters.isLoggedIn
         ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`

@@ -5,6 +5,7 @@ import { MacronutrientCalibrations } from '@/types/User'
 import Log from './modules/Log'
 import Auth from './modules/Auth'
 import Toast from './modules/Toast'
+import Nutrients from './modules/Nutrients'
 
 export default createStore<State>({
   strict: process.env.NODE_ENV !== 'production',
@@ -61,6 +62,7 @@ export default createStore<State>({
   modules: {
     Log,
     Auth,
-    Toast
+    Toast,
+    Nutrients
   }
 })
