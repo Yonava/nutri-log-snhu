@@ -17,7 +17,9 @@ import {
   IonBackButton,
   IonContent,
 } from '@ionic/vue';
-import { useStore } from 'vuex';
+
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -26,12 +28,11 @@ export default {
     IonContent,
   },
   setup() {
-    const store = useStore();
-    const item = store.getters.selectedLogItem;
-
+    const store = useStore()
+    const item = computed(() => store.getters.selectedCatalogItem)
     return {
       item
-    };
+    }
   }
 }
 </script>

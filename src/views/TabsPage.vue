@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+    <ProfileMenu />
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
@@ -24,6 +25,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import ProfileMenu from '@/components/Profile/ProfileMenu.vue';
 import { 
   IonTabBar,  
   IonTabButton, 
@@ -31,7 +33,7 @@ import {
   IonLabel, 
   IonIcon, 
   IonPage, 
-  IonRouterOutlet 
+  IonRouterOutlet,
 } from '@ionic/vue';
 import { 
   scanOutline, 
@@ -48,7 +50,8 @@ export default defineComponent({
     IonTabButton, 
     IonIcon, 
     IonPage, 
-    IonRouterOutlet 
+    IonRouterOutlet,
+    ProfileMenu,
   },
   setup() {
     return {
