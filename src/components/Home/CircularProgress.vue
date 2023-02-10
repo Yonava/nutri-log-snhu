@@ -9,7 +9,8 @@
       >
         <div 
           :style="{ 
-            transform: `rotate(${1.8 * percent}deg)` 
+            transform: `rotate(${1.8 * percent}deg)`,
+            backgroundColor: color ? color : 'var(--ion-color-primary)'
           }" 
           class="radial-bar__fill js-radial-fill"
         ></div>
@@ -55,9 +56,10 @@ export default {
 <style scoped>
 .radial-bar { 
   transform: scale(3.5);
+  margin: 50px;
   width: 80px;
   height: 80px;
-  background-color: var(--ion-color-step-100);
+  background-color: var(--ion-color-step-150);
   border-radius: 50%;
 }
 

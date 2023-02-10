@@ -98,6 +98,26 @@ const Nutrients: Module<NutrientState, any> = {
         total: totalProtein,
         percent: Math.round(totalProtein / state.macronutrientCalibrations.targetProtein * 100)
       }
+    },
+    todaysSodiumData: (state, getters, rootState, rootGetters) => {
+      const totalSodium = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return total + item.macro.sodium
+      }, 0)
+
+      return {
+        total: totalSodium,
+        percent: Math.round(totalSodium / state.macronutrientCalibrations.targetSodium * 100)
+      }
+    },
+    todaysPotassiumData: (state, getters, rootState, rootGetters) => {
+      const totalPotassium = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return total + item.macro.potassium
+      }, 0)
+
+      return {
+        total: totalPotassium,
+        percent: Math.round(totalPotassium / state.macronutrientCalibrations.targetPotassium * 100)
+      }
     }
   },
   mutations: {
