@@ -48,6 +48,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/signin',
     component: () => import('@/views/SignInTab.vue')
+  },
+  {
+    path: '/ADT',
+    component: () => import('@/components/ProfileButtons/ADT.vue')
+  },
+  {
+    path: '/TOU',
+    component: () => import('@/components/ProfileButtons/TermsOfUse.vue')
+  },
+  {
+    path: '/HC',
+    component: () => import('@/components/ProfileButtons/HideCalories.vue')
+  },
+  {
+    path: '/DA',
+    component: () => import('@/components/ProfileButtons/DeleteAccount.vue')
   }
 ]
 

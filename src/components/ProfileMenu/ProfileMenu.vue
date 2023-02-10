@@ -6,10 +6,10 @@
         </ion-toolbar>
       </ion-header>
         <ion-content padding>
-          <ion-button expand="block">Adjust Daily Targets</ion-button>
-          <ion-button expand="block">Hide Calories</ion-button>
-          <ion-button expand="block">Terms of Use</ion-button>
-          <ion-button expand="block">Delete Account</ion-button>
+          <ion-button expand="block" @click="$router.push('/ADT')">Adjust Daily Targets</ion-button>
+          <ion-button expand="block" @click="$router.push('/HC')">Hide Calories</ion-button>
+          <ion-button expand="block" @click="$router.push('/TOU')">Terms of Use</ion-button>
+          <ion-button expand="block" @click="$router.push('/DA')">Delete Account</ion-button>
         </ion-content>
     </ion-menu>
 </template>

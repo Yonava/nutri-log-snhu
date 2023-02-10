@@ -3,10 +3,10 @@
         <ion-header>
             <ion-toolbar>
                 <ion-back-button slot="start"></ion-back-button>
-                <ion-title>Adjust Daily Targets</ion-title>
+                <ion-title>Hide Calories</ion-title>
             </ion-toolbar>
         </ion-header>
-        <ion-content>Here you will adjust your calories,carbs,etc...</ion-content>
+        <ion-content>...</ion-content>
     </ion-page>
 </template>
 
