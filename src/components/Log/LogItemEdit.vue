@@ -17,11 +17,14 @@
           class="title"
           placeholder="Item Name"
         ></ion-input>
-        <NutrientEditContainer
-          :value="item.calories"
-          label="calories"
-          color="var(--ion-color-primary)"
-        />
+        <div class="nutrient-container">
+          <NutrientEditContainer
+            @valueChange="item.calories = $event"
+            :value="item.calories"
+            label="calories"
+            color="var(--ion-color-primary)"
+          />
+        </div>
       </div>
     </ion-content>
   </ion-page>

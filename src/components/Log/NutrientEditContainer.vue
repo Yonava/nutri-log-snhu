@@ -7,7 +7,7 @@
       {{ label }}
     </span>
     <ion-input
-      :value="value"
+      v-model.number="editableValue"
       :readonly="!editable"
       :style="inputStyle"
       @ionFocus="focused = true"
@@ -21,7 +21,13 @@
 
 <script setup>
 import { IonInput } from '@ionic/vue';
-import { ref, defineProps, computed } from 'vue';
+import { 
+  ref, 
+  defineProps, 
+  computed, 
+  watch, 
+  $emit 
+} from 'vue';
 
 const props = defineProps({
   value: {
@@ -45,6 +51,14 @@ const props = defineProps({
 });
 
 const focused = ref(false);
+const editableValue = ref(props.value);
+
+// watch inputs value and emit valueChange event
+watch(editableValue, (newValue) => {
+  if (newValue === "") editableValue.value = 0;
+  console.log('valueChange', newValue)
+  // $emit('valueChange', newValue);
+});
 
 const inputStyle = computed(() => {
   if (focused.value) {
