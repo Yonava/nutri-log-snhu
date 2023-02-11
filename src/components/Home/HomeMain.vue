@@ -1,15 +1,23 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <ion-slides class="center">
+    <ion-slides 
+      @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
+      ref="slider"
+      class="center"
+    >
       <ion-slide 
-        v-for="component in macroComponents"
+        v-for="(component, index) in macroComponents"
         :key="component"
         class="center"
         style="width: 100%; height: 350px;"
       >
-        <component :is="component" />
+        <component 
+          :is="component" 
+          :isActive="index === activeSlide"
+        />
       </ion-slide>
     </ion-slides>
+    {{ activeSlide }}
     <ion-button class="center" router-link="/signin">{{
       $store.getters.isLoggedIn
         ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
@@ -19,7 +27,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 import { 
   IonButton,
   IonContent,
@@ -52,18 +60,29 @@ export default defineComponent({
   },
   setup() {
 
+    const slideChangeDetector = ref(false);
+    const slider = ref(null);
+    const activeSlide = ref(0);
+
     const macroComponents = [
-      "SodiumProgress",
-      "SugarProgress",
-      "ProteinProgress",
       "CalorieProgress",
       "FatProgress",
+      "ProteinProgress",
       "CarbProgress",
+      "SugarProgress",
       "FiberProgress",
+      "SodiumProgress",
       "PotasProgress",
     ];
 
+    watch(slideChangeDetector, async () => {
+      activeSlide.value = await slider.value.$el.getActiveIndex();
+    });
+
     return {
+      activeSlide,
+      slider,
+      slideChangeDetector,
       macroComponents,
     };
   },
