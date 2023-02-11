@@ -3,13 +3,13 @@
     <div class="radial-bar__circle">
       <div 
         :style="{ 
-          transform: `rotate(${1.8 * percent}deg)` 
+          transform: `rotate(${1.8 * percentage}deg)` 
         }" 
         class="radial-bar__mask js-radial-mask"
       >
         <div 
           :style="{ 
-            transform: `rotate(${1.8 * percent}deg)`,
+            transform: `rotate(${1.8 * percentage}deg)`,
             backgroundColor: color ? color : 'var(--ion-color-primary)'
           }" 
           class="radial-bar__fill js-radial-fill"
@@ -24,7 +24,7 @@
         ></div>
         <div 
           :style="{ 
-            transform: `rotate(${1.8 * percent}deg)`, 
+            transform: `rotate(${1.8 * percentage}deg)`, 
             backgroundColor: color ? color : 'var(--ion-color-primary)' 
           }" 
           class="radial-bar__fill js-radial-fix"
@@ -50,6 +50,11 @@ export default {
       required: false,
     },
   },
+  computed: {
+    percentage() {
+      return this.percent > 100 ? 100 : this.percent;
+    },
+  }
 };
 </script>
 

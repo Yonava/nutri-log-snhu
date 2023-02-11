@@ -1,7 +1,7 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="fatData.percent"
+      :percent="percentage"
       color="var(--ion-color-danger)"
     >
       <div style="transform: translateY(15%)">
@@ -36,10 +36,18 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
+
+const percentage = ref(0)
+
+onMounted(() => {
+  setTimeout(() => {
+    percentage.value = fatData.value.percent
+  }, 250)
+})
 
 const fatData = computed(() => {
   return store.getters.todaysFatData;

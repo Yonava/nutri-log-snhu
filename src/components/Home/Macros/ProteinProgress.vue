@@ -1,6 +1,18 @@
 <template>
   <div>
-    <CircularProgress :percent="percent" />
+    <CircularProgress 
+      :percent="proteinData.percent"
+      color="var(--ion-color-success)"
+    >
+      <div style="transform: translateY(50%)">
+        <div style="font-weight: 700; font-size: 1.3rem">
+          {{ proteinData.total }}g
+        </div>
+        <div style="font-weight: 200; font-size: 0.5rem">
+          protein
+        </div>
+      </div>
+    </CircularProgress>
   </div>
 </template>
 
@@ -11,7 +23,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const percent = computed(() => {
-  return store.getters.todaysCalorieData.percent;
+const proteinData = computed(() => {
+  return store.getters.todaysProteinData;
 });
 </script>

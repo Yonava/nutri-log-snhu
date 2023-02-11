@@ -2,8 +2,8 @@
   <div>
     <CircularProgress :percent="calorieData.percent">
       <div style="transform: translateY(50%)">
-        <div @click="animateCountUp" style="font-weight: 700; font-size: 1.3rem">
-          {{ calorieData.total }}
+        <div style="font-weight: 700; font-size: 1.3rem">
+          {{ calorieData.total.toLocaleString() }}
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           calories

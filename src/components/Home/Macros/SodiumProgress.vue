@@ -1,6 +1,18 @@
 <template>
   <div>
-    <CircularProgress :percent="percent" />
+    <CircularProgress 
+      :percent="sodiumData.percent"
+      color="#EEA47FFF"
+    >
+      <div style="transform: translateY(90%)">
+        <div style="font-weight: 700; font-size: 0.9rem">
+          {{ sodiumData.total.toLocaleString() }}mg
+        </div>
+        <div style="font-weight: 200; font-size: 0.5rem">
+          sodium
+        </div>
+      </div>
+    </CircularProgress>
   </div>
 </template>
 
@@ -11,7 +23,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const percent = computed(() => {
-  return store.getters.todaysCalorieData.percent;
+const sodiumData = computed(() => {
+  return store.getters.todaysSodiumData;
 });
 </script>
