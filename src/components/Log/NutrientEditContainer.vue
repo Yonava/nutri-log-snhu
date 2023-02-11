@@ -76,7 +76,7 @@ const inputStyle = computed(() => {
 
 <style scoped>
 .parent {
-  border-radius: 10px
+  border-radius: 10px;
 }
 
 ion-input.macros {

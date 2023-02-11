@@ -1,11 +1,11 @@
 <template>
   <ion-page>
+    <default-header title="Modify Item">
+      <template #left>
+        <ion-back-button default-href="/tabs/log"></ion-back-button>
+      </template>
+    </default-header>
     <ion-content>
-      <default-header title="Modify Item">
-        <template #left>
-          <ion-back-button default-href="/tabs/log"></ion-back-button>
-        </template>
-      </default-header>
       <div class="ion-padding">
         <ion-input
           v-model="item.name"
@@ -17,20 +17,109 @@
           class="title"
           placeholder="Item Name"
         ></ion-input>
-        <div class="nutrient-container center">
-          <div class="nutrient-flex">
-            <div 
-              v-for="nutrient in nutrients"
-              :key="nutrient"
-              class="nutrient-box"
-            >
-              <NutrientEditContainer
-                @valueChange="nutrient.change($event)"
-                :value="nutrient.value"
-                :label="nutrient.label"
-                :color="nutrient.color"
-              />
-            </div>
+        <div style="margin-top: 20px">
+          <div class="nutrient-row">
+            <NutrientEditContainer
+              @valueChange="item.calories = $event"
+              :value="item.calories"
+              label="calories"
+              color="var(--ion-color-primary)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.protein = $event"
+              :value="item.macro.protein"
+              label="protein"
+              color="var(--ion-color-secondary)"
+            />
+          </div>
+          <div class="nutrient-row">
+            <NutrientEditContainer
+              @valueChange="item.macro.carbohydrates.total = $event"
+              :value="item.macro.carbohydrates.total"
+              label="total carbs"
+              color="var(--ion-color-tertiary)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.carbohydrates.sugars = $event"
+              :value="item.macro.carbohydrates.sugars"
+              label="total sugar"
+              color="red"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.carbohydrates.added_sugars = $event"
+              :value="item.macro.carbohydrates.added_sugars"
+              label="added sugar"
+              color="blue"
+            />
+          </div>
+          <div class="nutrient-row">
+            <NutrientEditContainer
+              @valueChange="item.macro.fat.total = $event"
+              :value="item.macro.fat.total"
+              label="total fat"
+              color="var(--ion-color-success)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.fat.saturated = $event"
+              :value="item.macro.fat.saturated"
+              label="saturated fat"
+              color="green"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.fat.trans = $event"
+              :value="item.macro.fat.trans"
+              label="trans fat"
+              color="var(--ion-color-danger)"
+            />
+          </div>
+          <div class="nutrient-row">
+            <NutrientEditContainer
+              @valueChange="item.macro.fiber = $event"
+              :value="item.macro.fiber"
+              label="fiber"
+              color="var(--ion-color-medium)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.sodium = $event"
+              :value="item.macro.sodium"
+              label="sodium"
+              color="orange"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.cholesterol = $event"
+              :value="item.macro.cholesterol"
+              label="cholesterol"
+              color="var(--ion-color-tertiary)"
+            />
+          </div>
+          <div class="nutrient-row">
+            <NutrientEditContainer
+              @valueChange="item.macro.calcium = $event"
+              :value="item.macro.calcium"
+              label="calcium"
+              color="var(--ion-color-primary)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.potassium = $event"
+              :value="item.macro.potassium"
+              label="potassium"
+              color="var(--ion-color-secondary)"
+            />
+            <div class="nutrient-spacer"></div>
+            <NutrientEditContainer
+              @valueChange="item.macro.iron = $event"
+              :value="item.macro.iron"
+              label="iron"
+              color="var(--ion-color-tertiary)"
+            />
           </div>
         </div>
       </div>
@@ -73,92 +162,11 @@ export default {
       }
       return {
         backgroundColor: 'var(--ion-color-step-100)',
+        borderBottom: '1px solid transparent'
       };
     });
 
-    const nutrients = [
-      {
-        label: 'calories',
-        value: item.value.calories, 
-        color: 'var(--ion-color-primary)',
-        change: (newValue) => item.value.calories = newValue,
-      },
-      {
-        label: 'protein',
-        value: item.value.macro.protein,
-        color: 'var(--ion-color-secondary)',
-        change: (newValue) => item.value.macro.protein = newValue,
-      },
-      {
-        label: 'total carbs',
-        value: item.value.macro.carbohydrates.total,
-        color: 'var(--ion-color-tertiary)',
-        change: (newValue) => item.value.macro.carbohydrates.total = newValue,
-      },
-      {
-        label: 'total sugar',
-        value: item.value.macro.carbohydrates.sugars,
-        color: 'red',
-        change: (newValue) => item.value.macro.carbohydrates.sugars = newValue,
-      },
-      {
-        label: 'total fat',
-        value: item.value.macro.fat.total,
-        color: 'var(--ion-color-success)',
-        change: (newValue) => item.value.macro.fat.total = newValue,
-      },
-      {
-        label: 'saturated',
-        value: item.value.macro.fat.saturated,
-        color: 'var(--ion-color-warning)',
-        change: (newValue) => item.value.macro.fat.saturated = newValue,
-      },
-      {
-        label: 'trans',
-        value: item.value.macro.fat.trans,
-        color: 'var(--ion-color-danger)',
-        change: (newValue) => item.value.macro.fat.trans = newValue,
-      },
-      {
-        label: 'fiber',
-        value: item.value.macro.fiber,
-        color: '#008080',
-        change: (newValue) => item.value.macro.fiber = newValue,
-      },
-      {
-        label: 'sodium',
-        value: item.value.macro.sodium,
-        color: 'purple',
-        change: (newValue) => item.value.macro.sodium = newValue,
-      },
-      {
-        label: 'cholesterol',
-        value: item.value.macro.cholesterol,
-        color: '#FFA500',
-        change: (newValue) => item.value.macro.cholesterol = newValue,
-      },
-      {
-        label: 'potassium',
-        value: item.value.macro.potassium,
-        color: '#FF29D6',
-        change: (newValue) => item.value.macro.potassium = newValue,
-      },
-      {
-        label: 'calcium',
-        value: item.value.macro.calcium,
-        color: '#FFD700',
-        change: (newValue) => item.value.macro.calcium = newValue,
-      },
-      {
-        label: 'iron',
-        value: item.value.macro.iron,
-        color: '#9928A2',
-        change: (newValue) => item.value.macro.iron = newValue,
-      },
-    ]
-
     return {
-      nutrients,
       titleStyle,
       titleFocused,
       item,
@@ -168,19 +176,14 @@ export default {
 </script>
 
 <style scoped>
-.nutrient-container {
-  margin-top: 10px;
+.nutrient-row {
+  display: flex; 
+  flex-direction: row; 
+  margin: 20px 0px;
 }
 
-.nutrient-flex {  
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.nutrient-box {
-  width: 27%; 
-  margin: 6px;
+.nutrient-spacer {
+  width: 25px;
 }
 
 ion-input.title {
