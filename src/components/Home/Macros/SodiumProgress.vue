@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <CircularProgress 
-      :percent="currentData.percent"
-      color="#EEA47FFF"
-    >
-      <div style="transform: translateY(90%)">
-        <div style="font-weight: 700; font-size: 0.9rem">
-          <AnimateCount 
-            :number="currentData.total" 
-            unit="mg"
-          />
-        </div>
-        <div style="font-weight: 200; font-size: 0.5rem">
-          sodium
-        </div>
-      </div>
-    </CircularProgress>
+  <CircularProgress 
+    :percent="currentData.percent"
+    color="#EEA47FFF"
+  />
+  <div style="position: absolute">
+    <div style="font-weight: 700; font-size: 3rem">
+      <AnimateCount 
+        :number="currentData.total" 
+        unit="mg"
+      />
+    </div>
+    <div style="font-weight: 200; font-size: 1.25rem">
+      sodium
+    </div>
   </div>
 </template>
 

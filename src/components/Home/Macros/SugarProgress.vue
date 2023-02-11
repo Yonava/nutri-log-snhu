@@ -1,37 +1,34 @@
 <template>
-  <div>
-    <CircularProgress 
-      :percent="currentData.percent"
-      color="var(--ion-color-tertiary)"
+  <CircularProgress
+    :percent="currentData.percent"
+    color="var(--ion-color-tertiary)"
+  />
+  <div style="position: absolute">
+    <div style="font-weight: 200; font-size: 1.75rem">
+      total
+    </div>
+    <div style="font-weight: 700; font-size: 4rem">
+      <AnimateCount 
+        :number="currentData.total" 
+        unit="g"
+      />
+    </div>
+    <div 
+      class="center" 
+      style="margin-top: 2px; margin-bottom: 8px"
     >
-      <div style="transform: translateY(15%)">
-        <div style="font-weight: 200; font-size: 0.5rem">
-          total
+      <div class="center">
+        <div style="font-weight: 200; font-size: 1.5rem">
+          added
         </div>
-        <div style="font-weight: 700; font-size: 1.1rem">
+        <div style="font-weight: 700; font-size: 3rem">
           <AnimateCount 
-            :number="currentData.total" 
+            :number="currentData.totalAdded" 
             unit="g"
           />
         </div>
-        <div 
-          class="center" 
-          style="margin-top: 2px"
-        >
-          <div class="center">
-            <div style="font-weight: 200; font-size: 0.4rem">
-              added
-            </div>
-            <div style="font-weight: 700; font-size: 0.7rem">
-              <AnimateCount 
-                :number="currentData.totalAdded" 
-                unit="g"
-              />
-            </div>
-          </div>
-        </div>
       </div>
-    </CircularProgress>
+    </div>
   </div>
 </template>
 

@@ -4,10 +4,10 @@
     color="var(--ion-color-danger)"
   />
   <div style="position: absolute; ">
-    <div style="font-weight: 200; font-size: 1.75rem">
+    <div style="font-weight: 200; font-size: 1.5rem">
       total
     </div>
-    <div style="font-weight: 700; font-size: 4rem">
+    <div style="font-weight: 700; font-size: 3.5rem">
       <AnimateCount 
         :number="currentData.total" 
         unit="g"
@@ -15,16 +15,16 @@
     </div>
     <div 
       class="center" 
-      style="flex-direction: row; margin-top: 3px; margin-bottom: 28px"
+      style="flex-direction: row; margin-top: 3px; margin-bottom: 25px"
     >
       <div 
         style="margin: 0px 7px" 
         class="center"
       >
-        <div style="font-weight: 200; font-size: 1.5rem">
+        <div style="font-weight: 200; font-size: 1.25rem">
           saturated
         </div>
-        <div style="font-weight: 700; font-size: 3rem">
+        <div style="font-weight: 700; font-size: 2.5rem">
           <AnimateCount 
             :number="currentData.totalSaturated" 
             unit="g"
@@ -35,10 +35,10 @@
         style="margin: 0px 7px"
         class="center"
       >
-        <div style="font-weight: 200; font-size: 1.5rem">
+        <div style="font-weight: 200; font-size: 1.25rem">
           trans
         </div>
-        <div style="font-weight: 700; font-size: 3rem">
+        <div style="font-weight: 700; font-size: 2.5rem">
           <AnimateCount 
             :number="currentData.totalTrans" 
             unit="g"
