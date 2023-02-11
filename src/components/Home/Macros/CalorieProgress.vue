@@ -3,7 +3,9 @@
     <CircularProgress :percent="currentData.percent">
       <div style="transform: translateY(50%)">
         <div style="font-weight: 700; font-size: 1.3rem">
-          {{ currentData.total.toLocaleString() }}
+          <CountUp 
+            :number="currentData.total" 
+          />
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           calories
@@ -15,6 +17,7 @@
 
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
+import CountUp from "@/base/CountUp.vue";
 import { onMounted, ref, toRefs } from "vue";
 import { useStore } from "vuex";
 import { useRedrawObserver } from "@/composables/RedrawObserver";

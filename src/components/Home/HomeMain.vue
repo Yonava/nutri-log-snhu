@@ -17,7 +17,6 @@
         />
       </ion-slide>
     </ion-slides>
-    {{ activeSlide }}
     <ion-button class="center" router-link="/signin">{{
       $store.getters.isLoggedIn
         ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
