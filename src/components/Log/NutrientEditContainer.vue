@@ -26,7 +26,7 @@ import {
   defineProps, 
   computed, 
   watch, 
-  $emit 
+  defineEmits 
 } from 'vue';
 
 const props = defineProps({
@@ -50,14 +50,15 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(['valueChange']);
+
 const focused = ref(false);
 const editableValue = ref(props.value);
 
 // watch inputs value and emit valueChange event
 watch(editableValue, (newValue) => {
   if (newValue === "") editableValue.value = 0;
-  console.log('valueChange', newValue)
-  // $emit('valueChange', newValue);
+  emits('valueChange', editableValue.value);
 });
 
 const inputStyle = computed(() => {

@@ -19,13 +19,14 @@
         ></ion-input>
         <div class="nutrient-container">
           <NutrientEditContainer
-            @valueChange="item.calories = $event"
+            @valueChange="valueChange"
             :value="item.calories"
             label="calories"
             color="var(--ion-color-primary)"
           />
         </div>
       </div>
+      {{ item }}
     </ion-content>
   </ion-page>
 </template>
@@ -52,8 +53,8 @@ export default {
   setup() {
     const store = useStore();
     const itemSelected = store.getters.selectedLogItem;
-    const item = structuredClone(itemSelected);
-
+    
+    const item = ref(structuredClone(itemSelected));
     const titleFocused = ref(false);
 
     const titleStyle = computed(() => {
@@ -68,7 +69,13 @@ export default {
       };
     });
 
+    const valueChange = (newValue) => {
+      console.log('valueChange on parent', newValue)
+      item.value.calories = newValue;
+    };
+
     return {
+      valueChange,
       titleStyle,
       titleFocused,
       item,
