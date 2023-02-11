@@ -17,13 +17,21 @@
           class="title"
           placeholder="Item Name"
         ></ion-input>
-        <div class="nutrient-container">
-          <NutrientEditContainer
-            @valueChange="valueChange"
-            :value="item.calories"
-            label="calories"
-            color="var(--ion-color-primary)"
-          />
+        <div class="nutrient-container center">
+          <div class="nutrient-flex">
+            <div 
+              v-for="nutrient in nutrients"
+              :key="nutrient"
+              style="width: 27%; margin: 6px;"
+            >
+              <NutrientEditContainer
+                @valueChange="nutrient.change($event)"
+                :value="nutrient.value"
+                :label="nutrient.label"
+                :color="nutrient.color"
+              />
+            </div>
+          </div>
         </div>
       </div>
       {{ item }}
@@ -53,7 +61,7 @@ export default {
   setup() {
     const store = useStore();
     const itemSelected = store.getters.selectedLogItem;
-    
+
     const item = ref(structuredClone(itemSelected));
     const titleFocused = ref(false);
 
@@ -69,13 +77,53 @@ export default {
       };
     });
 
-    const valueChange = (newValue) => {
-      console.log('valueChange on parent', newValue)
-      item.value.calories = newValue;
-    };
+    const nutrients = [
+      {
+        label: 'calories',
+        value: item.value.calories, 
+        color: 'var(--ion-color-primary)',
+        change: (newValue) => item.value.calories = newValue,
+      },
+      {
+        label: 'protein',
+        value: item.value.macro.protein,
+        color: 'var(--ion-color-secondary)',
+        change: (newValue) => item.value.macro.protein = newValue,
+      },
+      {
+        label: 'carbs',
+        value: item.value.macro.carbohydrates.total,
+        color: 'var(--ion-color-tertiary)',
+        change: (newValue) => item.value.macro.carbohydrates.total = newValue,
+      },
+      {
+        label: 'sugar',
+        value: item.value.macro.carbohydrates.sugars,
+        color: 'red',
+        change: (newValue) => item.value.macro.carbohydrates.sugars = newValue,
+      },
+      {
+        label: 'fat',
+        value: item.value.macro.fat.total,
+        color: 'var(--ion-color-success)',
+        change: (newValue) => item.value.macro.fat.total = newValue,
+      },
+      {
+        label: 'saturated',
+        value: item.value.macro.fat.saturated,
+        color: 'var(--ion-color-warning)',
+        change: (newValue) => item.value.macro.fat.saturated = newValue,
+      },
+      {
+        label: 'fiber',
+        value: item.value.macro.fiber,
+        color: 'var(--ion-color-danger)',
+        change: (newValue) => item.value.macro.fiber = newValue,
+      }
+    ]
 
     return {
-      valueChange,
+      nutrients,
       titleStyle,
       titleFocused,
       item,
@@ -85,6 +133,16 @@ export default {
 </script>
 
 <style scoped>
+.nutrient-container {
+  margin-top: 10px;
+}
+
+.nutrient-flex {  
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 ion-input.title {
   font-size: 2rem;
   font-weight: 300;

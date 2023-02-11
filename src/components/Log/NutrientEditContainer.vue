@@ -12,6 +12,7 @@
       :style="inputStyle"
       @ionFocus="focused = true"
       @ionBlur="focused = false"
+      inputmode="numeric"
       type="number"
       enterkeyhint="done"
       class="macros"
@@ -75,7 +76,6 @@ const inputStyle = computed(() => {
 
 <style scoped>
 .parent {
-  width: 30%; 
   border-radius: 10px
 }
 
