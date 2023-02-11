@@ -1,7 +1,6 @@
 <template>
   <ion-item
-    :class="removeItemsState ? '' : 'push-item'"
-    style="-webkit-transition: 0.2s ease-in-out; width: 113%"
+    style="width: 114%;"
     button
   >
     <ion-icon
@@ -18,7 +17,7 @@
         {{ item.macro.protein }}g protein |
         {{ item.macro.fat.total }}g fat
       </p>
-      <h2 style="text-transform: capitalize; margin: 0">
+      <h2 style="text-transform: capitalize; margin: 0; width: 95%">
         {{ item.name }}
       </h2>
     </div>
@@ -26,7 +25,10 @@
 </template>
 
 <script lang="ts">
-import { IonIcon, IonItem } from '@ionic/vue';
+import { 
+  IonIcon, 
+  IonItem,
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { removeCircleOutline } from 'ionicons/icons';
 
@@ -40,11 +42,7 @@ export default defineComponent({
     item: {
       type: Object,
       required: true,
-    },
-    removeItemsState: {
-      type: Boolean,
-      required: true,
-    },
+    }
   },
   emits: [
     'remove-item', 
@@ -59,7 +57,7 @@ export default defineComponent({
       const timeStamp = new Date(date);
       return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
     };
-
+    
     return {
       removeCircleOutline,
       toDateTimeString,
@@ -70,10 +68,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.push-item {
-  transform: translateX(-12%);
-}
-
 .item-parent {
   display: flex;
   align-items: left;

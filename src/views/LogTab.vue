@@ -52,44 +52,52 @@
           <ion-title size="large">Log Entries</ion-title>
         </ion-toolbar>
       </ion-header>
-      <TransitionGroup name="fade">
-        <div 
-          v-if="items.length === 0" 
-          class="center"
-        >
-          <h2>
-            No items logged yet
-          </h2>
-          <ion-button @click="addPopOver">
-            add
-            <ion-icon 
-              :icon="add"
-              slot="end" 
-            ></ion-icon>
-          </ion-button>
-        </div>
-        <div
-          v-for="i in items"
-          :key="i"
-          :style="itemStyle(i)"
-        >
-          <LogItem 
-            v-if="i.name"
-            :item="i"
-            :remove-items-state="removeItemsState"
-            @click="itemClicked(i)"
-            @remove-item="removeItem(i)"
-          />
-          <div 
-            class="date-item-parent"
-            v-else
+      <div 
+        v-if="items.length === 0" 
+        class="center"
+      >
+        <h2>
+          No items logged yet
+        </h2>
+        <ion-button @click="addPopOver">
+          add
+          <ion-icon 
+            :icon="add"
+            slot="end" 
+          ></ion-icon>
+        </ion-button>
+      </div>
+      <div 
+        id="parent-transform" 
+        style="transform: translateX(-14%)"
+      >
+        <TransitionGroup name="fade">
+          <div
+            v-for="i in items"
+            :key="i"
+            :style="itemStyle(i)"
           >
-            <h5 style="margin: 0">
-              {{ i.month }} 3, 2023
-            </h5>
+            <div 
+              v-if="i.name" 
+              
+            >
+              <LogItem 
+                :item="i"
+                @click="itemClicked(i)"
+                @remove-item="removeItem(i)"
+              />
+            </div>
+            <div 
+              class="date-item-parent"
+              v-else
+            >
+              <h5 style="margin: 0">
+                {{ i.month }} 3, 2023
+              </h5>
+            </div>
           </div>
-        </div>
-      </TransitionGroup>
+        </TransitionGroup>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -99,7 +107,8 @@ import AddPopOver from '@/components/Log/AddPopOver.vue';
 import LogItem from '@/components/Log/LogItem.vue';
 import { 
   defineComponent, 
-  ref
+  ref,
+  watch
 } from 'vue';
 import { useStore } from 'vuex';
 import { 
@@ -110,7 +119,8 @@ import {
   IonToolbar,
   IonTitle,
   IonHeader,
-  popoverController
+  popoverController,
+  createAnimation
 } from '@ionic/vue';
 import { 
   arrowForward,
@@ -186,6 +196,30 @@ export default defineComponent({
         return {};
       }
     }
+
+    function showRemoveButton() {
+      const parent = document.querySelector('#parent-transform');
+      if (!parent) return;
+      createAnimation()
+        .addElement(parent)
+        .duration(150)
+        .fromTo('transform', 'translateX(-14%)', 'translateX(0%)')
+        .play();
+    }
+
+    function hideRemoveButton() {
+      const parent = document.querySelector('#parent-transform');
+      if (!parent) return;
+      createAnimation()
+        .addElement(parent)
+        .duration(150)
+        .fromTo('transform', 'translateX(0%)', 'translateX(-14%)')
+        .play();
+    }
+
+    watch(removeItemsState, (val) => {
+      val ? showRemoveButton() : hideRemoveButton();
+    });
 
     return {
       items,
