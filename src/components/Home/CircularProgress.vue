@@ -31,9 +31,10 @@
         ></div>
       </div>
     </div>
-    <div class="radial-bar__inset">
-      <slot></slot>
-    </div>
+    <div 
+      v-if="!full"
+      class="radial-bar__inset"
+    ></div>
   </div>
 </template>
 
@@ -48,6 +49,11 @@ export default {
     color: {
       type: String,
       required: false,
+    },
+    full: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {
