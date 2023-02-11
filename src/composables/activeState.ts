@@ -1,23 +1,22 @@
-// import { ref, defineProps, watch, toRefs } from 'vue'
-// import { useRoute } from 'vue-router'
+// const store = useStore();
+// const route = useRoute();
 
-// export function useRedrawWatcher() {
-//   // const redraw = ref(false)
-//   const route = useRoute()
+// const props = defineProps({
+//   isActive: Boolean,
+// });
 
-//   const props = defineProps({
-//     isActive: Boolean
-//   })
+// const { isActive } = toRefs(props);
 
-//   const { isActive } = toRefs(props)
+// watch(() => route.path, (newVal) => {
+//   if (newVal === "/tabs/home" && isActive.value) {
+//     setTimeout(() => {
+//       currentData.value = store.getters[getter];
+//     }, 100);
+//   }
+// });
 
-//   watch(route, () => {
-//     if (route.path === '/tabs/home') {
-//       console.log('redraw', isActive)
-//     }
-//   })
-
-//   watch(isActive, (value) => {
-//     console.log(value, "redraw")
-//   })
-// }
+// watch(isActive, (newVal) => {
+//   if (newVal) {
+//     currentData.value = store.getters[getter];
+//   }
+// });

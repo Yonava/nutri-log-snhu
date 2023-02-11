@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
-import { ref, watch, defineProps, toRefs } from "vue";
+import { ref, watch, defineProps, toRefs, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 
@@ -37,20 +37,25 @@ const { isActive } = toRefs(props);
 watch(() => route.path, (newVal) => {
   if (newVal === "/tabs/home" && isActive.value) {
     setTimeout(() => {
-      updateData(getter);
+      currentData.value = store.getters[getter];
     }, 100);
   }
 });
 
 watch(isActive, (newVal) => {
-  console.log("isActive", newVal)
   if (newVal) {
-    updateData(getter);
+    currentData.value = store.getters[getter];
   }
-}, { immediate: true });
+});
 
-function updateData(property: string) {
-  currentData.value = store.getters[property];
-  console.log("currentData", currentData.value)
-}
+// allows data to fetch on initial load
+onMounted(() => {
+  const timeoutSeconds = 4;
+  for (let i = 0; i < timeoutSeconds * 2; i++) {
+    setTimeout(() => {
+      if (currentData.value.total > 0) return;
+      currentData.value = store.getters[getter];
+    }, 500 * (i + 1));
+  }
+});
 </script>
