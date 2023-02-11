@@ -26,18 +26,36 @@ const { number, unit, duration } = toRefs(props);
 const numberDisplay = ref(0);
 
 watch(number, (newVal, oldVal) => {
-  runAnimation(newVal - oldVal);
+  runAnimation(newVal, oldVal);
 });
 
-const runAnimation = (change) => {
-  const frameDuration = 25
+function getFrameDuration(change) {
+  if (change < 5) {
+    return 200
+  } else if (change < 50) {
+    return 100
+  } else if (change < 200) {
+    return 50
+  } else {
+    return 25
+  }
+}
+
+const runAnimation = (newValue, oldValue) => {
+  const change = newValue - oldValue
+  const frameDuration = getFrameDuration(change)
   let frameCount = 0
   const totalFrames = duration.value / frameDuration
   const increment = change / totalFrames
   const tick = setInterval(() => {
     frameCount++
-    numberDisplay.value += increment
-    if (frameCount >= totalFrames) {
+    if (frameCount <= totalFrames) {
+      const tempValue = Math.round(increment + numberDisplay.value)
+      if (tempValue < newValue) {
+        numberDisplay.value = tempValue
+      }
+    } else {
+      numberDisplay.value = newValue
       clearInterval(tick)
     }
   }, frameDuration)
