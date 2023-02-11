@@ -26,19 +26,14 @@ const { number, unit, duration } = toRefs(props);
 const numberDisplay = ref(0);
 
 watch(number, (newVal, oldVal) => {
-  const change = Math.abs(newVal - oldVal);
-  if (newVal > oldVal) {
-    countUp(change);
-  } else if (newVal < oldVal) {
-    countDown(change);
-  }
+  runAnimation(newVal - oldVal);
 });
 
-const countUp = (adjustment) => {
+const runAnimation = (change) => {
   const frameDuration = 25
   let frameCount = 0
   const totalFrames = duration.value / frameDuration
-  const increment = adjustment / totalFrames
+  const increment = change / totalFrames
   const tick = setInterval(() => {
     frameCount++
     numberDisplay.value += increment
@@ -46,20 +41,5 @@ const countUp = (adjustment) => {
       clearInterval(tick)
     }
   }, frameDuration)
-};
-
-const countDown = (adjustment) => {
-  const frameDuration = 25
-  let frameCount = 0
-  const totalFrames = duration.value / frameDuration
-  const decrement = adjustment / totalFrames
-  const tick = setInterval(() => {
-    frameCount++
-    numberDisplay.value -= decrement
-    if (frameCount >= totalFrames) {
-      clearInterval(tick)
-    }
-  }, frameDuration)
-  
 };
 </script>

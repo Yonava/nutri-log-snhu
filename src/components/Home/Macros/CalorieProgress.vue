@@ -3,7 +3,7 @@
     <CircularProgress :percent="currentData.percent">
       <div style="transform: translateY(50%)">
         <div style="font-weight: 700; font-size: 1.3rem">
-          <CountUp 
+          <AnimateCount 
             :number="currentData.total" 
           />
         </div>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
-import CountUp from "@/base/CountUp.vue";
+import AnimateCount from "@/base/AnimateCount.vue";
 import { onMounted, ref, toRefs } from "vue";
 import { useStore } from "vuex";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
