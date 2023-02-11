@@ -6,7 +6,10 @@
     >
       <div style="transform: translateY(90%)">
         <div style="font-weight: 700; font-size: 0.9rem">
-          {{ currentData.total.toLocaleString() }}mg
+          <AnimateCount 
+            :number="currentData.total" 
+            unit="mg"
+          />
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           sodium
@@ -18,6 +21,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
+import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 

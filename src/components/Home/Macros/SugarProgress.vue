@@ -9,7 +9,10 @@
           total
         </div>
         <div style="font-weight: 700; font-size: 1.1rem">
-          {{ currentData.total }}g
+          <AnimateCount 
+            :number="currentData.total" 
+            unit="g"
+          />
         </div>
         <div 
           class="center" 
@@ -20,7 +23,10 @@
               added
             </div>
             <div style="font-weight: 700; font-size: 0.7rem">
-              {{ currentData.totalAdded }}g
+              <AnimateCount 
+                :number="currentData.totalAdded" 
+                unit="g"
+              />
             </div>
           </div>
         </div>
@@ -31,6 +37,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
+import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 

@@ -9,7 +9,10 @@
           total
         </div>
         <div style="font-weight: 700; font-size: 0.9rem">
-          {{ currentData.total }}g
+          <AnimateCount 
+            :number="currentData.total" 
+            unit="g"
+          />
         </div>
         <div class="center" style="flex-direction: row; margin-top: 2px">
           <div style="margin: 0px 3px" class="center">
@@ -17,7 +20,10 @@
               saturated
             </div>
             <div style="font-weight: 700; font-size: 0.7rem">
-              {{ currentData.totalSaturated }}g
+              <AnimateCount 
+                :number="currentData.totalSaturated" 
+                unit="g"
+              />
             </div>
           </div>
           <div 
@@ -28,7 +34,10 @@
               trans
             </div>
             <div style="font-weight: 700; font-size: 0.7rem">
-              {{ currentData.totalTrans }}g
+              <AnimateCount 
+                :number="currentData.totalTrans" 
+                unit="g"
+              />
             </div>
           </div>
         </div>
@@ -39,6 +48,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
+import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 

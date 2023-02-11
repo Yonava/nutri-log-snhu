@@ -8,7 +8,10 @@
         <div 
           :style="`font-weight: 700; font-size: 0.8rem`"
         >
-          {{ currentData.total.toLocaleString() }}mg
+          <AnimateCount 
+            :number="currentData.total" 
+            unit="mg"
+          />
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           potassium
@@ -20,6 +23,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
+import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 

@@ -6,7 +6,10 @@
     >
       <div style="transform: translateY(50%)">
         <div style="font-weight: 700; font-size: 1.3rem">
-          {{ currentData.total }}g
+          <AnimateCount 
+            :number="currentData.total" 
+            unit="g"
+          />
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           carbohydrates
@@ -18,6 +21,7 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
+import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 
