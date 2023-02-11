@@ -1,48 +1,51 @@
 <template>
-  <div>
-    <CircularProgress 
-      :percent="currentData.percent"
-      color="var(--ion-color-danger)"
+  <CircularProgress 
+    :percent="currentData.percent"
+    color="var(--ion-color-danger)"
+  />
+  <div style="position: absolute; ">
+    <div style="font-weight: 200; font-size: 1.75rem">
+      total
+    </div>
+    <div style="font-weight: 700; font-size: 4rem">
+      <AnimateCount 
+        :number="currentData.total" 
+        unit="g"
+      />
+    </div>
+    <div 
+      class="center" 
+      style="flex-direction: row; margin-top: 3px; margin-bottom: 28px"
     >
-      <div style="transform: translateY(15%)">
-        <div style="font-weight: 200; font-size: 0.4rem">
-          total
+      <div 
+        style="margin: 0px 7px" 
+        class="center"
+      >
+        <div style="font-weight: 200; font-size: 1.5rem">
+          saturated
         </div>
-        <div style="font-weight: 700; font-size: 0.9rem">
+        <div style="font-weight: 700; font-size: 3rem">
           <AnimateCount 
-            :number="currentData.total" 
+            :number="currentData.totalSaturated" 
             unit="g"
           />
         </div>
-        <div class="center" style="flex-direction: row; margin-top: 2px">
-          <div style="margin: 0px 3px" class="center">
-            <div style="font-weight: 200; font-size: 0.4rem">
-              saturated
-            </div>
-            <div style="font-weight: 700; font-size: 0.7rem">
-              <AnimateCount 
-                :number="currentData.totalSaturated" 
-                unit="g"
-              />
-            </div>
-          </div>
-          <div 
-            style="margin: 0px 3px"
-            class="center"
-          >
-            <div style="font-weight: 200; font-size: 0.4rem">
-              trans
-            </div>
-            <div style="font-weight: 700; font-size: 0.7rem">
-              <AnimateCount 
-                :number="currentData.totalTrans" 
-                unit="g"
-              />
-            </div>
-          </div>
+      </div>
+      <div 
+        style="margin: 0px 7px"
+        class="center"
+      >
+        <div style="font-weight: 200; font-size: 1.5rem">
+          trans
+        </div>
+        <div style="font-weight: 700; font-size: 3rem">
+          <AnimateCount 
+            :number="currentData.totalTrans" 
+            unit="g"
+          />
         </div>
       </div>
-    </CircularProgress>
+    </div>
   </div>
 </template>
 
