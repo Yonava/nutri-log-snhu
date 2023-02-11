@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <CircularProgress 
-      :percent="currentData.percent"
-      color="var(--ion-color-success)"
-    >
-      <div style="transform: translateY(50%)">
-        <div style="font-weight: 700; font-size: 1.3rem">
-          <AnimateCount 
-            :number="currentData.total" 
-            unit="g"
-          />
-        </div>
-        <div style="font-weight: 200; font-size: 0.5rem">
-          protein
-        </div>
-      </div>
-    </CircularProgress>
+  <CircularProgress 
+    :percent="currentData.percent"
+    color="var(--ion-color-success)"
+  />
+  <div style="position: absolute">
+    <div style="font-weight: 700; font-size: 4.75rem">
+      <AnimateCount 
+        :number="currentData.total" 
+        unit="g"
+      />
+    </div>
+    <div style="font-weight: 200; font-size: 1.75rem">
+      protein
+    </div>
   </div>
 </template>
 

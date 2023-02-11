@@ -30,11 +30,12 @@ watch(number, (newVal, oldVal) => {
 });
 
 function getFrameDuration(change) {
-  if (change < 5) {
+  const absChange = Math.abs(change)
+  if (absChange < 5) {
     return 200
-  } else if (change < 50) {
+  } else if (absChange < 50) {
     return 100
-  } else if (change < 200) {
+  } else if (absChange < 200) {
     return 50
   } else {
     return 25
@@ -49,12 +50,13 @@ const runAnimation = (newValue, oldValue) => {
   const increment = change / totalFrames
   const tick = setInterval(() => {
     frameCount++
-    if (frameCount <= totalFrames) {
-      const tempValue = Math.round(increment + numberDisplay.value)
-      if (tempValue < newValue) {
-        numberDisplay.value = tempValue
-      }
-    } else {
+    const tempValue = Math.round(increment + numberDisplay.value)
+    if (change > 0 && tempValue < newValue) {
+      numberDisplay.value = tempValue
+    } else if (change < 0 && tempValue > newValue) {
+      numberDisplay.value = tempValue
+    }
+    if (frameCount >= totalFrames) {
       numberDisplay.value = newValue
       clearInterval(tick)
     }

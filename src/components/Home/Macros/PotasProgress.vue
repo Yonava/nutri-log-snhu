@@ -1,23 +1,20 @@
 <template>
-  <div>
-    <CircularProgress 
-      :percent="currentData.percent"
-      color="#8A2BE2"
+  <CircularProgress 
+    :percent="currentData.percent"
+    color="#8A2BE2"
+  />
+  <div style="position: absolute">
+    <div 
+      :style="`font-weight: 700; font-size: 3rem`"
     >
-      <div style="transform: translateY(100%)">
-        <div 
-          :style="`font-weight: 700; font-size: 0.8rem`"
-        >
-          <AnimateCount 
-            :number="currentData.total" 
-            unit="mg"
-          />
-        </div>
-        <div style="font-weight: 200; font-size: 0.5rem">
-          potassium
-        </div>
-      </div>
-    </CircularProgress>
+      <AnimateCount 
+        :number="currentData.total" 
+        unit="mg"
+      />
+    </div>
+    <div style="font-weight: 200; font-size: 1.25rem">
+      potassium
+    </div>
   </div>
 </template>
 

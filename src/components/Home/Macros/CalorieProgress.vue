@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <CircularProgress :percent="currentData.percent">
-      <div style="transform: translateY(50%)">
-        <div style="font-weight: 700; font-size: 1.3rem">
-          <AnimateCount 
-            :number="currentData.total" 
-          />
-        </div>
-        <div style="font-weight: 200; font-size: 0.5rem">
-          calories
-        </div>
-      </div>
-    </CircularProgress>
+  <CircularProgress :percent="currentData.percent" />
+  <div style="position: absolute">
+    <div style="font-weight: 700; font-size: 4.75rem">
+      <AnimateCount 
+        :number="currentData.total" 
+      />
+    </div>
+    <div style="font-weight: 200; font-size: 1.75rem">
+      calories
+    </div>
   </div>
 </template>
 
