@@ -1,15 +1,15 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="carbData.percent"
+      :percent="currentData.percent"
       color="#F97D38"
     >
       <div style="transform: translateY(50%)">
-        <div @click="animateCountUp" style="font-weight: 700; font-size: 1.3rem">
-          {{ carbData.total }}g
+        <div style="font-weight: 700; font-size: 1.3rem">
+          {{ currentData.total }}g
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
-          total carbs
+          carbohydrates
         </div>
       </div>
     </CircularProgress>
@@ -18,12 +18,21 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { ref, toRefs } from "vue";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
-const store = useStore();
-
-const carbData = computed(() => {
-  return store.getters.todaysCarbData;
+const props = defineProps({
+  isActive: Boolean,
 });
+
+const { isActive } = toRefs(props);
+
+const currentData = ref({
+  total: 0,
+  percent: 0,
+});
+
+const getter = "todaysCarbData";
+
+useRedrawObserver(getter, currentData, isActive);
 </script>

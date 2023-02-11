@@ -1,12 +1,12 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="fiberData.percent"
+      :percent="currentData.percent"
       color="#40E0D0"
     >
       <div style="transform: translateY(50%)">
-        <div @click="animateCountUp" style="font-weight: 700; font-size: 1.3rem">
-          {{ fiberData.total.toLocaleString() }}g
+        <div style="font-weight: 700; font-size: 1.3rem">
+          {{ currentData.total.toLocaleString() }}g
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           fiber
@@ -18,12 +18,21 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { ref, toRefs } from "vue";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
-const store = useStore();
-
-const fiberData = computed(() => {
-  return store.getters.todaysFiberData;
+const props = defineProps({
+  isActive: Boolean,
 });
+
+const { isActive } = toRefs(props);
+
+const currentData = ref({
+  total: 0,
+  percent: 0,
+});
+
+const getter = "todaysFiberData";
+
+useRedrawObserver(getter, currentData, isActive);
 </script>

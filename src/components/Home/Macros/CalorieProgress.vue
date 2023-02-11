@@ -15,18 +15,11 @@
 
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
-import { ref, watch, defineProps, toRefs, onMounted } from "vue";
+import { onMounted, ref, toRefs } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
-const currentData = ref({
-  total: 0,
-  percent: 0,
-});
-
-const getter = "todaysCalorieData";
 const store = useStore();
-const route = useRoute();
 
 const props = defineProps({
   isActive: Boolean,
@@ -34,19 +27,14 @@ const props = defineProps({
 
 const { isActive } = toRefs(props);
 
-watch(() => route.path, (newVal) => {
-  if (newVal === "/tabs/home" && isActive.value) {
-    setTimeout(() => {
-      currentData.value = store.getters[getter];
-    }, 100);
-  }
+const currentData = ref({
+  total: 0,
+  percent: 0,
 });
 
-watch(isActive, (newVal) => {
-  if (newVal) {
-    currentData.value = store.getters[getter];
-  }
-});
+const getter = "todaysCalorieData";
+
+useRedrawObserver(getter, currentData, isActive);
 
 // allows data to fetch on initial load
 onMounted(() => {

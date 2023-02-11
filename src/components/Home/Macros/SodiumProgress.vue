@@ -1,12 +1,12 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="sodiumData.percent"
+      :percent="currentData.percent"
       color="#EEA47FFF"
     >
       <div style="transform: translateY(90%)">
         <div style="font-weight: 700; font-size: 0.9rem">
-          {{ sodiumData.total.toLocaleString() }}mg
+          {{ currentData.total.toLocaleString() }}mg
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           sodium
@@ -18,12 +18,21 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { ref, toRefs } from "vue";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
-const store = useStore();
-
-const sodiumData = computed(() => {
-  return store.getters.todaysSodiumData;
+const props = defineProps({
+  isActive: Boolean,
 });
+
+const { isActive } = toRefs(props);
+
+const currentData = ref({
+  total: 0,
+  percent: 0,
+});
+
+const getter = "todaysSodiumData";
+
+useRedrawObserver(getter, currentData, isActive);
 </script>

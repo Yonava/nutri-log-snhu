@@ -1,12 +1,12 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="proteinData.percent"
+      :percent="currentData.percent"
       color="var(--ion-color-success)"
     >
       <div style="transform: translateY(50%)">
         <div style="font-weight: 700; font-size: 1.3rem">
-          {{ proteinData.total }}g
+          {{ currentData.total }}g
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           protein
@@ -18,12 +18,21 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { ref, toRefs } from "vue";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
-const store = useStore();
-
-const proteinData = computed(() => {
-  return store.getters.todaysProteinData;
+const props = defineProps({
+  isActive: Boolean,
 });
+
+const { isActive } = toRefs(props);
+
+const currentData = ref({
+  total: 0,
+  percent: 0,
+});
+
+const getter = "todaysProteinData";
+
+useRedrawObserver(getter, currentData, isActive);
 </script>

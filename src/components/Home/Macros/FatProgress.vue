@@ -1,15 +1,15 @@
 <template>
   <div>
     <CircularProgress 
-      :percent="percentage"
+      :percent="currentData.percent"
       color="var(--ion-color-danger)"
     >
       <div style="transform: translateY(15%)">
         <div style="font-weight: 200; font-size: 0.4rem">
           total
         </div>
-        <div @click="animateCountUp" style="font-weight: 700; font-size: 0.9rem">
-          {{ fatData.total }}g
+        <div style="font-weight: 700; font-size: 0.9rem">
+          {{ currentData.total }}g
         </div>
         <div class="center" style="flex-direction: row; margin-top: 2px">
           <div style="margin: 0px 3px" class="center">
@@ -17,15 +17,18 @@
               saturated
             </div>
             <div style="font-weight: 700; font-size: 0.7rem">
-              {{ fatData.totalSaturated }}g
+              {{ currentData.totalSaturated }}g
             </div>
           </div>
-          <div style="margin: 0px 3px" class="center">
+          <div 
+            style="margin: 0px 3px"
+            class="center"
+          >
             <div style="font-weight: 200; font-size: 0.4rem">
               trans
             </div>
             <div style="font-weight: 700; font-size: 0.7rem">
-              {{ fatData.totalTrans }}g
+              {{ currentData.totalTrans }}g
             </div>
           </div>
         </div>
@@ -36,41 +39,23 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { 
-  computed, 
-  ref, 
-  defineProps, 
-  toRefs, 
-  watch
-} from "vue";
-import { useStore } from "vuex";
-import { useRoute } from "vue-router";
-
-const store = useStore();
-const percentage = ref(0);
-const route = useRoute();
+import { ref, toRefs } from "vue";
+import { useRedrawObserver } from "@/composables/RedrawObserver";
 
 const props = defineProps({
-  isActive: Boolean
-})
-
-const { isActive } = toRefs(props)
-
-watch(() => route.path, (newVal) => {
-  if (newVal === "/tabs/home" && isActive.value) {
-    setTimeout(() => {
-      percentage.value = fatData.value.percent;
-    }, 100);
-  }
+  isActive: Boolean,
 });
 
-watch(isActive, (newVal) => {
-  if (newVal) {
-    percentage.value = fatData.value.percent;
-  }
+const { isActive } = toRefs(props);
+
+const currentData = ref({
+  total: 0,
+  totalSaturated: 0,
+  totalTrans: 0,
+  percent: 0,
 });
 
-const fatData = computed(() => {
-  return store.getters.todaysFatData;
-});
+const getter = "todaysFatData";
+
+useRedrawObserver(getter, currentData, isActive);
 </script>
