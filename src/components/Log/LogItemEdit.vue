@@ -22,7 +22,7 @@
             <div 
               v-for="nutrient in nutrients"
               :key="nutrient"
-              style="width: 27%; margin: 6px;"
+              class="nutrient-box"
             >
               <NutrientEditContainer
                 @valueChange="nutrient.change($event)"
@@ -34,7 +34,6 @@
           </div>
         </div>
       </div>
-      {{ item }}
     </ion-content>
   </ion-page>
 </template>
@@ -91,19 +90,19 @@ export default {
         change: (newValue) => item.value.macro.protein = newValue,
       },
       {
-        label: 'carbs',
+        label: 'total carbs',
         value: item.value.macro.carbohydrates.total,
         color: 'var(--ion-color-tertiary)',
         change: (newValue) => item.value.macro.carbohydrates.total = newValue,
       },
       {
-        label: 'sugar',
+        label: 'total sugar',
         value: item.value.macro.carbohydrates.sugars,
         color: 'red',
         change: (newValue) => item.value.macro.carbohydrates.sugars = newValue,
       },
       {
-        label: 'fat',
+        label: 'total fat',
         value: item.value.macro.fat.total,
         color: 'var(--ion-color-success)',
         change: (newValue) => item.value.macro.fat.total = newValue,
@@ -115,11 +114,47 @@ export default {
         change: (newValue) => item.value.macro.fat.saturated = newValue,
       },
       {
+        label: 'trans',
+        value: item.value.macro.fat.trans,
+        color: 'var(--ion-color-danger)',
+        change: (newValue) => item.value.macro.fat.trans = newValue,
+      },
+      {
         label: 'fiber',
         value: item.value.macro.fiber,
-        color: 'var(--ion-color-danger)',
+        color: '#008080',
         change: (newValue) => item.value.macro.fiber = newValue,
-      }
+      },
+      {
+        label: 'sodium',
+        value: item.value.macro.sodium,
+        color: 'purple',
+        change: (newValue) => item.value.macro.sodium = newValue,
+      },
+      {
+        label: 'cholesterol',
+        value: item.value.macro.cholesterol,
+        color: '#FFA500',
+        change: (newValue) => item.value.macro.cholesterol = newValue,
+      },
+      {
+        label: 'potassium',
+        value: item.value.macro.potassium,
+        color: '#FF29D6',
+        change: (newValue) => item.value.macro.potassium = newValue,
+      },
+      {
+        label: 'calcium',
+        value: item.value.macro.calcium,
+        color: '#FFD700',
+        change: (newValue) => item.value.macro.calcium = newValue,
+      },
+      {
+        label: 'iron',
+        value: item.value.macro.iron,
+        color: '#9928A2',
+        change: (newValue) => item.value.macro.iron = newValue,
+      },
     ]
 
     return {
@@ -141,6 +176,11 @@ export default {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+}
+
+.nutrient-box {
+  width: 27%; 
+  margin: 6px;
 }
 
 ion-input.title {
