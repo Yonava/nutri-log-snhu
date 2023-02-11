@@ -1,9 +1,9 @@
 <template>
   <div>
-    <CircularProgress :percent="calorieData.percent">
+    <CircularProgress :percent="currentData.percent">
       <div style="transform: translateY(50%)">
         <div style="font-weight: 700; font-size: 1.3rem">
-          {{ calorieData.total.toLocaleString() }}
+          {{ currentData.total.toLocaleString() }}
         </div>
         <div style="font-weight: 200; font-size: 0.5rem">
           calories
@@ -13,14 +13,44 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
-import { computed } from "vue";
+import { ref, watch, defineProps, toRefs } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
-const store = useStore();
-
-const calorieData = computed(() => {
-  return store.getters.todaysCalorieData;
+const currentData = ref({
+  total: 0,
+  percent: 0,
 });
+
+const getter = "todaysCalorieData";
+const store = useStore();
+const route = useRoute();
+
+const props = defineProps({
+  isActive: Boolean,
+});
+
+const { isActive } = toRefs(props);
+
+watch(() => route.path, (newVal) => {
+  if (newVal === "/tabs/home" && isActive.value) {
+    setTimeout(() => {
+      updateData(getter);
+    }, 100);
+  }
+});
+
+watch(isActive, (newVal) => {
+  console.log("isActive", newVal)
+  if (newVal) {
+    updateData(getter);
+  }
+}, { immediate: true });
+
+function updateData(property: string) {
+  currentData.value = store.getters[property];
+  console.log("currentData", currentData.value)
+}
 </script>

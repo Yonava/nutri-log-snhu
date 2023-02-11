@@ -36,18 +36,39 @@
 
 <script setup>
 import CircularProgress from "../CircularProgress.vue";
-import { computed, onMounted, ref } from "vue";
+import { 
+  computed, 
+  ref, 
+  defineProps, 
+  toRefs, 
+  watch
+} from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
 const store = useStore();
+const percentage = ref(0);
+const route = useRoute();
 
-const percentage = ref(0)
-
-onMounted(() => {
-  setTimeout(() => {
-    percentage.value = fatData.value.percent
-  }, 250)
+const props = defineProps({
+  isActive: Boolean
 })
+
+const { isActive } = toRefs(props)
+
+watch(() => route.path, (newVal) => {
+  if (newVal === "/tabs/home" && isActive.value) {
+    setTimeout(() => {
+      percentage.value = fatData.value.percent;
+    }, 100);
+  }
+});
+
+watch(isActive, (newVal) => {
+  if (newVal) {
+    percentage.value = fatData.value.percent;
+  }
+});
 
 const fatData = computed(() => {
   return store.getters.todaysFatData;

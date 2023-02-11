@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { 
   IonButton,
   IonContent,
