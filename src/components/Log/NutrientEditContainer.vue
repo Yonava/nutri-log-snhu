@@ -24,8 +24,6 @@ import {
   watch, 
   defineEmits,
   onMounted,
-  oneBeforeUnmount,
-  onBeforeMount,
   onBeforeUnmount,
 } from 'vue';
 
@@ -64,15 +62,16 @@ onBeforeUnmount(() => {
 });
 
 function cleanInput() {
-  if (editableValue.value === "" || isNaN(editableValue.value)) {
-    editableValue.value = 0;
-  }
+  if (editableValue.value === "") return editableValue.value = 0;
+  if (isNaN(editableValue.value)) return editableValue.value = 0;
+  if (editableValue.value < 0) return editableValue.value = 0;
 }
 
 // watch inputs value and emit valueChange event
 watch(editableValue, (newValue) => {
-  if (newValue === "" || isNaN(newValue)) return;
-  console.log('emitting valueChange: ', newValue)
+  if (newValue === "") return;
+  if (isNaN(newValue)) return;
+  if (newValue < 0) return;
   emits('valueChange', newValue);
 });
 </script>
