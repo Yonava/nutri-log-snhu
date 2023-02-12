@@ -193,8 +193,4 @@ ion-input.title {
   border-radius: 7px 7px 0 0;
   background-color: var(--ion-color-light);
 }
-
-ion-content {
-  --overflow: hidden;
-}
 </style>

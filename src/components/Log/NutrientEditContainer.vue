@@ -1,33 +1,32 @@
 <template>
-  <div 
-    class="parent center" 
-    :style="{ backgroundColor: color }"
-  >
-    <span style="font-weight: 500; margin: 3px 0px">
+  <div>
+    <div 
+      :style="{ backgroundColor: color }"
+      class="label" 
+      @click="printElement"
+    >
       {{ label }}
-    </span>
-    <ion-input
+    </div>
+    <input
       v-model.number="editableValue"
       :readonly="!editable"
-      :style="inputStyle"
-      @ionFocus="focused = true"
-      @ionBlur="focused = false"
-      inputmode="numeric"
+      ref="inputField"
       type="number"
-      enterkeyhint="done"
       class="macros"
-    ></ion-input>
+    />
   </div>
 </template>
 
 <script setup>
-import { IonInput } from '@ionic/vue';
 import { 
   ref, 
-  defineProps, 
-  computed, 
+  defineProps,  
   watch, 
-  defineEmits 
+  defineEmits,
+  onMounted,
+  oneBeforeUnmount,
+  onBeforeMount,
+  onBeforeUnmount,
 } from 'vue';
 
 const props = defineProps({
@@ -53,41 +52,53 @@ const props = defineProps({
 
 const emits = defineEmits(['valueChange']);
 
-const focused = ref(false);
 const editableValue = ref(props.value);
+const inputField = ref(null);
+
+onMounted(() => {
+  inputField.value.addEventListener('focusout', cleanInput);
+});
+
+onBeforeUnmount(() => {
+  inputField.value.removeEventListener('focusout', cleanInput);
+});
+
+function cleanInput() {
+  if (editableValue.value === "" || isNaN(editableValue.value)) {
+    editableValue.value = 0;
+  }
+}
 
 // watch inputs value and emit valueChange event
 watch(editableValue, (newValue) => {
-  if (newValue === "") editableValue.value = 0;
-  emits('valueChange', editableValue.value);
-});
-
-const inputStyle = computed(() => {
-  if (focused.value) {
-    return {
-      backgroundColor: 'var(--ion-color-step-150)',
-    };
-  }
-  return {
-    backgroundColor: 'var(--ion-color-step-100)',
-  };
+  if (newValue === "" || isNaN(newValue)) return;
+  console.log('emitting valueChange: ', newValue)
+  emits('valueChange', newValue);
 });
 </script>
 
 <style scoped>
-.parent {
-  border-radius: 10px;
+.label {
+  width: 100%; 
+  text-align: center; 
+  font-weight: 500; 
+  border-radius: 7px 7px 0px 0px; 
+  padding: 3px 0px;
 }
 
-ion-input.macros {
+input.macros {
   text-align: center;
   font-size: 2.25rem;
   font-weight: 200;
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-bottom: 8px;
-  --padding-top: 8px;
+  padding: 8px;
   border-radius: 0 0 7px 7px;
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-color-step-100);
+  width: 100%;
+  border: none;
+}
+
+input.macros:focus {
+  background-color: var(--ion-color-step-150);
+  outline: none;
 }
 </style>
