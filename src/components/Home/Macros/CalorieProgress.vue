@@ -27,6 +27,10 @@ const store = useStore();
 const props = defineProps({
   isActive: Boolean,
   color: String,
+  getter: {
+    type: String,
+    required: true,
+  },
 });
 
 const { isActive } = toRefs(props);
@@ -36,9 +40,7 @@ const currentData = ref({
   percent: 0,
 });
 
-const getter = "todaysCalorieData";
-
-useRedrawObserver(getter, currentData, isActive);
+useRedrawObserver(props.getter, currentData, isActive);
 
 // allows data to fetch on initial load
 onMounted(() => {
@@ -46,7 +48,7 @@ onMounted(() => {
   for (let i = 0; i < timeoutSeconds * 2; i++) {
     setTimeout(() => {
       if (currentData.value.total > 0) return;
-      currentData.value = store.getters[getter];
+      currentData.value = store.getters[props.getter];
     }, 500 * (i + 1));
   }
 });

@@ -29,6 +29,7 @@
         <component 
           :is="component.component" 
           :color="component.color"
+          :getter="component.getter"
           :isActive="index === activeSlide"
         />
       </ion-slide>
@@ -134,7 +135,7 @@ export default defineComponent({
         component: "PotasProgress",
         label: "potas",
         color: "#8A2BE2",
-        getter: "todaysPotasData",
+        getter: "todaysPotassiumData",
         unit: "mg",
       },
     ];
