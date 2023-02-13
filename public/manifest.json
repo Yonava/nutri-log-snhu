@@ -1,0 +1,8 @@
+{
+  "name": "NutriLog SNHU",
+  "short_name": "NutriLog",
+  "display": "standalone",
+  "background_color": "#FFA500",
+  "theme_color": "#FFA500",
+  "orientation": "portrait"
+}
