@@ -12,7 +12,14 @@
           <button @click="deleteUser">Delete User</button>
         </template>
       </Authenticator>
-      <input type="text" v-model="userId">
+      <button 
+        v-for="user in tempUserList"
+        :key="user._id"
+        style="margin: 10px"
+        @click.once="tempSignIn(user._id)"
+      >
+        {{ user.firstName }} {{ user.lastName }}
+      </button>
     </ion-content>
   </ion-page>
 </template>
@@ -24,7 +31,6 @@ import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
 import { IonPage, IonContent, IonHeader } from "@ionic/vue";
-import { init } from '@/initState';
 
 import axios from "axios";
 
@@ -44,7 +50,18 @@ export default defineComponent({
   data() {
     return {
       userId: "",
+      tempUserList: [],
     }
+  },
+  created() {
+    axios
+      .get("/users")
+      .then((res) => {
+        this.tempUserList = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   mounted() {
     // Listen for Auth events
@@ -72,20 +89,9 @@ export default defineComponent({
         console.log(error);
       }
     },
-  },
-  watch: {
-    userId(newVal) {
-      if (newVal.length < 10) return;
-      axios
-        .get(`/users/${newVal}`)
-        .then(async () => {
-          localStorage.setItem("userId", newVal);
-          await init();
-          location.replace("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    tempSignIn(userId) {
+      localStorage.setItem("userId", userId);
+      window.location.replace("/");
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <h1 style="text-align: center">
+    <h1 style="text-align: center" @click="printGetter">
       {{ new Date().toDateString() }}
     </h1>
     <div class="center macro-display-box-container">
@@ -58,6 +58,7 @@ import {
   ref, 
   watch,
 } from "vue";
+import { useStore } from "vuex";
 import { 
   IonButton,
   IonContent,
@@ -98,6 +99,13 @@ export default defineComponent({
     const slideChangeDetector = ref(false);
     const slider = ref(null);
     const activeSlide = ref(0);
+
+    const store = useStore();
+
+    function printGetter() {
+      console.log(store.getters.todaysFatData);
+    }
+
 
     const macroComponents = ref([
       {
@@ -168,6 +176,7 @@ export default defineComponent({
 
     return {
       slideTo,
+      printGetter,
       activeSlide,
       slider,
       slideChangeDetector,
