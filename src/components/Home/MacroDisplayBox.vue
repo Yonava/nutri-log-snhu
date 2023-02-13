@@ -26,16 +26,24 @@
   </div>
 </template>
 
-<script setup>
-import { defineProps, toRefs, computed } from "vue";
+<script setup lang="ts">
+import { 
+  defineProps, 
+  computed,
+  watch,
+  ref
+} from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import AnimateCount from "@/base/AnimateCount.vue";
-
-const displayValue = 200;
 
 const props = defineProps({
   label: String,
   color: String,
-  getter: String,
+  getter: {
+    type: String,
+    required: true,
+  },
   isActive: Boolean,
   unit: {
     type: String,
@@ -43,14 +51,35 @@ const props = defineProps({
   }
 });
 
-const { label, color, getter, unit } = toRefs(props);
+const store = useStore();
+const route = useRoute();
+
+const homePath = "/tabs/home";
+
+const displayValue = ref(0);
+
+const watchForInit = watch(() => store.getters[props.getter].total, (newValue) => {
+  displayValue.value = newValue;
+  watchForInit();
+});
+
+watch(() => route.path, (newPath) => {
+  if (newPath.includes(homePath)) {
+    displayValue.value = store.getters[props.getter].total;
+  }
+});
+
 
 const calculateFontSize = computed(() => {
-  const totalLength = displayValue.toString().length + unit.value.length;
-  if (totalLength < 6) {
-    return "1.5rem";
+  const totalLength = displayValue.value.toString().length + props.unit.length;
+  if (totalLength < 4) {
+    return "1.7rem";
+  } else if (totalLength < 5) {
+    return "1.6rem";
+  } else if (totalLength < 6) {
+    return "1.4rem";
   } else if (totalLength < 7) {
-    return "1.2rem";
+    return "1.1rem";
   } else {
     return "1rem";
   }

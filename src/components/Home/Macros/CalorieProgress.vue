@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
 import AnimateCount from "@/base/AnimateCount.vue";
-import { onMounted, ref, toRefs } from "vue";
+import { ref, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 
@@ -42,14 +42,8 @@ const currentData = ref({
 
 useRedrawObserver(props.getter, currentData, isActive);
 
-// allows data to fetch on initial load
-onMounted(() => {
-  const timeoutSeconds = 4;
-  for (let i = 0; i < timeoutSeconds * 2; i++) {
-    setTimeout(() => {
-      if (currentData.value.total > 0) return;
-      currentData.value = store.getters[props.getter];
-    }, 500 * (i + 1));
-  }
+const watchForInit = watch(() => store.getters[props.getter].total, () => {
+  currentData.value = store.getters[props.getter];
+  watchForInit();
 });
 </script>

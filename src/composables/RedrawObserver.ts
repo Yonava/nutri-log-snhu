@@ -14,7 +14,7 @@ export function useRedrawObserver(
   const homePath = "/tabs/home";
 
   watch(() => route.path, (newPath) => {
-    if (newPath === homePath && isActive.value) {
+    if (newPath.includes(homePath) && isActive.value) {
       setTimeout(() => {
         currentData.value = store.getters[getter];
       }, 100);
