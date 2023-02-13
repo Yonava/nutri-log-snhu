@@ -14,6 +14,16 @@
         :unit="component.unit"
         :isActive="index === activeSlide"
       />
+      <div 
+        v-if="macroComponents.length < 8"
+        @click="addComponent"
+        class="add-box center"
+      >
+        <ion-icon 
+          :icon="add"
+          size="large" 
+        ></ion-icon>
+      </div>
     </div>
     <ion-slides 
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
@@ -43,13 +53,19 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { 
+  defineComponent, 
+  ref, 
+  watch,
+} from "vue";
 import { 
   IonButton,
   IonContent,
   IonSlide,
   IonSlides,
+  IonIcon
 } from "@ionic/vue";
+import { add } from "ionicons/icons";
 import CalorieProgress from "./Macros/CalorieProgress.vue";
 import CarbProgress from "./Macros/CarbProgress.vue";
 import ProteinProgress from "./Macros/ProteinProgress.vue";
@@ -66,6 +82,7 @@ export default defineComponent({
     IonContent,
     IonSlide,
     IonSlides,
+    IonIcon,
     CalorieProgress,
     CarbProgress,
     ProteinProgress,
@@ -82,7 +99,7 @@ export default defineComponent({
     const slider = ref(null);
     const activeSlide = ref(0);
 
-    const macroComponents = [
+    const macroComponents = ref([
       {
         component: "CalorieProgress",
         label: "cals",
@@ -138,7 +155,7 @@ export default defineComponent({
         getter: "todaysPotassiumData",
         unit: "mg",
       },
-    ];
+    ]);
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();
@@ -155,6 +172,7 @@ export default defineComponent({
       slider,
       slideChangeDetector,
       macroComponents,
+      add,
     };
   },
 });
@@ -170,7 +188,13 @@ export default defineComponent({
   margin: 5px 0px;
 }
 
-ion-content {
-  --overflow: hidden;
+.add-box {
+  border: 1px solid var(--ion-color-medium);
+  width: 22%; 
+  height: 60px; 
+  background: var(--ion-color-step-100); 
+  margin: 4px; 
+  padding: 2px;
+  border-radius: 8px;
 }
 </style>
