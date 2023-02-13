@@ -29,6 +29,7 @@ import '@ionic/vue/css/display.css';
 import './theme/variables.css';
 
 import store from './store'
+import { init } from './initState';
 
 Amplify.configure(awsExports);
 
@@ -43,4 +44,4 @@ router.isReady().then(() => {
   app.mount('#app');
 });
 
-import './initState';
+init();

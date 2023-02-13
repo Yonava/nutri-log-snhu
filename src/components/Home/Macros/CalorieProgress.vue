@@ -3,7 +3,10 @@
     :percent="currentData.percent"
     :color="color"
   />
-  <div style="position: absolute">
+  <div 
+    :key="currentData.total"
+    style="position: absolute"
+  >
     <div style="font-weight: 700; font-size: 4.75rem">
       <AnimateCount 
         :number="currentData.total" 

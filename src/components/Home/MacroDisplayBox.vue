@@ -1,7 +1,8 @@
 <template>
   <div 
+    :key="displayValue"
     :style="{ borderRadius }"
-    class="center box" 
+    class="center box"
   >
     <div class="center box-contain">
       <div class="center label-holder">
@@ -31,7 +32,7 @@ import {
   defineProps, 
   computed,
   watch,
-  ref
+  ref,
 } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -63,12 +64,12 @@ const watchForInit = watch(() => store.getters[props.getter].total, (newValue) =
   watchForInit();
 });
 
+
 watch(() => route.path, (newPath) => {
   if (newPath.includes(homePath)) {
     displayValue.value = store.getters[props.getter].total;
   }
 });
-
 
 const calculateFontSize = computed(() => {
   const totalLength = displayValue.value.toString().length + props.unit.length;

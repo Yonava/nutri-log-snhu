@@ -12,7 +12,14 @@
           <button @click="deleteUser">Delete User</button>
         </template>
       </Authenticator>
-      <input type="text" v-model="userId">
+      <button 
+        v-for="user in tempUserList"
+        :key="user._id"
+        style="margin: 10px"
+        @click.once="tempSignIn(user._id)"
+      >
+        {{ user.firstName }} {{ user.lastName }}
+      </button>
     </ion-content>
   </ion-page>
 </template>
@@ -43,7 +50,18 @@ export default defineComponent({
   data() {
     return {
       userId: "",
+      tempUserList: [],
     }
+  },
+  created() {
+    axios
+      .get("/users")
+      .then((res) => {
+        this.tempUserList = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   mounted() {
     // Listen for Auth events
@@ -71,23 +89,9 @@ export default defineComponent({
         console.log(error);
       }
     },
-  },
-  watch: {
-    userId(newVal) {
-      if (newVal.length < 10) return;
-      axios
-        .get(`/users/${newVal}`)
-        .then((res) => {
-          this.$store.commit("setUser", res.data);
-          this.$router.push('/');
-          localStorage.setItem("userId", newVal);
-          setTimeout(() => {
-            location.reload();
-          }, 100);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    tempSignIn(userId) {
+      localStorage.setItem("userId", userId);
+      window.location.replace("/");
     },
   },
 });

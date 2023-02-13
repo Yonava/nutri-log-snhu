@@ -6,7 +6,7 @@ import { LoggedItem } from '@/types/Log'
 const Nutrients: Module<NutrientState, any> = {
   state: {
     macronutrientCalibrations: {
-      targetCalories: 5000,
+      targetCalories: 0,
       targetCarbs: 0,
       targetSugar: 0,
       targetAddedSugar: 0,
@@ -81,7 +81,7 @@ const Nutrients: Module<NutrientState, any> = {
       const totalTransFat = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
         return total + item.macro.fat.trans
       }, 0)
-
+      
       return {
         total: totalFat,
         totalSaturated: totalSaturatedFat,
