@@ -1,7 +1,7 @@
 <template>
   <CircularProgress 
     :percent="currentData.percent"
-    color="#EEA47FFF"
+    :color="color"
   />
   <div style="position: absolute">
     <div style="font-weight: 700; font-size: 3rem">
@@ -24,6 +24,7 @@ import { useRedrawObserver } from "@/composables/RedrawObserver";
 
 const props = defineProps({
   isActive: Boolean,
+  color: String,
 });
 
 const { isActive } = toRefs(props);

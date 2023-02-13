@@ -8,12 +8,13 @@
       style="flex-wrap: wrap; flex-direction: row; position: relative; width: 100%; height: 120px; margin: 5px 0px"
     >
       <MacroDisplayBox 
-        v-for="component in macroComponents"
+        v-for="(component, index) in macroComponents"
         :key="component"
         :label="component.label"
         :color="component.color"
         :getter="component.getter"
         :unit="component.unit"
+        :isActive="index === activeSlide"
       />
     </div>
     <ion-slides 
@@ -29,6 +30,7 @@
       >
         <component 
           :is="component.component" 
+          :color="component.color"
           :isActive="index === activeSlide"
         />
       </ion-slide>
@@ -85,55 +87,55 @@ export default defineComponent({
       {
         component: "CalorieProgress",
         label: "cals",
-        color: "--ion-color-primary",
+        color: "var(--ion-color-primary)",
         getter: "todaysCalorieData",
       },
       {
         component: "FatProgress",
         label: "fats",
-        color: "--ion-color-secondary",
+        color: "var(--ion-color-secondary)",
         getter: "todaysFatData",
         unit: "g"
       },
       {
         component: "ProteinProgress",
         label: "protein",
-        color: "--ion-color-tertiary",
+        color: "#40E0D0",
         getter: "todaysProteinData",
         unit: "g",
       },
       {
         component: "CarbProgress",
         label: "carbs",
-        color: "--ion-color-success",
+        color: "#F97D38",
         getter: "todaysCarbData",
         unit: "g",
       },
       {
         component: "SugarProgress",
         label: "sugars",
-        color: "--ion-color-warning",
+        color: "var(--ion-color-warning)",
         getter: "todaysSugarData",
         unit: "g",
       },
       {
         component: "FiberProgress",
         label: "fiber",
-        color: "--ion-color-danger",
+        color: "var(--ion-color-danger)",
         getter: "todaysFiberData",
         unit: "g",
       },
       {
         component: "SodiumProgress",
         label: "sodium",
-        color: "red",
+        color: "#EEA47FFF",
         getter: "todaysSodiumData",
         unit: "mg",
       },
       {
         component: "PotasProgress",
-        label: "potassium",
-        color: "blue",
+        label: "potas",
+        color: "#8A2BE2",
         getter: "todaysPotasData",
         unit: "mg",
       },

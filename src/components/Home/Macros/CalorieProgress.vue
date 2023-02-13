@@ -1,5 +1,8 @@
 <template>
-  <CircularProgress :percent="currentData.percent" />
+  <CircularProgress 
+    :percent="currentData.percent"
+    :color="color"
+  />
   <div style="position: absolute">
     <div style="font-weight: 700; font-size: 4.75rem">
       <AnimateCount 
@@ -23,6 +26,7 @@ const store = useStore();
 
 const props = defineProps({
   isActive: Boolean,
+  color: String,
 });
 
 const { isActive } = toRefs(props);
