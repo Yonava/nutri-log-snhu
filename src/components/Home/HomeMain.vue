@@ -7,21 +7,14 @@
       class="center" 
       style="flex-wrap: wrap; flex-direction: row; position: relative; width: 100%; height: 120px; margin: 5px 0px"
     >
-      <div 
+      <MacroDisplayBox 
         v-for="component in macroComponents"
         :key="component"
-        style="width: 20%; height: 60px; background: var(--ion-color-light); margin: 7px; border-radius: 8px;"
-        class="center"
-      >
-        <div>
-          {{ component.label }}
-        </div>
-        <div>
-          <AnimateCount 
-            :number="300"
-          />
-        </div>
-      </div>
+        :label="component.label"
+        :color="component.color"
+        :getter="component.getter"
+        :unit="component.unit"
+      />
     </div>
     <ion-slides 
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
@@ -64,8 +57,7 @@ import SugarProgress from "./Macros/SugarProgress.vue";
 import SodiumProgress from "./Macros/SodiumProgress.vue";
 import PotasProgress from "./Macros/PotasProgress.vue";
 import FiberProgress from "./Macros/FiberProgress.vue";
-
-import AnimateCount from "@/base/AnimateCount.vue"
+import MacroDisplayBox from "./MacroDisplayBox.vue";
 
 export default defineComponent({
   components: {
@@ -81,7 +73,7 @@ export default defineComponent({
     SodiumProgress,
     PotasProgress,
     FiberProgress,
-    AnimateCount,
+    MacroDisplayBox,
   },
   setup() {
 
@@ -101,44 +93,51 @@ export default defineComponent({
         label: "fats",
         color: "--ion-color-secondary",
         getter: "todaysFatData",
+        unit: "g"
       },
       {
         component: "ProteinProgress",
         label: "protein",
         color: "--ion-color-tertiary",
         getter: "todaysProteinData",
+        unit: "g",
       },
       {
         component: "CarbProgress",
         label: "carbs",
         color: "--ion-color-success",
         getter: "todaysCarbData",
+        unit: "g",
       },
       {
         component: "SugarProgress",
         label: "sugars",
         color: "--ion-color-warning",
         getter: "todaysSugarData",
+        unit: "g",
       },
       {
         component: "FiberProgress",
         label: "fiber",
         color: "--ion-color-danger",
         getter: "todaysFiberData",
+        unit: "g",
       },
       {
         component: "SodiumProgress",
         label: "sodium",
-        color: "red"
+        color: "red",
+        getter: "todaysSodiumData",
+        unit: "mg",
       },
       {
         component: "PotasProgress",
         label: "potassium",
-        color: "blue"
+        color: "blue",
+        getter: "todaysPotasData",
+        unit: "mg",
       },
     ];
-
-
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();

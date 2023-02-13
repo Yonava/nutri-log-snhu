@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ numberDisplay.toLocaleString() }}{{ unit }}
+    {{ numberOnScreen }}{{ unit }}
   </div>
 </template>
 
@@ -11,18 +11,23 @@ import {
   defineProps,
   watch,
   onMounted,
+  computed
 } from "vue";
 
 const props = defineProps({
   number: Number,
   unit: String,
+  displayRaw: {
+    type: Boolean,
+    default: false
+  },
   duration: {
     type: Number,
     default: 500
   }
 });
 
-const { number, unit, duration } = toRefs(props);
+const { number, unit, duration, displayRaw } = toRefs(props);
 
 const numberDisplay = ref(0);
 
@@ -32,6 +37,14 @@ onMounted(() => {
 
 watch(number, (newVal, oldVal) => {
   runAnimation(newVal, oldVal);
+});
+
+const numberOnScreen = computed(() => {
+  if (displayRaw.value) {
+    return numberDisplay.value;
+  } else {
+    return numberDisplay.value.toLocaleString();
+  }
 });
 
 function getFrameDuration(change) {
