@@ -30,7 +30,7 @@
 import { defineProps, toRefs, computed } from "vue";
 import AnimateCount from "@/base/AnimateCount.vue";
 
-const displayValue = 20398;
+const displayValue = 200;
 
 const props = defineProps({
   label: String,

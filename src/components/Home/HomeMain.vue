@@ -3,13 +3,11 @@
     <h1 style="text-align: center">
       {{ new Date().toDateString() }}
     </h1>
-    <div 
-      class="center" 
-      style="flex-wrap: wrap; flex-direction: row; position: relative; width: 100%; height: 120px; margin: 5px 0px"
-    >
+    <div class="center macro-display-box-container">
       <MacroDisplayBox 
         v-for="(component, index) in macroComponents"
         :key="component"
+        @click="slideTo(index)"
         :label="component.label"
         :color="component.color"
         :getter="component.getter"
@@ -145,7 +143,13 @@ export default defineComponent({
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
+    function slideTo(index) {
+      activeSlide.value = index;
+      slider.value.$el.slideTo(index);
+    }
+
     return {
+      slideTo,
       activeSlide,
       slider,
       slideChangeDetector,
@@ -156,6 +160,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.macro-display-box-container {
+  flex-wrap: wrap; 
+  flex-direction: row; 
+  position: relative; 
+  width: 100%; 
+  height: 120px; 
+  margin: 5px 0px;
+}
+
 ion-content {
   --overflow: hidden;
 }
