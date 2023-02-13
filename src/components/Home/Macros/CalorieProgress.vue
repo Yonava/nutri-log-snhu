@@ -1,5 +1,8 @@
 <template>
-  <CircularProgress :percent="currentData.percent" />
+  <CircularProgress 
+    :percent="currentData.percent"
+    :color="color"
+  />
   <div style="position: absolute">
     <div style="font-weight: 700; font-size: 4.75rem">
       <AnimateCount 
@@ -15,7 +18,7 @@
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
 import AnimateCount from "@/base/AnimateCount.vue";
-import { onMounted, ref, toRefs } from "vue";
+import { ref, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 
@@ -23,6 +26,11 @@ const store = useStore();
 
 const props = defineProps({
   isActive: Boolean,
+  color: String,
+  getter: {
+    type: String,
+    required: true,
+  },
 });
 
 const { isActive } = toRefs(props);
@@ -32,18 +40,10 @@ const currentData = ref({
   percent: 0,
 });
 
-const getter = "todaysCalorieData";
+useRedrawObserver(props.getter, currentData, isActive);
 
-useRedrawObserver(getter, currentData, isActive);
-
-// allows data to fetch on initial load
-onMounted(() => {
-  const timeoutSeconds = 4;
-  for (let i = 0; i < timeoutSeconds * 2; i++) {
-    setTimeout(() => {
-      if (currentData.value.total > 0) return;
-      currentData.value = store.getters[getter];
-    }, 500 * (i + 1));
-  }
+const watchForInit = watch(() => store.getters[props.getter].total, () => {
+  currentData.value = store.getters[props.getter];
+  watchForInit();
 });
 </script>

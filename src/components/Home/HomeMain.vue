@@ -1,18 +1,35 @@
 <template>
   <ion-content content-id="home-tab-content">
+    <h1 style="text-align: center">
+      {{ new Date().toDateString() }}
+    </h1>
+    <div class="center macro-display-box-container">
+      <MacroDisplayBox 
+        v-for="(component, index) in macroComponents"
+        :key="component"
+        @click="slideTo(index)"
+        :label="component.label"
+        :color="component.color"
+        :getter="component.getter"
+        :unit="component.unit"
+        :isActive="index === activeSlide"
+      />
+    </div>
     <ion-slides 
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
       ref="slider"
       class="center"
     >
-      <ion-slide 
+      <ion-slide
         v-for="(component, index) in macroComponents"
         :key="component"
         class="center"
         style="width: 100%; height: 350px;"
       >
         <component 
-          :is="component" 
+          :is="component.component" 
+          :color="component.color"
+          :getter="component.getter"
           :isActive="index === activeSlide"
         />
       </ion-slide>
@@ -41,6 +58,7 @@ import SugarProgress from "./Macros/SugarProgress.vue";
 import SodiumProgress from "./Macros/SodiumProgress.vue";
 import PotasProgress from "./Macros/PotasProgress.vue";
 import FiberProgress from "./Macros/FiberProgress.vue";
+import MacroDisplayBox from "./MacroDisplayBox.vue";
 
 export default defineComponent({
   components: {
@@ -56,6 +74,7 @@ export default defineComponent({
     SodiumProgress,
     PotasProgress,
     FiberProgress,
+    MacroDisplayBox,
   },
   setup() {
 
@@ -64,21 +83,74 @@ export default defineComponent({
     const activeSlide = ref(0);
 
     const macroComponents = [
-      "CalorieProgress",
-      "FatProgress",
-      "ProteinProgress",
-      "CarbProgress",
-      "SugarProgress",
-      "FiberProgress",
-      "SodiumProgress",
-      "PotasProgress",
+      {
+        component: "CalorieProgress",
+        label: "cals",
+        color: "var(--ion-color-primary)",
+        getter: "todaysCalorieData",
+      },
+      {
+        component: "FatProgress",
+        label: "fats",
+        color: "var(--ion-color-secondary)",
+        getter: "todaysFatData",
+        unit: "g"
+      },
+      {
+        component: "ProteinProgress",
+        label: "protein",
+        color: "#40E0D0",
+        getter: "todaysProteinData",
+        unit: "g",
+      },
+      {
+        component: "CarbProgress",
+        label: "carbs",
+        color: "#F97D38",
+        getter: "todaysCarbData",
+        unit: "g",
+      },
+      {
+        component: "SugarProgress",
+        label: "sugars",
+        color: "var(--ion-color-warning)",
+        getter: "todaysSugarData",
+        unit: "g",
+      },
+      {
+        component: "FiberProgress",
+        label: "fiber",
+        color: "var(--ion-color-danger)",
+        getter: "todaysFiberData",
+        unit: "g",
+      },
+      {
+        component: "SodiumProgress",
+        label: "sodium",
+        color: "#EEA47FFF",
+        getter: "todaysSodiumData",
+        unit: "mg",
+      },
+      {
+        component: "PotasProgress",
+        label: "potas",
+        color: "#8A2BE2",
+        getter: "todaysPotassiumData",
+        unit: "mg",
+      },
     ];
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
+    function slideTo(index) {
+      activeSlide.value = index;
+      slider.value.$el.slideTo(index);
+    }
+
     return {
+      slideTo,
       activeSlide,
       slider,
       slideChangeDetector,
@@ -89,6 +161,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.macro-display-box-container {
+  flex-wrap: wrap; 
+  flex-direction: row; 
+  position: relative; 
+  width: 100%; 
+  height: 120px; 
+  margin: 5px 0px;
+}
+
 ion-content {
   --overflow: hidden;
 }

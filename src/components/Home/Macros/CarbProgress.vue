@@ -1,7 +1,7 @@
 <template>
   <CircularProgress 
     :percent="currentData.percent"
-    color="#F97D38"
+    :color="color"
   />
   <div style="position: absolute">
     <div style="font-weight: 700; font-size: 4.75rem">
@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
 import AnimateCount from "@/base/AnimateCount";
 import { ref, toRefs } from "vue";
@@ -24,6 +24,11 @@ import { useRedrawObserver } from "@/composables/RedrawObserver";
 
 const props = defineProps({
   isActive: Boolean,
+  color: String,
+  getter: {
+    type: String,
+    required: true,
+  },
 });
 
 const { isActive } = toRefs(props);
@@ -33,7 +38,5 @@ const currentData = ref({
   percent: 0,
 });
 
-const getter = "todaysCarbData";
-
-useRedrawObserver(getter, currentData, isActive);
+useRedrawObserver(props.getter, currentData, isActive);
 </script>
