@@ -1,9 +1,9 @@
 <template>
   <div>
     <div 
-      :style="{ backgroundColor: color }"
-      class="label" 
       @click="printElement"
+      :style="{ backgroundColor: color }"
+      class="label"
     >
       {{ label }}
     </div>

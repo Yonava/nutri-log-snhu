@@ -9,7 +9,8 @@ import {
   ref, 
   toRefs, 
   defineProps,
-  watch
+  watch,
+  onMounted,
 } from "vue";
 
 const props = defineProps({
@@ -24,6 +25,10 @@ const props = defineProps({
 const { number, unit, duration } = toRefs(props);
 
 const numberDisplay = ref(0);
+
+onMounted(() => {
+  runAnimation(number.value, 0);
+});
 
 watch(number, (newVal, oldVal) => {
   runAnimation(newVal, oldVal);

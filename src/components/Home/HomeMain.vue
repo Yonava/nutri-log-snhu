@@ -1,18 +1,41 @@
 <template>
   <ion-content content-id="home-tab-content">
+    <h1 style="text-align: center">
+      {{ new Date().toDateString() }}
+    </h1>
+    <div 
+      class="center" 
+      style="flex-wrap: wrap; flex-direction: row; position: relative; width: 100%; height: 120px; margin: 5px 0px"
+    >
+      <div 
+        v-for="component in macroComponents"
+        :key="component"
+        style="width: 20%; height: 60px; background: var(--ion-color-light); margin: 7px; border-radius: 8px;"
+        class="center"
+      >
+        <div>
+          {{ component.label }}
+        </div>
+        <div>
+          <AnimateCount 
+            :number="300"
+          />
+        </div>
+      </div>
+    </div>
     <ion-slides 
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
       ref="slider"
       class="center"
     >
-      <ion-slide 
+      <ion-slide
         v-for="(component, index) in macroComponents"
         :key="component"
         class="center"
         style="width: 100%; height: 350px;"
       >
         <component 
-          :is="component" 
+          :is="component.component" 
           :isActive="index === activeSlide"
         />
       </ion-slide>
@@ -42,6 +65,8 @@ import SodiumProgress from "./Macros/SodiumProgress.vue";
 import PotasProgress from "./Macros/PotasProgress.vue";
 import FiberProgress from "./Macros/FiberProgress.vue";
 
+import AnimateCount from "@/base/AnimateCount.vue"
+
 export default defineComponent({
   components: {
     IonButton,
@@ -56,6 +81,7 @@ export default defineComponent({
     SodiumProgress,
     PotasProgress,
     FiberProgress,
+    AnimateCount,
   },
   setup() {
 
@@ -64,15 +90,55 @@ export default defineComponent({
     const activeSlide = ref(0);
 
     const macroComponents = [
-      "CalorieProgress",
-      "FatProgress",
-      "ProteinProgress",
-      "CarbProgress",
-      "SugarProgress",
-      "FiberProgress",
-      "SodiumProgress",
-      "PotasProgress",
+      {
+        component: "CalorieProgress",
+        label: "cals",
+        color: "--ion-color-primary",
+        getter: "todaysCalorieData",
+      },
+      {
+        component: "FatProgress",
+        label: "fats",
+        color: "--ion-color-secondary",
+        getter: "todaysFatData",
+      },
+      {
+        component: "ProteinProgress",
+        label: "protein",
+        color: "--ion-color-tertiary",
+        getter: "todaysProteinData",
+      },
+      {
+        component: "CarbProgress",
+        label: "carbs",
+        color: "--ion-color-success",
+        getter: "todaysCarbData",
+      },
+      {
+        component: "SugarProgress",
+        label: "sugars",
+        color: "--ion-color-warning",
+        getter: "todaysSugarData",
+      },
+      {
+        component: "FiberProgress",
+        label: "fiber",
+        color: "--ion-color-danger",
+        getter: "todaysFiberData",
+      },
+      {
+        component: "SodiumProgress",
+        label: "sodium",
+        color: "red"
+      },
+      {
+        component: "PotasProgress",
+        label: "potassium",
+        color: "blue"
+      },
     ];
+
+
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();
