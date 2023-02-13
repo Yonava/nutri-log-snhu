@@ -24,6 +24,7 @@ import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
 import { IonPage, IonContent, IonHeader } from "@ionic/vue";
+import { init } from '@/initState';
 
 import axios from "axios";
 
@@ -77,13 +78,10 @@ export default defineComponent({
       if (newVal.length < 10) return;
       axios
         .get(`/users/${newVal}`)
-        .then((res) => {
-          this.$store.commit("setUser", res.data);
-          this.$router.push('/');
+        .then(async () => {
           localStorage.setItem("userId", newVal);
-          setTimeout(() => {
-            location.reload();
-          }, 100);
+          await init();
+          location.replace("/");
         })
         .catch((err) => {
           console.log(err);

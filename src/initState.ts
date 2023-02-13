@@ -3,7 +3,7 @@ import router from "./router";
 import vuexStore from "./store";
 import axios from "axios";
 
-async function init() {
+export async function init() {
 
   SplashScreen.show();
 
@@ -42,7 +42,9 @@ async function init() {
     setTimeout(() => {
       router.push("/signin")
     }, 100);
+  } else {
+    setTimeout(() => {
+      router.push("/")
+    }, 100);
   }
 }
-
-init();
