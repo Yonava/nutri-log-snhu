@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { 
   ref, 
   toRefs, 
@@ -15,7 +15,10 @@ import {
 } from "vue";
 
 const props = defineProps({
-  number: Number,
+  number: {
+    type: Number,
+    required: true
+  },
   unit: String,
   displayRaw: {
     type: Boolean,
@@ -27,7 +30,7 @@ const props = defineProps({
   }
 });
 
-const { number, unit, duration, displayRaw } = toRefs(props);
+const { number, duration, displayRaw } = toRefs(props);
 
 const numberDisplay = ref(0);
 
@@ -47,7 +50,7 @@ const numberOnScreen = computed(() => {
   }
 });
 
-function getFrameDuration(change) {
+function getFrameDuration(change: number) {
   const absChange = Math.abs(change)
   if (absChange < 5) {
     return 200
@@ -60,7 +63,7 @@ function getFrameDuration(change) {
   }
 }
 
-const runAnimation = (newValue, oldValue) => {
+const runAnimation = (newValue: number, oldValue: number) => {
   const change = newValue - oldValue
   const frameDuration = getFrameDuration(change)
   let frameCount = 0
