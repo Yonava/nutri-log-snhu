@@ -118,6 +118,36 @@ const Nutrients: Module<NutrientState, any> = {
         total: totalPotassium,
         percent: Math.round(totalPotassium / state.macronutrientCalibrations.targetPotassium * 100)
       }
+    },
+    todaysCholesterolData: (state, getters, rootState, rootGetters) => {
+      const totalCholesterol = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return total + item.macro.cholesterol
+      }, 0)
+
+      return {
+        total: totalCholesterol,
+        percent: Math.round(totalCholesterol / state.macronutrientCalibrations.targetCholesterol * 100)
+      }
+    },
+    todaysCalciumData: (state, getters, rootState, rootGetters) => {
+      const totalCalcium = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return total + item.macro.calcium
+      }, 0)
+
+      return {
+        total: totalCalcium,
+        percent: Math.round(totalCalcium / state.macronutrientCalibrations.targetCalcium * 100)
+      }
+    },
+    todaysIronData: (state, getters, rootState, rootGetters) => {
+      const totalIron = rootGetters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return total + item.macro.iron
+      }, 0)
+
+      return {
+        total: totalIron,
+        percent: Math.round(totalIron / state.macronutrientCalibrations.targetIron * 100)
+      }
     }
   },
   mutations: {

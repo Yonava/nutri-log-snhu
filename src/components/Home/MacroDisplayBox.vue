@@ -33,6 +33,7 @@ import {
   computed,
   watch,
   ref,
+  onMounted,
 } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -57,8 +58,12 @@ const route = useRoute();
 
 const homePath = "/tabs/home";
 
-const displayValue = ref(0);
+const displayValue = ref(store.getters[props.getter].total);
 const rerenderKey = ref(true);
+
+onMounted(() => {
+  rerenderKey.value = !rerenderKey.value;
+});
 
 const watchForInit = watch(() => store.getters[props.getter].total, (newValue) => {
   watchForInit();

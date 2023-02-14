@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
 import AnimateCount from "@/base/AnimateCount";
-import { ref, toRefs } from "vue";
+import { ref, toRefs, watch } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 
 const props = defineProps({
@@ -76,6 +76,10 @@ const currentData = ref({
   totalTrans: 0,
   percent: 0,
 });
+
+watch(isActive, () => {
+  console.log("isActive", isActive.value);
+})
 
 useRedrawObserver(props.getter, currentData, isActive, props.index);
 </script>
