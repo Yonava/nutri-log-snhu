@@ -13,11 +13,22 @@ interface Object1 {
 const Toast: Module<ToastState, any> = {
   mutations: {
     presentToast(state, options: ToastOptions = { 
+      header: 'Error',
       message: 'Toast options left undefined',
       duration: 3000,
       color: 'danger',
     }) {
-      toastController.create(options)
+
+      const defaults: ToastOptions = {
+        message: 'Toast options left undefined',
+        duration: 2000,
+        color: 'primary',
+        position: 'bottom',
+      }
+
+      const toastOptions = Object.assign(defaults, options)
+
+      toastController.create(toastOptions)
         .then(toast => {
           toast.present()
         })

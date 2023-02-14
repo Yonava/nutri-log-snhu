@@ -49,7 +49,7 @@ import {
   addCircleOutline
 } from 'ionicons/icons';
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { DisplayItem } from '@/types/Log'
@@ -70,6 +70,7 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+
 
     function addItem(item: DisplayItem) {
       store.dispatch("postLoggedItem", item)

@@ -71,7 +71,14 @@ const Log: Module<LogState, any> = {
       }
       try {
         await axios.put(`/users/${getters.userId}/log`, loggedItem)
-        commit('addLogItem', { loggedItem, insertIndex: 0 })
+        commit('addLogItem', { 
+          loggedItem, 
+          insertIndex: 0 
+        })
+        commit('presentToast', {
+          message: `Added ${item.name} to log`,
+          color: 'success',
+        })
       } catch {
         console.error('Error posting logged item to database')
       }
@@ -87,7 +94,10 @@ const Log: Module<LogState, any> = {
     async updateLoggedItem({ commit, getters }, item: LoggedItem) {
       try {
         await axios.put(`/users/${getters.userId}/log/${item._id}`, item)
-        commit('presentToast')
+        commit('presentToast', { 
+          message: `${item.name} updated.`,
+          position: 'top',
+        })
         commit('updateLogItem', item)
       } catch {
         console.error('Error updating logged item in database')
