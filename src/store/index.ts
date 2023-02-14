@@ -6,6 +6,7 @@ import Log from './modules/Log'
 import Auth from './modules/Auth'
 import Toast from './modules/Toast'
 import Nutrients from './modules/Nutrients'
+import User from './modules/User'
 
 export default createStore<State>({
   strict: process.env.NODE_ENV !== 'production',
@@ -13,7 +14,7 @@ export default createStore<State>({
     catalog: [],
     selectedCatalogItem: null,
     caloriesHidden: false,
-    
+
     clientStore: null
   },
   getters: {
@@ -52,7 +53,6 @@ export default createStore<State>({
       })
       try {
         await clientStore.create()
-        console.log('clientStore created')
       } catch (err) {
         console.log(err)
       }
@@ -63,6 +63,7 @@ export default createStore<State>({
     Log,
     Auth,
     Toast,
-    Nutrients
+    Nutrients,
+    User
   }
 })

@@ -69,6 +69,7 @@ import {
   ref, 
   watch,
 } from "vue";
+import { useStore } from "vuex";
 import { 
   IonButton,
   IonContent,
@@ -118,64 +119,9 @@ export default defineComponent({
     const slideChangeDetector = ref(false);
     const slider = ref(null);
     const activeSlide = ref(0);
+    const store = useStore();
 
-    const macroComponents = ref([
-      {
-        component: "CalorieProgress",
-        label: "cals",
-        color: "var(--ion-color-primary)",
-        getter: "todaysCalorieData",
-      },
-      {
-        component: "FatProgress",
-        label: "fats",
-        color: "var(--ion-color-secondary)",
-        getter: "todaysFatData",
-        unit: "g"
-      },
-      {
-        component: "ProteinProgress",
-        label: "protein",
-        color: "#40E0D0",
-        getter: "todaysProteinData",
-        unit: "g",
-      },
-      {
-        component: "CarbProgress",
-        label: "carbs",
-        color: "#F97D38",
-        getter: "todaysCarbData",
-        unit: "g",
-      },
-      {
-        component: "SugarProgress",
-        label: "sugars",
-        color: "var(--ion-color-warning)",
-        getter: "todaysSugarData",
-        unit: "g",
-      },
-      {
-        component: "FiberProgress",
-        label: "fiber",
-        color: "var(--ion-color-danger)",
-        getter: "todaysFiberData",
-        unit: "g",
-      },
-      {
-        component: "SodiumProgress",
-        label: "sodium",
-        color: "#EEA47FFF",
-        getter: "todaysSodiumData",
-        unit: "mg",
-      },
-      {
-        component: "PotasProgress",
-        label: "potas",
-        color: "#8A2BE2",
-        getter: "todaysPotassiumData",
-        unit: "mg",
-      }
-    ]);
+    const macroComponents = store.getters.activeMacroDisplayComponents;
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();
