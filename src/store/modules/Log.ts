@@ -44,10 +44,10 @@ const Log: Module<LogState, any> = {
     },
     setLog(state, log: LoggedItem[]) {
       const sortedLogByISO = log.sort((a, b) => a.dateAdded > b.dateAdded ? -1 : 1)
-      state.log = sortedLogByISO
+      state.log = sortedLogByISO;
     },
     setCustomItems(state, customItems: DisplayItem[]) {
-      state.customItems = customItems
+      state.customItems = customItems;
     }
   },
   actions: {
@@ -87,6 +87,7 @@ const Log: Module<LogState, any> = {
     async updateLoggedItem({ commit, getters }, item: LoggedItem) {
       try {
         await axios.put(`/users/${getters.userId}/log/${item._id}`, item)
+        commit('presentToast')
         commit('updateLogItem', item)
       } catch {
         console.error('Error updating logged item in database')
