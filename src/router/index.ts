@@ -46,6 +46,11 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'scan',
         component: () => import('@/views/ScanTab.vue')
+      },
+      {
+        name: 'ModifyMacroDisplay',
+        path: 'modifyMacroDisplay',
+        component: () => import('@/views/ModifyMacroDisplay.vue')
       }
     ]
   },

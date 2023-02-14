@@ -3,7 +3,6 @@
     <ion-item
       v-for="item in fullMacroComponentList"
       :key="item.component"
-      @click="$emit('item-added', item)"
     >
       {{ item.label }}
     </ion-item>

@@ -77,9 +77,5 @@ const currentData = ref({
   percent: 0,
 });
 
-watch(isActive, () => {
-  console.log("isActive", isActive.value);
-})
-
 useRedrawObserver(props.getter, currentData, isActive, props.index);
 </script>

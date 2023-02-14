@@ -1,14 +1,6 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <div class="center" style="margin: 3px">
-      <ion-button
-        color="danger"
-        @click="removeComponent(activeSlide)"
-      >remove {{ macroComponents[activeSlide].label }}</ion-button>
-    </div>
-    <div 
-      class="center macro-display-box-container"
-    >
+    <div class="center macro-display-box-container">
       <MacroDisplayBox 
         v-for="(component, index) in macroComponents"
         :key="component"
@@ -21,28 +13,17 @@
       />
       <div 
         v-if="macroComponents.length < 8"
-        @click="applyPopOver($event)"
         class="add-box center"
+        router-link="/add-component"
       >
         <ion-icon 
           :icon="add"
           size="large" 
         ></ion-icon>
       </div>
-      <ion-popover 
-        :is-open="showAddComponentPopover"
-        :dismiss-on-select="true"
-        :event="popoverEvent"
-        @ionPopoverDidDismiss="showAddComponentPopover = false"
-      >
-        <AddComponentPopover 
-          @item-added="addComponent($event)"
-        />
-      </ion-popover>
     </div>
-    <ion-slides 
+    <ion-slides
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
-      :key="macroComponents.length"
       ref="slider"
       class="center"
     >
@@ -81,7 +62,6 @@ import {
   IonSlide,
   IonSlides,
   IonIcon,
-  IonPopover,
 } from "@ionic/vue";
 import { add } from "ionicons/icons";
 import CalorieProgress from "./Macros/CalorieProgress.vue";
@@ -95,8 +75,8 @@ import FiberProgress from "./Macros/FiberProgress.vue";
 import CholProgress from "./Macros/CholProgress.vue";
 import IronProgress from "./Macros/IronProgress.vue";
 import CalciumProgress from "./Macros/CalciumProgress.vue";
+
 import MacroDisplayBox from "./MacroDisplayBox.vue";
-import AddComponentPopover from "./AddComponentPopover.vue";
 
 export default defineComponent({
   components: {
@@ -105,8 +85,7 @@ export default defineComponent({
     IonSlide,
     IonSlides,
     IonIcon,
-    IonPopover,
-    AddComponentPopover,
+
     CalciumProgress,
     IronProgress,
     CalorieProgress,
@@ -118,6 +97,7 @@ export default defineComponent({
     SodiumProgress,
     PotasProgress,
     FiberProgress,
+
     MacroDisplayBox,
   },
   setup() {
@@ -125,8 +105,6 @@ export default defineComponent({
     const slideChangeDetector = ref(false);
     const slider = ref(null);
     const activeSlide = ref(0);
-    const showAddComponentPopover = ref(false);
-    const popoverEvent = ref(null);
 
     const macroComponents = ref([
       {
@@ -190,35 +168,13 @@ export default defineComponent({
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
-    async function addComponent(component) {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      macroComponents.value.push(component);
-      setTimeout(() => {
-        slideTo(macroComponents.value.length - 1);
-      }, 1000);
-    }
-
-    function removeComponent(index) {
-      macroComponents.value.splice(index, 1);
-    }
-
     function slideTo(index) {
       activeSlide.value = index;
       slider.value.$el.slideTo(index);
     }
 
-    function applyPopOver(event) {
-      showAddComponentPopover.value = true;
-      popoverEvent.value = event;
-    }
-
     return {
-      popoverEvent,
-      applyPopOver,
-      removeComponent,
-      addComponent,
       slideTo,
-      showAddComponentPopover,
       activeSlide,
       slider,
       slideChangeDetector,
