@@ -29,3 +29,11 @@ export interface MacronutrientCalibrations {
   targetCalcium: number;
   targetIron: number;
 }
+
+export interface MacroDisplayComponent {
+  component: string;
+  getter: string;
+  label: string;
+  color: string;
+  unit?: string;
+}

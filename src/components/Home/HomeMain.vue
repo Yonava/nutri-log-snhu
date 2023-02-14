@@ -1,25 +1,38 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <div class="center macro-display-box-container">
-      <MacroDisplayBox 
-        v-for="(component, index) in macroComponents"
-        :key="component"
-        @click="slideTo(index)"
-        :label="component.label"
-        :color="component.color"
-        :getter="component.getter"
-        :unit="component.unit"
-        :isActive="index === activeSlide"
-      />
+    <div style="position: relative;">
+      <div class="center macro-display-box-container">
+        <MacroDisplayBox 
+          v-for="(component, index) in macroComponents"
+          :key="component"
+          @click="slideTo(index)"
+          :label="component.label"
+          :color="component.color"
+          :getter="component.getter"
+          :unit="component.unit"
+          :isActive="index === activeSlide"
+        />
+        <div 
+          v-if="macroComponents.length < 8"
+          class="add-box center"
+          @click="$router.push({ name: 'ModifyMacroDisplay' })"
+        >
+          <ion-icon 
+            :icon="add"
+            size="large" 
+          ></ion-icon>
+        </div>
+      </div>
       <div 
-        v-if="macroComponents.length < 8"
-        class="add-box center"
-        router-link="/add-component"
+        v-if="macroComponents.length === 8"
+        class="modify-button-container"
       >
-        <ion-icon 
-          :icon="add"
-          size="large" 
-        ></ion-icon>
+        <button 
+          @click="$router.push({ name: 'ModifyMacroDisplay' })"
+          class="modify-macros-button"
+        >
+          modify nutrients
+        </button>
       </div>
     </div>
     <ion-slides
@@ -191,8 +204,22 @@ export default defineComponent({
   flex-direction: row; 
   position: relative; 
   width: 100%; 
-  height: 120px; 
-  margin: 5px 0px;
+}
+
+.modify-macros-button {
+  border-radius: 5px; 
+  background-color: var(--ion-color-primary); 
+  font-weight: 600; 
+  position: absolute;  
+  margin-top: 3px;
+  right: 0; 
+  padding: 3px 5px;
+}
+
+.modify-button-container {
+  position: relative;
+  width: calc(94% + 12px); 
+  z-index: 2;
 }
 
 .add-box {
