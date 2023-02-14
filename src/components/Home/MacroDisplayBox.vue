@@ -1,6 +1,6 @@
 <template>
   <div 
-    :key="displayValue"
+    :key="rerenderKey"
     :style="{ borderRadius }"
     class="center box"
   >
@@ -58,12 +58,14 @@ const route = useRoute();
 const homePath = "/tabs/home";
 
 const displayValue = ref(0);
+const rerenderKey = ref(true);
 
 const watchForInit = watch(() => store.getters[props.getter].total, (newValue) => {
-  displayValue.value = newValue;
   watchForInit();
+  rerenderKey.value = !rerenderKey.value;
+  if (!route.path.includes(homePath)) return;
+  displayValue.value = newValue;
 });
-
 
 watch(() => route.path, (newPath) => {
   if (newPath.includes(homePath)) {
