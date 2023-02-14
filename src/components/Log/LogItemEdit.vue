@@ -135,7 +135,11 @@ import {
   IonInput,
 } from '@ionic/vue';
 import { useStore } from 'vuex';
-import { computed, ref } from 'vue';
+import { 
+  computed, 
+  ref,
+  onUnmounted,
+} from 'vue';
 import NutrientEditContainer from './NutrientEditContainer.vue';
 
 export default {
@@ -164,6 +168,11 @@ export default {
         backgroundColor: 'var(--ion-color-step-100)',
         borderBottom: '1px solid transparent'
       };
+    });
+
+    onUnmounted(() => {
+      if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return
+      store.dispatch('updateLoggedItem', item.value);
     });
 
     return {
