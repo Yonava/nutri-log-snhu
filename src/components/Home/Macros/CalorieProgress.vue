@@ -30,6 +30,10 @@ const store = useStore();
 const props = defineProps({
   isActive: Boolean,
   color: String,
+  index: {
+    type: Number,
+    required: true,
+  },
   getter: {
     type: String,
     required: true,
@@ -43,10 +47,5 @@ const currentData = ref({
   percent: 0,
 });
 
-useRedrawObserver(props.getter, currentData, isActive);
-
-const watchForInit = watch(() => store.getters[props.getter].total, () => {
-  currentData.value = store.getters[props.getter];
-  watchForInit();
-});
+useRedrawObserver(props.getter, currentData, isActive, props.index);
 </script>

@@ -15,11 +15,11 @@ import {
 } from "vue";
 
 const props = defineProps({
+  unit: String,
   number: {
     type: Number,
     required: true
   },
-  unit: String,
   displayRaw: {
     type: Boolean,
     default: false
