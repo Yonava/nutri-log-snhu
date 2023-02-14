@@ -21,7 +21,7 @@
       />
       <div 
         v-if="macroComponents.length < 8"
-        @click="showAddComponentPopover = true"
+        @click="applyPopOver($event)"
         class="add-box center"
       >
         <ion-icon 
@@ -32,6 +32,8 @@
       <ion-popover 
         :is-open="showAddComponentPopover"
         :dismiss-on-select="true"
+        :event="popoverEvent"
+        @ionPopoverDidDismiss="showAddComponentPopover = false"
       >
         <AddComponentPopover 
           @item-added="addComponent($event)"
@@ -124,6 +126,7 @@ export default defineComponent({
     const slider = ref(null);
     const activeSlide = ref(0);
     const showAddComponentPopover = ref(false);
+    const popoverEvent = ref(null);
 
     const macroComponents = ref([
       {
@@ -188,7 +191,6 @@ export default defineComponent({
     });
 
     async function addComponent(component) {
-      console.log(component)
       await new Promise((resolve) => setTimeout(resolve, 500));
       macroComponents.value.push(component);
       setTimeout(() => {
@@ -205,7 +207,14 @@ export default defineComponent({
       slider.value.$el.slideTo(index);
     }
 
+    function applyPopOver(event) {
+      showAddComponentPopover.value = true;
+      popoverEvent.value = event;
+    }
+
     return {
+      popoverEvent,
+      applyPopOver,
       removeComponent,
       addComponent,
       slideTo,
