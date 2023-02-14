@@ -15,7 +15,7 @@
       <button 
         v-for="user in tempUserList"
         :key="user._id"
-        style="margin: 10px"
+        style="margin: 10px; color: white; background-color: #3b3b3b; border-radius: 5px; padding: 5px;"
         @click.once="tempSignIn(user._id)"
       >
         {{ user.firstName }} {{ user.lastName }}

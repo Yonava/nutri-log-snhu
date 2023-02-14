@@ -6,7 +6,8 @@ import type { Ref } from "vue";
 export function useRedrawObserver(
   getter: string, 
   currentData: Ref, 
-  isActive: Ref<boolean>
+  isActive: Ref<boolean>,
+  index: number
 ) {
   const store = useStore();
   const route = useRoute();
@@ -26,4 +27,12 @@ export function useRedrawObserver(
       currentData.value = store.getters[getter];
     }
   });
+
+  if (index === 0) {
+    const watchForInit = watch(() => store.getters[getter].total, () => {
+      watchForInit();
+      if (!route.path.includes(homePath)) return;
+      currentData.value = store.getters[getter];
+    });
+  }
 }

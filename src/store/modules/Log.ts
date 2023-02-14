@@ -38,16 +38,16 @@ const Log: Module<LogState, any> = {
       const index = state.log.findIndex(item => item.dateAdded === dateAdded)
       state.log.splice(index, 1)
     },
-    updateLogItem(state, { _id, item }: { _id: string, item: LoggedItem }) {
-      const index = state.log.findIndex(item => item._id === _id)
-      state.log.splice(index, 1, item)
+    updateLogItem(state, item: LoggedItem) {
+      const index = state.log.findIndex(loggedItem => loggedItem._id === item._id)
+      state.log[index] = item;
     },
     setLog(state, log: LoggedItem[]) {
       const sortedLogByISO = log.sort((a, b) => a.dateAdded > b.dateAdded ? -1 : 1)
-      state.log = sortedLogByISO
+      state.log = sortedLogByISO;
     },
     setCustomItems(state, customItems: DisplayItem[]) {
-      state.customItems = customItems
+      state.customItems = customItems;
     }
   },
   actions: {
@@ -71,22 +71,37 @@ const Log: Module<LogState, any> = {
       }
       try {
         await axios.put(`/users/${getters.userId}/log`, loggedItem)
+        commit('addLogItem', { 
+          loggedItem, 
+          insertIndex: 0 
+        })
+        commit('presentToast', {
+          message: `Added ${item.name} to log`,
+          color: 'success',
+        })
       } catch {
         console.error('Error posting logged item to database')
       }
-      commit('addLogItem', { loggedItem, insertIndex: 0 })
     },
     async deleteLoggedItem({ commit, getters }, dateAdded: Date) {
       try {
-        await axios.put(`/users/${getters.userId}/log/${dateAdded}`)
+        await axios.delete(`/users/${getters.userId}/log/${dateAdded}`)
+        commit('removeLogItem', dateAdded)
       } catch {
         console.error('Error deleting logged item from database')
       }
-      commit('removeLogItem', dateAdded)
     },
-    updateLoggedItem({ commit }, { _id, item }: { _id: string, item: LoggedItem }) {
-      // HTTP request to update item in database
-      commit('updateLogItem', { _id, item })
+    async updateLoggedItem({ commit, getters }, item: LoggedItem) {
+      try {
+        await axios.put(`/users/${getters.userId}/log/${item._id}`, item)
+        commit('presentToast', { 
+          message: `${item.name} updated.`,
+          position: 'top',
+        })
+        commit('updateLogItem', item)
+      } catch {
+        console.error('Error updating logged item in database')
+      }
     }
   },
 };

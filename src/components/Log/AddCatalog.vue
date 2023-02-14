@@ -20,7 +20,7 @@
         >
           <ion-icon 
             @click.stop="addItem(item)"
-            :icon="addCircleOutline" 
+            :icon="justAddedItemId === item._id ? checkmarkCircleOutline : addCircleOutline" 
             color="success" 
             slot="start"
           ></ion-icon>
@@ -46,10 +46,14 @@ import {
 } from '@ionic/vue';
 
 import {
-  addCircleOutline
+  addCircleOutline,
+  checkmarkCircleOutline
 } from 'ionicons/icons';
 
-import { computed } from 'vue'
+import { 
+  computed, 
+  ref
+} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { DisplayItem } from '@/types/Log'
@@ -71,18 +75,29 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    const justAddedItemId = ref<string | null>(null);
+
     function addItem(item: DisplayItem) {
-      store.dispatch("postLoggedItem", item)
+      store.dispatch("postLoggedItem", item);
+      justAddedItemId.value = item._id;
+      setTimeout(() => {
+        if (justAddedItemId.value === item._id) {
+          justAddedItemId.value = null;
+        }
+      }, 3000);
     }
 
     function goToDetail(item: DisplayItem) {
-      store.commit('setSelectedCatalogItem', item)
-      router.push('/tabs/log/addCatalog/detail')
+      store.commit('setSelectedCatalogItem', item);
+      router.push('/tabs/log/addCatalog/detail');
     }
 
     const items = computed(() => store.getters.catalog);
+
     return {
       addCircleOutline,
+      checkmarkCircleOutline,
+      justAddedItemId,
       items,
       addItem,
       goToDetail

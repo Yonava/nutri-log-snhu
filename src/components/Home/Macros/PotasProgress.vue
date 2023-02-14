@@ -27,6 +27,10 @@ import { useRedrawObserver } from "@/composables/RedrawObserver";
 const props = defineProps({
   isActive: Boolean,
   color: String,
+  index: {
+    type: Number,
+    required: true,
+  },
   getter: {
     type: String,
     required: true,
@@ -40,5 +44,5 @@ const currentData = ref({
   percent: 0,
 });
 
-useRedrawObserver(props.getter, currentData, isActive);
+useRedrawObserver(props.getter, currentData, isActive, props.index);
 </script>
