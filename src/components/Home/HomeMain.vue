@@ -31,7 +31,7 @@
           @click="$router.push({ name: 'ModifyMacroDisplay' })"
           class="modify-macros-button"
         >
-          modify nutrients
+          personalize
         </button>
       </div>
     </div>
