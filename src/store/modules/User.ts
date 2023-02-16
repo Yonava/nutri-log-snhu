@@ -113,7 +113,7 @@ const User: Module<UserState, any> = {
       {
         component: "FiberProgress",
         label: "fiber",
-        color: "var(--ion-color-danger)",
+        color: "#317773",
         getter: "todaysFiberData",
         unit: "g",
       },

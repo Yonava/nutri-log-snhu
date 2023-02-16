@@ -1,39 +1,37 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <div style="position: relative;">
-      <div class="center macro-display-box-container">
-        <MacroDisplayBox 
-          v-for="(component, index) in macroComponents"
-          :key="component"
-          @click="slideTo(index)"
-          :label="component.label"
-          :color="component.color"
-          :getter="component.getter"
-          :unit="component.unit"
-          :isActive="index === activeSlide"
-        />
-        <div 
-          v-if="macroComponents.length < 8"
-          class="add-box center"
-          @click="$router.push({ name: 'ModifyMacroDisplay' })"
-        >
-          <ion-icon 
-            :icon="add"
-            size="large" 
-          ></ion-icon>
-        </div>
-      </div>
+    <div class="center macro-display-box-container">
+      <MacroDisplayBox 
+        v-for="(component, index) in macroComponents"
+        :key="component"
+        @click="slideTo(index)"
+        :label="component.label"
+        :color="component.color"
+        :getter="component.getter"
+        :unit="component.unit"
+        :isActive="index === activeSlide"
+      />
       <div 
-        v-if="macroComponents.length === 8"
-        class="modify-button-container"
+        v-if="macroComponents.length < 8"
+        class="add-box center"
+        @click="$router.push({ name: 'ModifyMacroDisplay' })"
       >
-        <button 
-          @click="$router.push({ name: 'ModifyMacroDisplay' })"
-          class="modify-macros-button"
-        >
-          personalize
-        </button>
+        <ion-icon 
+          :icon="add"
+          size="large" 
+        ></ion-icon>
       </div>
+    </div>
+    <div 
+      v-if="macroComponents.length === 8"
+      class="modify-button-container"
+    >
+      <button 
+        @click="$router.push({ name: 'ModifyMacroDisplay' })"
+        class="modify-macros-button"
+      >
+        personalize
+      </button>
     </div>
     <ion-slides
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
