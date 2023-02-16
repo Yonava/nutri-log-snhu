@@ -41,86 +41,68 @@
           </template>
         </draggable>
       </div> -->
-      <div></div>
-      <draggable 
-        v-if="!loading"
-        v-model="funArray" 
-        group="people" 
-        item-key="id"
-      >
-        <template #item="{element}">
-          <div>{{ element }}</div>
-        </template>
-      </draggable>
+      <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
+        <div style="width: 100px; height: 50px; background: red" v-for="i in funArray" :key="i">
+          <ion-reorder>
+            <ion-label>
+              Item {{ i }}
+            </ion-label>
+            
+         </ion-reorder>
+        </div>
+      </ion-reorder-group>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { 
   IonHeader,
   IonToolbar,
   IonTitle,
   IonContent, 
   IonPage, 
-  IonBackButton 
+  IonBackButton,
+  IonReorderGroup,
+  IonReorder,
+  IonList,
+  IonItem,
 } from "@ionic/vue";
 import { ref } from "vue";
-import { MacroDisplayComponent } from '@/types/User'
+import { MacroDisplayComponent } from '@/types/User';
 import { useStore } from "vuex";
-import draggable from "vuedraggable";
 
-export default {
-  name: "ModifyMacroDisplay",
-  components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
-    IonBackButton,
-    draggable,
-  },
-  setup() {
-    const funArray = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-    const loading = ref(true);
+const funArray = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-    setTimeout(() => {
-      loading.value = false;
-    }, 3000);
+const store = useStore();
 
-    const store = useStore();
+const activeMacroComponents = ref(store.getters.activeMacroDisplayComponents);
+const macroComponents = store.getters.macroDisplayComponents;
 
-    const activeMacroComponents = ref(store.getters.activeMacroDisplayComponents);
-    const macroComponents = store.getters.macroDisplayComponents;
+// TODO: figure out which event type in ts to use
+function startDrag(event: any, item: number) {
+  event.transferData.dropEffect = 'move';
+  event.transferData.effectAllowed = 'move';
+  event.transferData.setData('itemID', item);
+  console.log('start drag', item);
+}
 
-    function isActive(component: string) {
-      return activeMacroComponents.value.find((item: MacroDisplayComponent) => {
-        return item.component === component;
-      });
-    }
+function isActive(component: string) {
+  return activeMacroComponents.value.find((item: MacroDisplayComponent) => {
+    return item.component === component;
+  });
+}
 
-    return {
-      loading,
-      funArray,
-      isActive,
-      macroComponents,
-    }
-  }
+const handleReorder = (event: CustomEvent) => {
+  // The `from` and `to` properties contain the index of the item
+  // when the drag started and ended, respectively
+  console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+  // Finish the reorder and position the item in the DOM based on
+  // where the gesture ended. This method can also be called directly
+  // by the reorder group
+  event.detail.complete();
 };
-
-// const funArray = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-
-// const store = useStore();
-
-// const activeMacroComponents = ref(store.getters.activeMacroDisplayComponents);
-// const macroComponents = store.getters.macroDisplayComponents;
-
-// function isActive(component: string) {
-//   return activeMacroComponents.value.find((item: MacroDisplayComponent) => {
-//     return item.component === component;
-//   });
-// }
 </script>
 
 <style scoped>
