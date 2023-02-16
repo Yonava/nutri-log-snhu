@@ -22,33 +22,29 @@
       >
         drag to reorder
       </div>
-      <!-- <div class="center display-box-container">
-        <draggable 
-          v-model="macroComponents"
-          item-key="component"
-          :list="macroComponents"
+      <ion-reorder-group 
+        :disabled="false"
+        @ionItemReorder="handleReorder($event)"
+        
+      >
+        <div 
+          v-for="item in macroComponents"
+          :key="item.component"
+          class="display-box-container center"
         >
-          <template #item="{ item }">
-            <div
-              class="center display-box"
-              :style="{ 
-                border: `2px solid ${item.color}`, 
-                marginTop: isActive(item.component) ? '4px' : '20px',
-              }"
-            >
-              {{ item.label }}
-            </div>
-          </template>
-        </draggable>
-      </div> -->
-      <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
-        <div style="width: 100px; height: 50px; background: red" v-for="i in funArray" :key="i">
-          <ion-reorder>
-            <ion-label>
-              Item {{ i }}
-            </ion-label>
-            
-         </ion-reorder>
+          <div 
+            class="add-box center"
+            :style="{ 
+              border: `2px solid ${item.color}`, 
+              marginTop: isActive(item.component) ? '4px' : '4px',
+            }"
+          >
+            <ion-reorder>
+              <div>
+                {{ item.label }}
+              </div>
+            </ion-reorder>
+          </div>
         </div>
       </ion-reorder-group>
     </ion-content>
@@ -65,8 +61,6 @@ import {
   IonBackButton,
   IonReorderGroup,
   IonReorder,
-  IonList,
-  IonItem,
 } from "@ionic/vue";
 import { ref } from "vue";
 import { MacroDisplayComponent } from '@/types/User';
@@ -106,11 +100,23 @@ const handleReorder = (event: CustomEvent) => {
 </script>
 
 <style scoped>
+
+.add-box {
+  border: 1px solid var(--ion-color-medium);
+  width: 22%; 
+  height: 60px; 
+  background: var(--ion-color-step-100); 
+  margin: 4px; 
+  padding: 2px;
+  border-radius: 8px;
+}
+
+
 .display-box-container {
   flex-wrap: wrap; 
   flex-direction: row; 
   position: relative; 
-  width: 100%; 
+  width: 100vw; 
 }
 
 .display-box {
