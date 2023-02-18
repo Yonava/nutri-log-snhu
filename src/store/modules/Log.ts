@@ -62,14 +62,17 @@ const Log: Module<LogState, any> = {
         dateAdded: new Date().toISOString(),
       }
       try {
-        await axios.put(`/users/${getters.userId}/log`, loggedItem)
+        await axios.post(`/users/${getters.userId}/log`, loggedItem)
         commit('addLogItem', loggedItem)
         commit('presentToast', {
           message: `Added ${item.name} to log`,
           color: 'success',
         })
       } catch {
-        console.error('Error posting logged item to database')
+        commit('presentToast', {
+          message: 'Error adding item to log',
+          color: 'danger',
+        })
       }
     },
     async deleteLoggedItem({ commit, getters }, loggedItem: LoggedItem) {

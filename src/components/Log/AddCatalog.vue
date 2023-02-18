@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header title="Add Item">
+    <default-header title="Select Item">
       <template #left>
         <ion-back-button 
           text="Log Entries"
@@ -21,17 +21,18 @@
         </ion-toolbar>
       </ion-header>
       <ion-list v-if="loading">
-        <h3 
+        <div 
           class="center" 
-          v-for="i in 6" :key="i"
+          v-for="i in 10" :key="i"
         >
           <ion-skeleton-text 
             :animated="true" 
-            style="width: 80%; height: 40px;"
+            style="width: 80%; height: 50px; margin: 10px 0;"
           ></ion-skeleton-text>
-        </h3>
+        </div>
       </ion-list>
       <ion-list v-else>
+        {{ mealPeriod }}
         <ion-item 
           v-for="item in items" 
           :key="item.id"
@@ -44,7 +45,9 @@
             color="success" 
             slot="start"
           ></ion-icon>
-          <ion-label>{{ item.name }}</ion-label>
+          <ion-label>
+            {{ item.name }}
+          </ion-label>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -85,6 +88,7 @@ const store = useStore();
 const router = useRouter();
 
 const loading = ref(true);
+const mealPeriod = getMealPeriod();
 
 onMounted(async () => {
   if (store.getters.catalog.length > 0) {
@@ -110,6 +114,19 @@ function addItem(item: DisplayItem) {
 function goToDetail(item: DisplayItem) {
   store.commit('setSelectedCatalogItem', item);
   router.push('/tabs/log/addCatalog/detail');
+}
+
+function getMealPeriod() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return 'breakfast';
+  } else if (hour >= 12 && hour < 17) {
+    return 'lunch';
+  } else if (hour >= 17 && hour < 22) {
+    return 'dinner';
+  } else {
+    return 'late night';
+  }
 }
 
 const items = computed(() => store.getters.catalog);
