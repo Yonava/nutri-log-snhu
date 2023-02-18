@@ -22,7 +22,6 @@
           <div
             v-for="i in items"
             :key="i"
-            :style="itemStyle(i)"
           >
             <div v-if="i.name">
               <LogItem 
