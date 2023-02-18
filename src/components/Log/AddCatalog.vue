@@ -19,6 +19,15 @@
             type="indeterminate"
           ></ion-progress-bar>
         </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar 
+            v-model="searchQuery"
+            @ionFocus="searching = true"
+            @ionCancel="searching = false"
+            :show-cancel-button="searchQuery.length > 0 ? 'always' : 'never'" 
+            :show-clear-button="searchQuery.length > 0 ? 'focus' : 'never'"
+          ></ion-searchbar>
+        </ion-toolbar>
       </ion-header>
       <ion-list v-if="loading">
         <div 
@@ -31,7 +40,7 @@
           ></ion-skeleton-text>
         </div>
       </ion-list>
-      <div v-else>
+      <div v-else-if="!searching">
         <h1 style="text-transform: capitalize; text-align: center">
           Popular For {{ mealPeriod }}
         </h1>
@@ -78,6 +87,24 @@
           </h4>
         </div>
       </div>
+      <div v-else>
+        <ion-item 
+          v-for="item in searchResults" 
+          :key="item.id"
+          button
+          @click="goToDetail(item)"
+        >
+          <ion-icon 
+            @click.stop="addItem(item)"
+            :icon="justAddedItemId === item._id ? checkmarkCircleOutline : addCircleOutline" 
+            color="success" 
+            slot="start"
+          ></ion-icon>
+          <ion-label>
+            {{ item.name }}
+          </ion-label>
+        </ion-item>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -96,6 +123,7 @@ import {
   IonIcon,
   IonSkeletonText,
   IonProgressBar,
+  IonSearchbar,
 } from '@ionic/vue';
 
 import {
@@ -116,6 +144,8 @@ const store = useStore();
 const router = useRouter();
 
 const loading = ref(true);
+const searching = ref(false);
+const searchQuery = ref('');
 const mealPeriod = getMealPeriod();
 
 onMounted(async () => {
@@ -181,6 +211,19 @@ const recentItems = computed(() => {
     if (output.length === maxRecentItems) break;
     if (output.find(item => item.name === loggedItems[i].name)) continue;
     output.push(loggedItems[i]);
+  }
+  
+  return output;
+});
+
+const searchResults = computed(() => {
+  if (searchQuery.value === '') return [];
+  const output: UnloggedItem[] = [];
+  for (let i = 0; i < items.value.length; i++) {
+    const item = items.value[i];
+    if (item.name.toLowerCase().includes(searchQuery.value.toLowerCase())) {
+      output.push(item);
+    }
   }
   
   return output;
