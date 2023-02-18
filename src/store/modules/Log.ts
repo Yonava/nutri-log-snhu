@@ -33,7 +33,7 @@ const Log: Module<LogState, any> = {
       state.log.splice(insertIndex, 0, loggedItem);
     },
     appendLogItems(state, items: LoggedItem[]) {
-      state.log.push(...items)
+      state.log.push(...items);
     },
     removeLogItem(state, itemId: string) {
       const index = state.log.findIndex(item => item._id === itemId);
