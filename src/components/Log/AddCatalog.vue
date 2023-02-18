@@ -82,7 +82,7 @@ import {
 } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { DisplayItem } from '@/types/Log'
+import { UnloggedItem } from '@/types/Log'
 
 const store = useStore();
 const router = useRouter();
@@ -101,7 +101,7 @@ onMounted(async () => {
 
 const justAddedItemId = ref<string | null>(null);
 
-function addItem(item: DisplayItem) {
+function addItem(item: UnloggedItem) {
   store.dispatch("postLoggedItem", item);
   justAddedItemId.value = item._id;
   setTimeout(() => {
@@ -111,7 +111,7 @@ function addItem(item: DisplayItem) {
   }, 3000);
 }
 
-function goToDetail(item: DisplayItem) {
+function goToDetail(item: UnloggedItem) {
   store.commit('setSelectedCatalogItem', item);
   router.push('/tabs/log/addCatalog/detail');
 }

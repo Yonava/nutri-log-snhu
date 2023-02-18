@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, DisplayItem } from '@/types/Log';
+import { LoggedItem, UnloggedItem } from '@/types/Log';
 
 import axios from 'axios';
 
@@ -47,7 +47,7 @@ const Log: Module<LogState, any> = {
       const sortedLogByISO = log.sort((a, b) => a.dateAdded > b.dateAdded ? -1 : 1)
       state.log = sortedLogByISO;
     },
-    setCustomItems(state, customItems: DisplayItem[]) {
+    setCustomItems(state, customItems: UnloggedItem[]) {
       state.customItems = customItems;
     }
   },
@@ -56,16 +56,24 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async postLoggedItem({ commit, getters }, item: DisplayItem) {
+    async postLoggedItem({ commit, getters }, item: UnloggedItem) {
+      const {
+        name,
+        calories,
+        macro,
+        ...rest
+      } = item;
       const loggedItem = {
-        ...item,
-        dateAdded: new Date().toISOString(),
+        name,
+        calories,
+        macro,
+        dateAdded: new Date(),
       }
       try {
         await axios.post(`/users/${getters.userId}/log`, loggedItem)
         commit('addLogItem', loggedItem)
         commit('presentToast', {
-          message: `Added ${item.name} to log`,
+          message: `Added ${loggedItem.name} to log`,
           color: 'success',
         })
       } catch {

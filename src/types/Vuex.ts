@@ -1,10 +1,10 @@
-import { DisplayItem, LoggedItem } from './Log'
+import { UnloggedItem, LoggedItem } from './Log'
 import { User, MacronutrientCalibrations, MacroDisplayComponent } from './User'
 
 export interface State {
   caloriesHidden: boolean,
-  catalog: DisplayItem[],
-  selectedCatalogItem: DisplayItem | null,
+  catalog: UnloggedItem[],
+  selectedCatalogItem: UnloggedItem | null,
   clientStore: Object | null
 }
 
@@ -15,7 +15,7 @@ export interface UserState {
 
 export interface LogState {
   log: LoggedItem[],
-  customItems: DisplayItem[],
+  customItems: UnloggedItem[],
   selectedLogItem: LoggedItem | null
 }
 
