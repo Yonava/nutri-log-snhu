@@ -4,7 +4,9 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Log Entries</ion-title>
+          <ion-title size="large">
+            Log Entries
+          </ion-title>
         </ion-toolbar>
       </ion-header>
       <div 
@@ -12,7 +14,7 @@
         class="center"
       >
         <h2>
-          No items logged yet
+          No items logged
         </h2>
       </div>
       <div>
@@ -29,17 +31,19 @@
                 @remove-item="removeItem(i)"
               />
             </div>
-            <div 
-              class="date-item-parent"
-              v-else
-            >
-              <h5 style="margin: 0">
-                {{ i.month }} 3, 2023
-              </h5>
-            </div>
           </div>
         </TransitionGroup>
       </div>
+      <ion-fab 
+        class="ion-padding" 
+        vertical="bottom" 
+        horizontal="end" 
+        slot="fixed"
+      >
+        <ion-fab-button @click="$router.push({ name: 'AddCatalog' })">
+          <ion-icon :icon="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -55,6 +59,8 @@ import {
   IonToolbar,
   IonTitle,
   IonHeader,
+  IonFab,
+  IonFabButton,
 } from '@ionic/vue';
 import { 
   arrowForward,
