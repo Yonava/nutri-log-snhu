@@ -56,7 +56,7 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async postLoggedItem({ commit, getters }, item) {
+    async postLoggedItem({ commit, getters }, item: DisplayItem) {
       const loggedItem = {
         ...item,
         dateAdded: new Date().toISOString(),

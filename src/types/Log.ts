@@ -1,22 +1,22 @@
-export interface LoggedItem extends DisplayItem {
+interface GenericItem {
+  _id: string;
+  name: string;
+  calories: number;
+  macro: Macronutrients;
+}
+
+export interface LoggedItem extends GenericItem {
   dateAdded: Date;
 }
 
-export interface DisplayItem extends UnloggedItem {
+export interface UnloggedItem extends GenericItem {
+  type: string,
+  time: "breakfast" | "lunch" | "dinner" | "snack" | null,
+  allergens: Allergens;
   measurement: {
     value: number;
     unit: string;
   },
-}
-
-export interface UnloggedItem {
-  _id: string,
-  name: string,
-  type: string,
-  time: "breakfast" | "lunch" | "dinner" | "snack" | null,
-  calories: number;
-  macro: Macronutrients;
-  allergens: Allergens;
 }
 
 export interface Allergens {
