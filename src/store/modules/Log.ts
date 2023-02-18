@@ -3,6 +3,7 @@ import { LogState } from '@/types/Vuex';
 import { LoggedItem, UnloggedItem } from '@/types/Log';
 
 import axios from 'axios';
+import mongoose from 'mongoose';
 
 const Log: Module<LogState, any> = {
   state: {
@@ -63,7 +64,8 @@ const Log: Module<LogState, any> = {
         macro,
         ...rest
       } = item;
-      const loggedItem = {
+      const loggedItem: LoggedItem = {
+        _id: new mongoose.Types.ObjectId().toString(),
         name,
         calories,
         macro,

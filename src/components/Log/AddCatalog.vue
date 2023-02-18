@@ -31,10 +31,12 @@
           ></ion-skeleton-text>
         </div>
       </ion-list>
-      <ion-list v-else>
-        {{ mealPeriod }}
+      <div v-else>
+        <h1 style="text-transform: capitalize; text-align: center">
+          Popular For {{ mealPeriod }}
+        </h1>
         <ion-item 
-          v-for="item in items" 
+          v-for="item in popularItems" 
           :key="item.id"
           button
           @click="goToDetail(item)"
@@ -49,7 +51,33 @@
             {{ item.name }}
           </ion-label>
         </ion-item>
-      </ion-list>
+        <h1 style="text-transform: capitalize; text-align: center">
+          Recently Added
+        </h1>
+        <ion-list v-if="recentItems.length > 0">
+          <ion-item 
+            v-for="item in recentItems" 
+            :key="item.id"
+            button
+            @click="goToDetail(item)"
+          >
+            <ion-icon 
+              @click.stop="addItem(item)"
+              :icon="justAddedItemId === item._id ? checkmarkCircleOutline : addCircleOutline" 
+              color="success" 
+              slot="start"
+            ></ion-icon>
+            <ion-label>
+              {{ item.name }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <div v-else>
+          <h4 class="center">
+            No items recently added
+          </h4>
+        </div>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -82,7 +110,7 @@ import {
 } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { UnloggedItem } from '@/types/Log'
+import { UnloggedItem, LoggedItem } from '@/types/Log'
 
 const store = useStore();
 const router = useRouter();
@@ -130,4 +158,31 @@ function getMealPeriod() {
 }
 
 const items = computed(() => store.getters.catalog);
+
+const popularItems = computed(() => {
+  const maxPopularItems = 5;
+  const output: UnloggedItem[] = [];
+  for (let i = 0; i < items.value.length; i++) {
+    if (output.length === maxPopularItems) break;
+    const item = items.value[i];
+    if (item.time === mealPeriod) {
+      output.push(item);
+    }
+  }
+  
+  return output;
+});
+
+const recentItems = computed(() => {
+  const maxRecentItems = 5;
+  const output: LoggedItem[] = [];
+  const loggedItems = store.getters.log;
+  for (let i = 0; i < loggedItems.length; i++) {
+    if (output.length === maxRecentItems) break;
+    if (output.find(item => item.name === loggedItems[i].name)) continue;
+    output.push(loggedItems[i]);
+  }
+  
+  return output;
+});
 </script>
