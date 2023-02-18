@@ -16,38 +16,25 @@
           </ion-title>
         </ion-toolbar>
       </ion-header>
-      <div 
-        class="center" 
-        style="margin-bottom: 2px"
-      >
-        drag to reorder
-      </div>
       <ion-reorder-group 
         :disabled="false"
         @ionItemReorder="handleReorder($event)"
-        
+        class="center"
       >
-        <div 
+        <ion-item 
           v-for="item in macroComponents"
           :key="item.component"
-          class="display-box-container center"
+          class="add-box center"
+          :color="item.color"
         >
-          <div 
-            class="add-box center"
-            :style="{ 
-              border: `2px solid ${item.color}`, 
-              marginTop: isActive(item.component) ? '4px' : '4px',
-            }"
-          >
-            <ion-reorder>
-              <div>
-                {{ item.label }}
-              </div>
-            </ion-reorder>
+          <div>
+            {{ item.label }}
           </div>
-        </div>
+          <ion-reorder slot="end"></ion-reorder>
+          <!-- <ion-icon slot="end" :icon="reorderThreeOutline"></ion-icon> -->
+        </ion-item>
       </ion-reorder-group>
-    </ion-content>
+      </ion-content>
   </ion-page>
 </template>
 
@@ -61,7 +48,9 @@ import {
   IonBackButton,
   IonReorderGroup,
   IonReorder,
+  IonItem
 } from "@ionic/vue";
+import { reorderThreeOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { MacroDisplayComponent } from '@/types/User';
 import { useStore } from "vuex";
@@ -102,27 +91,15 @@ const handleReorder = (event: CustomEvent) => {
 <style scoped>
 
 .add-box {
-  border: 1px solid var(--ion-color-medium);
-  width: 22%; 
-  height: 60px; 
-  background: var(--ion-color-step-100); 
-  margin: 4px; 
-  padding: 2px;
+  width: 85%; 
+  height: 40px;
+  margin: 3px; 
   border-radius: 8px;
-}
-
-
-.display-box-container {
-  flex-wrap: wrap; 
-  flex-direction: row; 
-  position: relative; 
-  width: 100vw; 
 }
 
 .display-box {
   width: 22%; 
-  height: 60px; 
-  background-color: var(--ion-color-light); 
+  /* height: 10%;  */
   border-radius: 12px; 
   margin: 4px; 
   font-size: 1.1rem;

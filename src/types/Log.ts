@@ -56,7 +56,3 @@ export interface DateTag {
   day: number;
   year: number;
 }
-
-export interface UndoItem extends LoggedItem {
-  index: number;
-}

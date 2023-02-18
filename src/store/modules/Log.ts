@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, DisplayItem, UndoItem } from '@/types/Log';
+import { LoggedItem, DisplayItem } from '@/types/Log';
 
 import axios from 'axios';
 
@@ -28,15 +28,16 @@ const Log: Module<LogState, any> = {
     setSelectedLogItem(state, item: LoggedItem | null) {
       state.selectedLogItem = item
     },
-    addLogItem(state, { loggedItem, insertIndex }: { loggedItem: LoggedItem, insertIndex: number }) {
-      state.log.splice(insertIndex, 0, loggedItem)
+    addLogItem(state, loggedItem: LoggedItem) {
+      const insertIndex = state.log.findIndex(item => item.dateAdded > loggedItem.dateAdded);
+      state.log.splice(insertIndex, 0, loggedItem);
     },
     appendLogItems(state, items: LoggedItem[]) {
       state.log.push(...items)
     },
     removeLogItem(state, dateAdded: Date) {
-      const index = state.log.findIndex(item => item.dateAdded === dateAdded)
-      state.log.splice(index, 1)
+      const index = state.log.findIndex(item => item.dateAdded === dateAdded);
+      state.log.splice(index, 1);
     },
     updateLogItem(state, item: LoggedItem) {
       const index = state.log.findIndex(loggedItem => loggedItem._id === item._id)
@@ -55,15 +56,6 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async reAddLoggedItem({ commit, getters }, item: UndoItem) {
-      const { index, ...loggedItem } = item;
-      try {
-        await axios.put(`/users/${getters.userId}/log`, loggedItem)
-      } catch {
-        console.error('Error posting logged item to database')
-      }
-      commit('addLogItem', { loggedItem, insertIndex: index })
-    },
     async postLoggedItem({ commit, getters }, item) {
       const loggedItem = {
         ...item,
@@ -71,10 +63,7 @@ const Log: Module<LogState, any> = {
       }
       try {
         await axios.put(`/users/${getters.userId}/log`, loggedItem)
-        commit('addLogItem', { 
-          loggedItem, 
-          insertIndex: 0 
-        })
+        commit('addLogItem', loggedItem)
         commit('presentToast', {
           message: `Added ${item.name} to log`,
           color: 'success',
