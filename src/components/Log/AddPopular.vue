@@ -1,12 +1,19 @@
 <template>
-  <h1 style="text-transform: capitalize; text-align: center">
+  <h1 class="title">
     Popular For {{ mealPeriod }}
   </h1>
+  <div v-if="popularItems.length > 0">
   <AddItem 
     v-for="item in popularItems" 
     :key="item._id"
     :item="item"
   />
+  </div>
+  <div v-else>
+    <h4 class="center">
+      Sorry, but I cannot find any popular items for {{ mealPeriod }}
+    </h4>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -47,3 +54,12 @@ function getMealPeriod() {
   }
 }
 </script>
+
+<style scoped>
+.title {
+  text-transform: capitalize;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.9rem;
+}
+</style>
