@@ -24,7 +24,7 @@
             v-model="searchQuery"
             @ionFocus="searching = true"
             @ionCancel="searching = false"
-            :show-cancel-button="searchQuery.length > 0 ? 'always' : 'never'" 
+            :show-cancel-button="searching ? 'always' : 'never'" 
             :show-clear-button="searchQuery.length > 0 ? 'focus' : 'never'"
           ></ion-searchbar>
         </ion-toolbar>
@@ -88,22 +88,10 @@
         </div>
       </div>
       <div v-else>
-        <ion-item 
-          v-for="item in searchResults" 
-          :key="item.id"
-          button
-          @click="goToDetail(item)"
-        >
-          <ion-icon 
-            @click.stop="addItem(item)"
-            :icon="justAddedItemId === item._id ? checkmarkCircleOutline : addCircleOutline" 
-            color="success" 
-            slot="start"
-          ></ion-icon>
-          <ion-label>
-            {{ item.name }}
-          </ion-label>
-        </ion-item>
+        <CatalogSearch 
+          :searchQuery="searchQuery"
+          :searchResults="searchResults"
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -128,7 +116,8 @@ import {
 
 import {
   addCircleOutline,
-  checkmarkCircleOutline
+  checkmarkCircleOutline,
+  search
 } from 'ionicons/icons';
 
 import { 
@@ -139,6 +128,7 @@ import {
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { UnloggedItem, LoggedItem } from '@/types/Log'
+import CatalogSearch from '@/components/Log/CatalogSearch.vue'
 
 const store = useStore();
 const router = useRouter();
