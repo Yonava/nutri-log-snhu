@@ -9,7 +9,6 @@ export interface State {
 }
 
 export interface UserState {
-  activeMacroDisplayComponents: MacroDisplayComponent[],
   macroDisplayComponents: MacroDisplayComponent[],
 }
 

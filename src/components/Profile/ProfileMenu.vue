@@ -23,7 +23,8 @@
             </div>
           </div>
           <div class="center">
-            <ion-button 
+            <ion-button
+              @click="$router.push({ name: 'SignIn' })"
               color="danger" 
               style="width: 90%"
             >Logout</ion-button>

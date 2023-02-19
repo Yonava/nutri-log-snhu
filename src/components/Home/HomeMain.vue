@@ -11,21 +11,8 @@
         :unit="component.unit"
         :isActive="index === activeSlide"
       />
-      <div 
-        v-if="macroComponents.length < 8"
-        class="add-box center"
-        @click="$router.push({ name: 'ModifyMacroDisplay' })"
-      >
-        <ion-icon 
-          :icon="add"
-          size="large" 
-        ></ion-icon>
-      </div>
     </div>
-    <div 
-      v-if="macroComponents.length === 8"
-      class="modify-button-container"
-    >
+    <div class="modify-button-container">
       <button 
         @click="$router.push({ name: 'ModifyMacroDisplay' })"
         class="modify-macros-button"
@@ -34,6 +21,7 @@
       </button>
     </div>
     <ion-slides
+      :key="macroComponents"
       @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
       ref="slider"
       class="center"
@@ -53,11 +41,11 @@
         />
       </ion-slide>
     </ion-slides>
-    <ion-button class="center" router-link="/signin">{{
-      $store.getters.isLoggedIn
-        ? `Signed in as ${$store.getters.user.firstName} ${$store.getters.user.lastName}`
-        : "Sign In"
-    }}</ion-button>
+    <div class="center">
+      <div style="width: 90%; height: 100px; background: gray">
+        more detailed stats from selected macro
+      </div>
+    </div>
   </ion-content>
 </template>
 
@@ -66,6 +54,7 @@ import {
   defineComponent, 
   ref, 
   watch,
+  computed,
 } from "vue";
 import { useStore } from "vuex";
 import { 
@@ -75,18 +64,17 @@ import {
   IonSlides,
   IonIcon,
 } from "@ionic/vue";
-import { add } from "ionicons/icons";
-import CalorieProgress from "./Macros/CalorieProgress.vue";
-import CarbProgress from "./Macros/CarbProgress.vue";
-import ProteinProgress from "./Macros/ProteinProgress.vue";
-import FatProgress from "./Macros/FatProgress.vue";
-import SugarProgress from "./Macros/SugarProgress.vue";
-import SodiumProgress from "./Macros/SodiumProgress.vue";
-import PotasProgress from "./Macros/PotasProgress.vue";
-import FiberProgress from "./Macros/FiberProgress.vue";
-import CholProgress from "./Macros/CholProgress.vue";
-import IronProgress from "./Macros/IronProgress.vue";
-import CalciumProgress from "./Macros/CalciumProgress.vue";
+import CalorieProgress from "./MacroCircle/CalorieProgress.vue";
+import CarbProgress from "./MacroCircle/CarbProgress.vue";
+import ProteinProgress from "./MacroCircle/ProteinProgress.vue";
+import FatProgress from "./MacroCircle/FatProgress.vue";
+import SugarProgress from "./MacroCircle/SugarProgress.vue";
+import SodiumProgress from "./MacroCircle/SodiumProgress.vue";
+import PotasProgress from "./MacroCircle/PotasProgress.vue";
+import FiberProgress from "./MacroCircle/FiberProgress.vue";
+import CholProgress from "./MacroCircle/CholProgress.vue";
+import IronProgress from "./MacroCircle/IronProgress.vue";
+import CalciumProgress from "./MacroCircle/CalciumProgress.vue";
 
 import MacroDisplayBox from "./MacroDisplayBox.vue";
 
@@ -119,7 +107,9 @@ export default defineComponent({
     const activeSlide = ref(0);
     const store = useStore();
 
-    const macroComponents = store.getters.activeMacroDisplayComponents;
+    const macroComponents = computed(() => {
+      return store.getters.macroComponents.slice(0, 8);
+    });
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();
@@ -136,7 +126,6 @@ export default defineComponent({
       slider,
       slideChangeDetector,
       macroComponents,
-      add,
     };
   },
 });

@@ -55,6 +55,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    name: 'SignIn',
     path: '/signin',
     component: () => import('@/views/SignInTab.vue')
   }
