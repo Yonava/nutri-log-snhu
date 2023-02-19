@@ -30,12 +30,12 @@ const Log: Module<LogState, any> = {
       state.selectedLogItem = item
     },
     addLogItem(state, loggedItem: LoggedItem) {
-      const insertIndex = state.log.findIndex(item => item.dateAdded > loggedItem.dateAdded);
-      if (insertIndex === -1) {
-        state.log.unshift(loggedItem);
-        return;
+      const insertedIndex = state.log.findIndex(item => item.dateAdded < loggedItem.dateAdded)
+      if (insertedIndex === -1) {
+        state.log.push(loggedItem)
+      } else {
+        state.log.splice(insertedIndex, 0, loggedItem)
       }
-      state.log.splice(insertIndex, 0, loggedItem);
     },
     appendLogItems(state, items: LoggedItem[]) {
       state.log.push(...items);
@@ -73,7 +73,7 @@ const Log: Module<LogState, any> = {
         name,
         calories,
         macro,
-        dateAdded: new Date(),
+        dateAdded: new Date().toISOString(),
       }
       try {
         await axios.post(`/users/${getters.userId}/log`, loggedItem)

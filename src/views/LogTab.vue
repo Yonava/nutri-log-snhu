@@ -31,7 +31,7 @@
           <TransitionGroup name="fade">
             <div 
               v-for="item in dateTag.items"
-              :key="item._id"
+              :key="item.name"
             >
               <LogItem 
                 :item="item"

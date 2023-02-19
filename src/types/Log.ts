@@ -6,7 +6,7 @@ interface GenericItem {
 }
 
 export interface LoggedItem extends GenericItem {
-  dateAdded: Date;
+  dateAdded: string;
 }
 
 export interface UnloggedItem extends GenericItem {
