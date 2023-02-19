@@ -36,7 +36,7 @@
         >
           <ion-skeleton-text 
             :animated="true" 
-            style="width: 80%; height: 50px; margin: 10px 0;"
+            class="skeleton-loader"
           ></ion-skeleton-text>
         </div>
       </ion-list>
@@ -108,3 +108,11 @@ const searchResults = computed(() => {
   return output;
 });
 </script>
+
+<style scoped>
+.skeleton-loader {
+  width: 80%; 
+  height: 50px; 
+  margin: 10px 0;
+}
+</style>

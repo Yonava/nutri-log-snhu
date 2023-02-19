@@ -10,6 +10,39 @@
         </ion-toolbar>
       </ion-header>
       <div 
+        v-if="groupByDate.length === 0" 
+        class="center"
+      >
+        <h2>
+          No items logged
+        </h2>
+      </div>
+      <div v-else>
+        <ion-item-group 
+          v-for="dateTag in groupByDate" 
+          :key="dateTag"
+        >
+          <ion-item-divider sticky="true">
+            <ion-label>
+              {{ dateTag.date }}
+            </ion-label>
+          </ion-item-divider>
+
+          <TransitionGroup name="fade">
+            <div 
+              v-for="item in dateTag.items"
+              :key="item._id"
+            >
+              <LogItem 
+                :item="item"
+                @click="itemClicked(item)"
+                @remove-item="removeItem(item)"
+              />
+            </div>
+          </TransitionGroup>
+        </ion-item-group>
+      </div>
+      <!-- <div 
         v-if="items.length === 0" 
         class="center"
       >
@@ -32,7 +65,7 @@
             </div>
           </div>
         </TransitionGroup>
-      </div>
+      </div> -->
       <ion-fab 
         class="ion-padding" 
         vertical="bottom" 
@@ -60,6 +93,11 @@ import {
   IonHeader,
   IonFab,
   IonFabButton,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonItemGroup,
+  IonItemDivider
 } from '@ionic/vue';
 import { 
   arrowForward,
@@ -68,15 +106,11 @@ import {
   checkmarkOutline
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
-import { 
-  LoggedItem, 
-  DateTag 
-} from '@/types/Log';
+import { LoggedItem } from '@/types/Log';
+import { computed } from 'vue';
 
 const router = useRouter();
 const store = useStore();
-
-const items = store.getters.log;
 
 function itemClicked(item: LoggedItem) {
   store.commit("setSelectedLogItem", item);
@@ -89,13 +123,30 @@ function removeItem(item: LoggedItem) {
   store.dispatch("deleteLoggedItem", item);
 }
 
-function itemStyle(item: LoggedItem | DateTag) {
-  if ('month' in item) {
-    return { position: 'sticky', top: 0, zIndex: 2 };
-  } else {
-    return {};
-  }
+type DateTag = {
+  date: string;
+  items: LoggedItem[];
 }
+
+const groupByDate = computed(() => {
+  const dates: DateTag[] = [];
+  const log = store.getters.log;
+  console.log('recomputing')
+  log.forEach((item: LoggedItem) => {
+    const date = new Date(item.dateAdded);
+    const dateString = date.toDateString();
+    const dateIndex = dates.findIndex((d) => d.date === dateString);
+    if (dateIndex === -1) {
+      dates.push({
+        date: dateString,
+        items: [item]
+      });
+    } else {
+      dates[dateIndex].items.push(item);
+    }
+  });
+  return dates;
+})
 </script>
 
 <style scoped>
@@ -113,15 +164,5 @@ function itemStyle(item: LoggedItem | DateTag) {
 
 .fade-leave-active {
   position: absolute;
-}
-
-.date-item-parent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  background: linear-gradient(var(--ion-color-primary), var(--ion-color-tertiary-shade));
-  padding: 7px 0px;
 }
 </style>

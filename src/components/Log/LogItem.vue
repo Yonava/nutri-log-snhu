@@ -38,7 +38,6 @@ import {
   IonItemSliding,
   IonItemOptions,
   IonItemOption,
-  IonChip
 } from '@ionic/vue';
 import { defineProps, defineEmits } from 'vue';
 

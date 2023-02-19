@@ -50,9 +50,3 @@ export interface Macronutrients {
   potassium: number;
   iron: number;
 }
-
-export interface DateTag {
-  month: number;
-  day: number;
-  year: number;
-}
