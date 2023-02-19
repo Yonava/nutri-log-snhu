@@ -31,6 +31,10 @@ const Log: Module<LogState, any> = {
     },
     addLogItem(state, loggedItem: LoggedItem) {
       const insertIndex = state.log.findIndex(item => item.dateAdded > loggedItem.dateAdded);
+      if (insertIndex === -1) {
+        state.log.unshift(loggedItem);
+        return;
+      }
       state.log.splice(insertIndex, 0, loggedItem);
     },
     appendLogItems(state, items: LoggedItem[]) {
