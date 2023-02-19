@@ -15,7 +15,7 @@
             </span>
           </div>
         </div>
-        <h2 style="text-transform: capitalize; margin: 0; width: 95%">
+        <h2 style="text-transform: capitalize; margin: 2px 0;">
           {{ item.name }}
         </h2>
       </div>

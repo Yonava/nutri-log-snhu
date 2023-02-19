@@ -3,32 +3,68 @@
     @click="goToDetail(item)"
     button
   >
+    <div class="item-parent">
+      <div class="chip-content">
+        <div 
+          v-for="chip in chips"
+          :key="chip"
+          class="top-chip"
+          :style="{ backgroundColor: chip.color }"
+        >
+          {{ chip.value }}
+        </div>
+      </div>
+      <h4 style="text-transform: capitalize; margin: 2px 0;">
+        {{ item.name }}
+      </h4>
+    </div>
     <ion-icon 
       @click.stop="addItem(item)"
       :icon="itemIcon" 
       color="success" 
       slot="start"
     ></ion-icon>
-    <ion-label>
-      {{ item.name }}
-    </ion-label>
   </ion-item>
 </template>
 
 <script setup lang="ts">
-import { IonItem, IonIcon, IonLabel } from '@ionic/vue';
+import { IonItem, IonIcon } from '@ionic/vue';
 import { addCircleOutline, checkmarkCircleOutline } from 'ionicons/icons';
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, ref, computed, onMounted } from 'vue';
 import { UnloggedItem } from '@/types/Log';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+
+type Chip = {
+  value: string | number | null;
+  color: string;
+};
 
 const store = useStore();
 const router = useRouter();
 
 const itemAdded = ref(false);
+const chips = ref<Chip[]>([]);
 
-defineProps<{
+onMounted(() => {
+  const possibleChips = [
+    {
+      value: props.item.calories + ' cals',
+      color: 'var(--ion-color-primary)',
+    },
+    {
+      value: props.item.type,
+      color: 'var(--ion-color-danger)',
+    },
+    {
+      value: props.item.time,
+      color: 'var(--ion-color-tertiary)',
+    }
+  ];
+  chips.value = possibleChips.filter(chip => chip.value);
+});
+
+const props = defineProps<{
   item: UnloggedItem;
 }>();
 
@@ -49,3 +85,39 @@ const itemIcon = computed(() => {
   return itemAdded.value ? checkmarkCircleOutline : addCircleOutline;
 });
 </script>
+
+<style scoped>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.chip-container::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-container {
+  overflow: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  margin: 3px 0;
+  white-space: nowrap;
+}
+
+.top-chip {
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  padding: 1px 4px;
+  margin-right: 5px;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.item-parent {
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+}
+</style>

@@ -41,25 +41,7 @@
         </div>
       </ion-list>
       <div v-else-if="!searching">
-        <h1 style="text-transform: capitalize; text-align: center">
-          Popular For {{ mealPeriod }}
-        </h1>
-        <ion-item 
-          v-for="item in popularItems" 
-          :key="item.id"
-          button
-          @click="goToDetail(item)"
-        >
-          <ion-icon 
-            @click.stop="addItem(item)"
-            :icon="justAddedItemId === item._id ? checkmarkCircleOutline : addCircleOutline" 
-            color="success" 
-            slot="start"
-          ></ion-icon>
-          <ion-label>
-            {{ item.name }}
-          </ion-label>
-        </ion-item>
+        <AddPopular />
         <h1 style="text-transform: capitalize; text-align: center">
           Recently Added
         </h1>
@@ -129,6 +111,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { UnloggedItem, LoggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
+import AddPopular from '@/components/Log/AddPopular.vue'
 
 const store = useStore();
 const router = useRouter();
@@ -136,7 +119,6 @@ const router = useRouter();
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
-const mealPeriod = getMealPeriod();
 
 onMounted(async () => {
   if (store.getters.catalog.length > 0) {
@@ -164,34 +146,7 @@ function goToDetail(item: UnloggedItem) {
   router.push('/tabs/log/addCatalog/detail');
 }
 
-function getMealPeriod() {
-  const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) {
-    return 'breakfast';
-  } else if (hour >= 12 && hour < 17) {
-    return 'lunch';
-  } else if (hour >= 17 && hour < 22) {
-    return 'dinner';
-  } else {
-    return 'late night';
-  }
-}
-
 const items = computed(() => store.getters.catalog);
-
-const popularItems = computed(() => {
-  const maxPopularItems = 5;
-  const output: UnloggedItem[] = [];
-  for (let i = 0; i < items.value.length; i++) {
-    if (output.length === maxPopularItems) break;
-    const item = items.value[i];
-    if (item.time === mealPeriod) {
-      output.push(item);
-    }
-  }
-  
-  return output;
-});
 
 const recentItems = computed(() => {
   const maxRecentItems = 5;
