@@ -1,30 +1,32 @@
 <template>
-  <ion-item 
-    @click="goToDetail(item)"
-    button
-  >
-    <div class="item-parent">
-      <div class="chip-content">
-        <div 
-          v-for="chip in chips"
-          :key="chip"
-          class="top-chip"
-          :style="{ backgroundColor: chip.color }"
-        >
-          {{ chip.value }}
+  <div>
+    <ion-item 
+      @click="goToDetail(item)"
+      button
+    >
+      <div class="item-parent">
+        <div class="chip-content">
+          <div 
+            v-for="chip in chips"
+            :key="chip"
+            class="top-chip"
+            :style="{ backgroundColor: chip.color }"
+          >
+            {{ chip.value }}
+          </div>
         </div>
+        <h4 style="text-transform: capitalize; margin: 2px 0;">
+          {{ item.name }}
+        </h4>
       </div>
-      <h4 style="text-transform: capitalize; margin: 2px 0;">
-        {{ item.name }}
-      </h4>
-    </div>
-    <ion-icon 
-      @click.stop="addItem(item)"
-      :icon="itemIcon" 
-      color="success" 
-      slot="start"
-    ></ion-icon>
-  </ion-item>
+      <ion-icon 
+        @click.stop="addItem(item)"
+        :icon="itemIcon" 
+        color="success" 
+        slot="start"
+      ></ion-icon>
+    </ion-item>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -69,11 +71,8 @@ const props = defineProps<{
 }>();
 
 function addItem(item: UnloggedItem) {
-  store.dispatch("postLoggedItem", item);
   itemAdded.value = true;
-  setTimeout(() => {
-    itemAdded.value = false;
-  }, 3000);
+  store.dispatch('postLoggedItem', item);
 }
 
 function goToDetail(item: UnloggedItem) {

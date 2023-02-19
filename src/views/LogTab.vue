@@ -20,7 +20,7 @@
       <div v-else>
         <ion-item-group 
           v-for="dateTag in groupByDate" 
-          :key="dateTag"
+          :key="dateTag.items.toLocaleString()"
         >
           <ion-item-divider sticky="true">
             <ion-label>
@@ -31,7 +31,7 @@
           <TransitionGroup name="fade">
             <div 
               v-for="item in dateTag.items"
-              :key="item.name"
+              :key="item"
             >
               <LogItem 
                 :item="item"
@@ -42,30 +42,6 @@
           </TransitionGroup>
         </ion-item-group>
       </div>
-      <!-- <div 
-        v-if="items.length === 0" 
-        class="center"
-      >
-        <h2>
-          No items logged
-        </h2>
-      </div>
-      <div>
-        <TransitionGroup name="fade">
-          <div
-            v-for="i in items"
-            :key="i"
-          >
-            <div v-if="i.name">
-              <LogItem 
-                :item="i"
-                @click="itemClicked(i)"
-                @remove-item="removeItem(i)"
-              />
-            </div>
-          </div>
-        </TransitionGroup>
-      </div> -->
       <ion-fab 
         class="ion-padding" 
         vertical="bottom" 
@@ -107,10 +83,12 @@ import {
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { LoggedItem } from '@/types/Log';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const router = useRouter();
 const store = useStore();
+
+const deletedItemId = ref('');
 
 function itemClicked(item: LoggedItem) {
   store.commit("setSelectedLogItem", item);
@@ -119,8 +97,9 @@ function itemClicked(item: LoggedItem) {
   });
 }
 
-function removeItem(item: LoggedItem) {
-  store.dispatch("deleteLoggedItem", item);
+async function removeItem(item: LoggedItem) {
+  deletedItemId.value = item._id;
+  await store.dispatch("deleteLoggedItem", item);
 }
 
 type DateTag = {
@@ -131,7 +110,6 @@ type DateTag = {
 const groupByDate = computed(() => {
   const dates: DateTag[] = [];
   const log = store.getters.log;
-  console.log('recomputing')
   log.forEach((item: LoggedItem) => {
     const date = new Date(item.dateAdded);
     const dateString = date.toDateString();

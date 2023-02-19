@@ -31,7 +31,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalCalories,
-        percent: Math.round(totalCalories / state.macronutrientCalibrations.targetCalories * 100)
+        percent: Math.round(totalCalories / state.macronutrientCalibrations.targetCalories * 100),
+        target: state.macronutrientCalibrations.targetCalories
       }
     },
     todaysCarbData: (state, getters, rootState, rootGetters) => {
@@ -41,7 +42,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalCarbs,
-        percent: Math.round(totalCarbs / state.macronutrientCalibrations.targetCarbs * 100)
+        percent: Math.round(totalCarbs / state.macronutrientCalibrations.targetCarbs * 100),
+        target: state.macronutrientCalibrations.targetCarbs
       }
     },
     todaysSugarData: (state, getters, rootState, rootGetters) => {
@@ -56,7 +58,10 @@ const Nutrients: Module<NutrientState, any> = {
       return {
         total: totalSugar,
         totalAdded: totalAddedSugar,
-        percent: Math.round(totalSugar / state.macronutrientCalibrations.targetSugar * 100)
+        percent: Math.round(totalSugar / state.macronutrientCalibrations.targetSugar * 100),
+        percentAdded: Math.round(totalAddedSugar / state.macronutrientCalibrations.targetAddedSugar * 100),
+        target: state.macronutrientCalibrations.targetSugar,
+        targetAdded: state.macronutrientCalibrations.targetAddedSugar
       }
     },
     todaysFiberData: (state, getters, rootState, rootGetters) => {
@@ -66,7 +71,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalFiber,
-        percent: Math.round(totalFiber / state.macronutrientCalibrations.targetFiber * 100)
+        percent: Math.round(totalFiber / state.macronutrientCalibrations.targetFiber * 100),
+        target: state.macronutrientCalibrations.targetFiber
       }
     },
     todaysFatData: (state, getters, rootState, rootGetters) => {
@@ -86,7 +92,12 @@ const Nutrients: Module<NutrientState, any> = {
         total: totalFat,
         totalSaturated: totalSaturatedFat,
         totalTrans: totalTransFat,
-        percent: Math.round(totalFat / state.macronutrientCalibrations.targetFat * 100)
+        percent: Math.round(totalFat / state.macronutrientCalibrations.targetFat * 100),
+        percentSaturated: Math.round(totalSaturatedFat / state.macronutrientCalibrations.targetSaturatedFat * 100),
+        percentTrans: Math.round(totalTransFat / state.macronutrientCalibrations.targetTransFat * 100),
+        target: state.macronutrientCalibrations.targetFat,
+        targetSaturated: state.macronutrientCalibrations.targetSaturatedFat,
+        targetTrans: state.macronutrientCalibrations.targetTransFat
       }
     },
     todaysProteinData: (state, getters, rootState, rootGetters) => {
@@ -96,7 +107,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalProtein,
-        percent: Math.round(totalProtein / state.macronutrientCalibrations.targetProtein * 100)
+        percent: Math.round(totalProtein / state.macronutrientCalibrations.targetProtein * 100),
+        target: state.macronutrientCalibrations.targetProtein
       }
     },
     todaysSodiumData: (state, getters, rootState, rootGetters) => {
@@ -106,7 +118,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalSodium,
-        percent: Math.round(totalSodium / state.macronutrientCalibrations.targetSodium * 100)
+        percent: Math.round(totalSodium / state.macronutrientCalibrations.targetSodium * 100),
+        target: state.macronutrientCalibrations.targetSodium
       }
     },
     todaysPotassiumData: (state, getters, rootState, rootGetters) => {
@@ -116,7 +129,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalPotassium,
-        percent: Math.round(totalPotassium / state.macronutrientCalibrations.targetPotassium * 100)
+        percent: Math.round(totalPotassium / state.macronutrientCalibrations.targetPotassium * 100),
+        target: state.macronutrientCalibrations.targetPotassium
       }
     },
     todaysCholesterolData: (state, getters, rootState, rootGetters) => {
@@ -126,7 +140,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalCholesterol,
-        percent: Math.round(totalCholesterol / state.macronutrientCalibrations.targetCholesterol * 100)
+        percent: Math.round(totalCholesterol / state.macronutrientCalibrations.targetCholesterol * 100),
+        target: state.macronutrientCalibrations.targetCholesterol
       }
     },
     todaysCalciumData: (state, getters, rootState, rootGetters) => {
@@ -136,7 +151,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalCalcium,
-        percent: Math.round(totalCalcium / state.macronutrientCalibrations.targetCalcium * 100)
+        percent: Math.round(totalCalcium / state.macronutrientCalibrations.targetCalcium * 100),
+        target: state.macronutrientCalibrations.targetCalcium
       }
     },
     todaysIronData: (state, getters, rootState, rootGetters) => {
@@ -146,7 +162,8 @@ const Nutrients: Module<NutrientState, any> = {
 
       return {
         total: totalIron,
-        percent: Math.round(totalIron / state.macronutrientCalibrations.targetIron * 100)
+        percent: Math.round(totalIron / state.macronutrientCalibrations.targetIron * 100),
+        target: state.macronutrientCalibrations.targetIron
       }
     }
   },
