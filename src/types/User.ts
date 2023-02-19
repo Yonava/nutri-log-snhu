@@ -1,8 +1,8 @@
-import { DisplayItem, LoggedItem } from './Log';
+import { UnloggedItem, LoggedItem } from './Log';
 
 export interface UserDetail extends User {
   macronutrientCalibrations: MacronutrientCalibrations;
-  customItems: DisplayItem[];
+  customItems: UnloggedItem[];
   log: LoggedItem[];
 }
 
@@ -28,4 +28,12 @@ export interface MacronutrientCalibrations {
   targetPotassium: number;
   targetCalcium: number;
   targetIron: number;
+}
+
+export interface MacroDisplayComponent {
+  component: string;
+  getter: string;
+  label: string;
+  color: string;
+  unit?: string;
 }

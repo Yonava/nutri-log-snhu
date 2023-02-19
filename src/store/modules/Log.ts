@@ -1,8 +1,9 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
-import { LoggedItem, DisplayItem, UndoItem } from '@/types/Log';
+import { LoggedItem, UnloggedItem } from '@/types/Log';
 
 import axios from 'axios';
+import mongoose from 'mongoose';
 
 const Log: Module<LogState, any> = {
   state: {
@@ -28,15 +29,20 @@ const Log: Module<LogState, any> = {
     setSelectedLogItem(state, item: LoggedItem | null) {
       state.selectedLogItem = item
     },
-    addLogItem(state, { loggedItem, insertIndex }: { loggedItem: LoggedItem, insertIndex: number }) {
-      state.log.splice(insertIndex, 0, loggedItem)
+    addLogItem(state, loggedItem: LoggedItem) {
+      const insertedIndex = state.log.findIndex(item => item.dateAdded < loggedItem.dateAdded)
+      if (insertedIndex === -1) {
+        state.log.push(loggedItem)
+      } else {
+        state.log.splice(insertedIndex, 0, loggedItem)
+      }
     },
     appendLogItems(state, items: LoggedItem[]) {
-      state.log.push(...items)
+      state.log.push(...items);
     },
-    removeLogItem(state, dateAdded: Date) {
-      const index = state.log.findIndex(item => item.dateAdded === dateAdded)
-      state.log.splice(index, 1)
+    removeLogItem(state, itemId: string) {
+      const index = state.log.findIndex(item => item._id === itemId);
+      state.log.splice(index, 1);
     },
     updateLogItem(state, item: LoggedItem) {
       const index = state.log.findIndex(loggedItem => loggedItem._id === item._id)
@@ -46,7 +52,7 @@ const Log: Module<LogState, any> = {
       const sortedLogByISO = log.sort((a, b) => a.dateAdded > b.dateAdded ? -1 : 1)
       state.log = sortedLogByISO;
     },
-    setCustomItems(state, customItems: DisplayItem[]) {
+    setCustomItems(state, customItems: UnloggedItem[]) {
       state.customItems = customItems;
     }
   },
@@ -55,38 +61,38 @@ const Log: Module<LogState, any> = {
       // HTTP request to fetch logged items from database
       // commit('appendLogItems', items)
     },
-    async reAddLoggedItem({ commit, getters }, item: UndoItem) {
-      const { index, ...loggedItem } = item;
-      try {
-        await axios.put(`/users/${getters.userId}/log`, loggedItem)
-      } catch {
-        console.error('Error posting logged item to database')
-      }
-      commit('addLogItem', { loggedItem, insertIndex: index })
-    },
-    async postLoggedItem({ commit, getters }, item) {
-      const loggedItem = {
-        ...item,
+    async postLoggedItem({ commit, getters }, item: UnloggedItem) {
+      const {
+        name,
+        calories,
+        macro,
+        ...rest
+      } = item;
+      const loggedItem: LoggedItem = {
+        _id: new mongoose.Types.ObjectId().toString(),
+        name,
+        calories,
+        macro,
         dateAdded: new Date().toISOString(),
       }
       try {
-        await axios.put(`/users/${getters.userId}/log`, loggedItem)
-        commit('addLogItem', { 
-          loggedItem, 
-          insertIndex: 0 
-        })
+        await axios.post(`/users/${getters.userId}/log`, loggedItem)
+        commit('addLogItem', loggedItem)
         commit('presentToast', {
-          message: `Added ${item.name} to log`,
+          message: `Added ${loggedItem.name} to log`,
           color: 'success',
         })
       } catch {
-        console.error('Error posting logged item to database')
+        commit('presentToast', {
+          message: 'Error adding item to log',
+          color: 'danger',
+        })
       }
     },
-    async deleteLoggedItem({ commit, getters }, dateAdded: Date) {
+    async deleteLoggedItem({ commit, getters }, loggedItem: LoggedItem) {
       try {
-        await axios.delete(`/users/${getters.userId}/log/${dateAdded}`)
-        commit('removeLogItem', dateAdded)
+        await axios.delete(`/users/${getters.userId}/log/${loggedItem._id}`)
+        commit('removeLogItem', loggedItem._id)
       } catch {
         console.error('Error deleting logged item from database')
       }

@@ -1,115 +1,63 @@
 <template>
   <ion-page>
-    <default-header title="Log">
-      <template #left>
-        <div @click="removeItemsState = !removeItemsState">
-          <ion-button 
-            v-if="!removeItemsState"
-            :disabled="items.length === 0"
-          >
-            remove
-            <ion-icon 
-              slot="start" 
-              :icon="remove"
-            ></ion-icon>
-          </ion-button>
-          <ion-button v-else>
-            done
-            <ion-icon 
-              slot="start" 
-              :icon="checkmarkOutline"
-            ></ion-icon>
-          </ion-button>
-        </div>
-      </template>
-      <template #right>
-        <ion-button 
-          v-if="!removeItemsState"
-          @click="addPopOver"
-        >
-          add
-          <ion-icon 
-            :icon="add"
-            slot="end" 
-          ></ion-icon>
-        </ion-button>
-        <ion-button 
-          v-else
-          @click="undo"
-          :disabled="undoStack.length === 0"
-        >
-          undo
-          <ion-icon 
-            slot="end" 
-            :icon="arrowUndoOutline"
-          ></ion-icon>
-        </ion-button>
-      </template>
-    </default-header>
+    <default-header title="Log" />
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Log Entries</ion-title>
+          <ion-title size="large">
+            Log Entries
+          </ion-title>
         </ion-toolbar>
       </ion-header>
       <div 
-        v-if="items.length === 0" 
+        v-if="groupByDate.length === 0" 
         class="center"
       >
         <h2>
-          No items logged yet
+          No items logged
         </h2>
-        <ion-button @click="addPopOver">
-          add
-          <ion-icon 
-            :icon="add"
-            slot="end" 
-          ></ion-icon>
-        </ion-button>
       </div>
-      <div 
-        id="parent-transform" 
-        style="transform: translateX(-14%)"
-      >
-        <TransitionGroup name="fade">
-          <div
-            v-for="i in items"
-            :key="i"
-            :style="itemStyle(i)"
-          >
+      <div v-else>
+        <ion-item-group 
+          v-for="dateTag in groupByDate" 
+          :key="dateTag.items.toLocaleString()"
+        >
+          <ion-item-divider sticky="true">
+            <ion-label>
+              {{ dateTag.date }}
+            </ion-label>
+          </ion-item-divider>
+
+          <TransitionGroup name="fade">
             <div 
-              v-if="i.name" 
-              
+              v-for="item in dateTag.items"
+              :key="item"
             >
               <LogItem 
-                :item="i"
-                @click="itemClicked(i)"
-                @remove-item="removeItem(i)"
+                :item="item"
+                @click="itemClicked(item)"
+                @remove-item="removeItem(item)"
               />
             </div>
-            <div 
-              class="date-item-parent"
-              v-else
-            >
-              <h5 style="margin: 0">
-                {{ i.month }} 3, 2023
-              </h5>
-            </div>
-          </div>
-        </TransitionGroup>
+          </TransitionGroup>
+        </ion-item-group>
       </div>
+      <ion-fab 
+        class="ion-padding" 
+        vertical="bottom" 
+        horizontal="end" 
+        slot="fixed"
+      >
+        <ion-fab-button @click="$router.push({ name: 'AddCatalog' })">
+          <ion-icon :icon="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
-import AddPopOver from '@/components/Log/AddPopOver.vue';
+<script setup lang="ts">
 import LogItem from '@/components/Log/LogItem.vue';
-import { 
-  defineComponent, 
-  ref,
-  watch
-} from 'vue';
 import { useStore } from 'vuex';
 import { 
   IonPage,  
@@ -119,125 +67,64 @@ import {
   IonToolbar,
   IonTitle,
   IonHeader,
-  popoverController,
-  createAnimation
+  IonFab,
+  IonFabButton,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonItemGroup,
+  IonItemDivider
 } from '@ionic/vue';
 import { 
   arrowForward,
   add,
   remove,
-  arrowUndoOutline,
   checkmarkOutline
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
-import { 
-  LoggedItem, 
-  UndoItem, 
-  DateTag 
-} from '@/types/Log';
+import { LoggedItem } from '@/types/Log';
+import { computed, ref } from 'vue';
 
-export default defineComponent({
-  components: { 
-    IonContent, 
-    IonPage, 
-    IonButton, 
-    IonIcon,
-    LogItem, 
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-  },
-  setup() {
+const router = useRouter();
+const store = useStore();
 
-    const router = useRouter();
-    const store = useStore();
+const deletedItemId = ref('');
 
-    const items = store.getters.log;
+function itemClicked(item: LoggedItem) {
+  store.commit("setSelectedLogItem", item);
+  router.push({ 
+    name: 'LogEditDetail'
+  });
+}
 
-    const removeItemsState = ref(false);
-    const undoStack = ref<UndoItem[]>([]);
+async function removeItem(item: LoggedItem) {
+  deletedItemId.value = item._id;
+  await store.dispatch("deleteLoggedItem", item);
+}
 
-    function removeItem(item: LoggedItem) {
-      const index = items.indexOf(item);
-      store.dispatch("deleteLoggedItem", item.dateAdded);
-      undoStack.value.push({ 
-        ...item,
-        index 
+type DateTag = {
+  date: string;
+  items: LoggedItem[];
+}
+
+const groupByDate = computed(() => {
+  const dates: DateTag[] = [];
+  const log = store.getters.log;
+  log.forEach((item: LoggedItem) => {
+    const date = new Date(item.dateAdded);
+    const dateString = date.toDateString();
+    const dateIndex = dates.findIndex((d) => d.date === dateString);
+    if (dateIndex === -1) {
+      dates.push({
+        date: dateString,
+        items: [item]
       });
+    } else {
+      dates[dateIndex].items.push(item);
     }
-
-    function undo() {
-      const poppedItem = undoStack.value.pop();
-      store.dispatch("reAddLoggedItem", poppedItem);
-    }
-
-    function itemClicked(item: LoggedItem) {
-      store.commit("setSelectedLogItem", item);
-      removeItemsState.value ? undefined :
-      router.push({ 
-        name: 'LogEditDetail'
-      })
-    }
-
-    async function addPopOver(e: Event) {
-      const popover = await popoverController.create({
-        component: AddPopOver,
-        event: e,
-        translucent: true,
-        dismissOnSelect: true
-      });
-      return await popover.present();
-    }
-
-    function itemStyle(item: LoggedItem | DateTag) {
-      if ('month' in item) {
-        return { position: 'sticky', top: 0, zIndex: 2 };
-      } else {
-        return {};
-      }
-    }
-
-    function showRemoveButton() {
-      const parent = document.querySelector('#parent-transform');
-      if (!parent) return;
-      createAnimation()
-        .addElement(parent)
-        .duration(150)
-        .fromTo('transform', 'translateX(-14%)', 'translateX(0%)')
-        .play();
-    }
-
-    function hideRemoveButton() {
-      const parent = document.querySelector('#parent-transform');
-      if (!parent) return;
-      createAnimation()
-        .addElement(parent)
-        .duration(150)
-        .fromTo('transform', 'translateX(0%)', 'translateX(-14%)')
-        .play();
-    }
-
-    watch(removeItemsState, (val) => {
-      val ? showRemoveButton() : hideRemoveButton();
-    });
-
-    return {
-      items,
-      arrowForward,
-      arrowUndoOutline,
-      add,
-      remove,
-      removeItemsState,
-      checkmarkOutline,
-      undoStack,
-      undo,
-      removeItem,
-      itemStyle,
-      itemClicked,
-      addPopOver  
-    }
-  }
-});
+  });
+  return dates;
+})
 </script>
 
 <style scoped>
@@ -255,15 +142,5 @@ export default defineComponent({
 
 .fade-leave-active {
   position: absolute;
-}
-
-.date-item-parent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  background: linear-gradient(var(--ion-color-primary), var(--ion-color-tertiary-shade));
-  padding: 7px 0px;
 }
 </style>

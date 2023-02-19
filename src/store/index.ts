@@ -6,6 +6,8 @@ import Log from './modules/Log'
 import Auth from './modules/Auth'
 import Toast from './modules/Toast'
 import Nutrients from './modules/Nutrients'
+import User from './modules/User'
+import axios from 'axios'
 
 export default createStore<State>({
   strict: process.env.NODE_ENV !== 'production',
@@ -13,7 +15,7 @@ export default createStore<State>({
     catalog: [],
     selectedCatalogItem: null,
     caloriesHidden: false,
-    
+
     clientStore: null
   },
   getters: {
@@ -37,6 +39,22 @@ export default createStore<State>({
     }
   },
   actions: {
+    async fetchCatalog({ commit }) {
+      try {
+        const response = await axios.get('/items');
+        const contentType = response.headers['content-type'];
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new TypeError("Didn't receive JSON");
+        }
+        commit("setCatalog", response.data);
+      } catch (err) {
+        commit('presentToast', {
+          message: 'Error fetching catalog',
+          color: 'danger'
+        });
+        console.log(err);
+      }
+    },
     toggleCaloriesHidden({ commit }) {
       // HTTP request to update user's caloriesHidden setting
       commit('toggleCaloriesHidden')
@@ -52,7 +70,6 @@ export default createStore<State>({
       })
       try {
         await clientStore.create()
-        console.log('clientStore created')
       } catch (err) {
         console.log(err)
       }
@@ -63,6 +80,7 @@ export default createStore<State>({
     Log,
     Auth,
     Toast,
-    Nutrients
+    Nutrients,
+    User
   }
 })

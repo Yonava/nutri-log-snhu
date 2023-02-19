@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import CircularProgress from "../CircularProgress.vue";
 import AnimateCount from "@/base/AnimateCount";
-import { ref, toRefs } from "vue";
+import { ref, toRefs, watch } from "vue";
 import { useRedrawObserver } from "@/composables/RedrawObserver";
 
 const props = defineProps({

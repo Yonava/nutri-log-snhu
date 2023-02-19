@@ -11,9 +11,6 @@ export async function init() {
 
   await vuexStore.dispatch("configClientStore");
 
-  const catalogItems = await axios.get("/items");
-  vuexStore.commit("setCatalog", catalogItems.data);
-
   if (localStorage.getItem("userId")) {
     let user;
     try {

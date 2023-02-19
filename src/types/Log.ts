@@ -1,22 +1,22 @@
-export interface LoggedItem extends DisplayItem {
-  dateAdded: Date;
+interface GenericItem {
+  _id: string;
+  name: string;
+  calories: number;
+  macro: Macronutrients;
 }
 
-export interface DisplayItem extends UnloggedItem {
+export interface LoggedItem extends GenericItem {
+  dateAdded: string;
+}
+
+export interface UnloggedItem extends GenericItem {
+  type: string,
+  time: "breakfast" | "lunch" | "dinner" | "snack" | null,
+  allergens: Allergens;
   measurement: {
     value: number;
     unit: string;
   },
-}
-
-export interface UnloggedItem {
-  _id: string,
-  name: string,
-  type: string,
-  time: "breakfast" | "lunch" | "dinner" | "snack" | null,
-  calories: number;
-  macro: Macronutrients;
-  allergens: Allergens;
 }
 
 export interface Allergens {
@@ -49,14 +49,4 @@ export interface Macronutrients {
   calcium: number;
   potassium: number;
   iron: number;
-}
-
-export interface DateTag {
-  month: number;
-  day: number;
-  year: number;
-}
-
-export interface UndoItem extends LoggedItem {
-  index: number;
 }

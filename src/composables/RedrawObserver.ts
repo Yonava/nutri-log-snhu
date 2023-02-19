@@ -29,6 +29,9 @@ export function useRedrawObserver(
   });
 
   if (index === 0) {
+    setTimeout(() => {
+      currentData.value = store.getters[getter];
+    }, 100);
     const watchForInit = watch(() => store.getters[getter].total, () => {
       watchForInit();
       if (!route.path.includes(homePath)) return;
