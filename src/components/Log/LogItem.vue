@@ -1,34 +1,43 @@
 <template>
-  <ion-item-sliding>
-    <ion-item button>
-      <div class="item-parent">
-        <div class="chip-container">
-          <div 
-            v-for="chip in chips"
-            :key="chip"
-            class="top-chip"
-            :style="{ backgroundColor: chip.color }"
-          >
-            {{ chip.value }}
-            <span style="font-weight: 700"> 
-              {{ chip.label }} 
-            </span>
+  <div 
+    :style="{ 
+      width,
+      height,
+      overflow: 'hidden',
+    }"
+    class="item-container"
+  >
+    <ion-item-sliding>
+      <ion-item button>
+        <div class="item-parent">
+          <div class="chip-container">
+            <div 
+              v-for="chip in chips"
+              :key="chip"
+              class="top-chip"
+              :style="{ backgroundColor: chip.color }"
+            >
+              {{ chip.value }}
+              <span style="font-weight: 700"> 
+                {{ chip.label }} 
+              </span>
+            </div>
           </div>
+          <h2 style="text-transform: capitalize; margin: 2px 0;">
+            {{ item.name }}
+          </h2>
         </div>
-        <h2 style="text-transform: capitalize; margin: 2px 0;">
-          {{ item.name }}
-        </h2>
-      </div>
-    </ion-item>
-    <ion-item-options side="start">
-      <ion-item-option 
-        color="danger" 
-        @click.stop="removeItem(i)"
-      >
-        Remove
-      </ion-item-option>
-    </ion-item-options>
-  </ion-item-sliding>
+      </ion-item>
+      <ion-item-options side="start">
+        <ion-item-option 
+          color="danger" 
+          @click.stop="removeItem(i)"
+        >
+          Remove
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,9 +48,12 @@ import {
   IonItemOptions,
   IonItemOption,
 } from '@ionic/vue';
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 
 const emit = defineEmits(['remove-item']);
+
+const width = ref('100%');
+const height = ref('59px');
 
 const props = defineProps({
   item: {
@@ -51,7 +63,11 @@ const props = defineProps({
 });
 
 const removeItem = (i: any) => {
-  emit('remove-item', i);
+  height.value = '0px';
+  const transitionDuration = 1000;
+  setTimeout(() => {
+    emit('remove-item', i);
+  }, transitionDuration);
 };
 
 const toDateTimeString = (date: Date) => {
@@ -103,7 +119,7 @@ const chips = [
   flex-direction: row;
   align-items: center;
   justify-content: left;
-  margin: 3px 0;
+  margin: 8px 0 0 0;
   white-space: nowrap;
 }
 
@@ -121,5 +137,16 @@ const chips = [
   display: flex;
   align-items: left;
   flex-direction: column;
+}
+
+.item-container {
+  transition: -webkit .3s;
+  transition: -ms .3s;
+  transition: .3s;
+}
+
+ion-item {
+  /* --background: "pink"; */
+  /* --color: "black"; */
 }
 </style>
