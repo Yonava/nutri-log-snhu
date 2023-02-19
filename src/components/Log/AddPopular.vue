@@ -1,6 +1,7 @@
 <template>
   <h1 class="title">
-    Popular For {{ mealPeriod }}
+    <!-- patch job to get around snack + late night miscategorization -->
+    Popular For {{ mealPeriod === 'snack' ? 'Late Night' : mealPeriod }}
   </h1>
   <div v-if="popularItems.length > 0">
   <AddItem 
@@ -11,7 +12,7 @@
   </div>
   <div v-else>
     <h4 class="center">
-      Sorry, but I cannot find any popular items for {{ mealPeriod }}
+      No popular items for {{ mealPeriod }}
     </h4>
   </div>
 </template>
@@ -50,7 +51,7 @@ function getMealPeriod() {
   } else if (hour >= 17 && hour < 22) {
     return 'dinner';
   } else {
-    return 'late night';
+    return 'snack';
   }
 }
 </script>

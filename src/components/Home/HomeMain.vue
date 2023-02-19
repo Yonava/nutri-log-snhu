@@ -1,49 +1,51 @@
 <template>
   <ion-content content-id="home-tab-content">
-    <div class="center macro-display-box-container">
-      <MacroDisplayBox 
-        v-for="(component, index) in macroComponents"
-        :key="component"
-        @click="slideTo(index)"
-        :label="component.label"
-        :color="component.color"
-        :getter="component.getter"
-        :unit="component.unit"
-        :isActive="index === activeSlide"
-      />
-    </div>
-    <div class="modify-button-container">
-      <button 
-        @click="$router.push({ name: 'ModifyMacroDisplay' })"
-        class="modify-macros-button"
-      >
-        personalize
-      </button>
-    </div>
-    <ion-slides
-      :key="macroComponents"
-      @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
-      ref="slider"
-      class="center"
-    >
-      <ion-slide
-        v-for="(component, index) in macroComponents"
-        :key="component"
-        class="center"
-        style="width: 100%; height: 350px;"
-      >
-        <component 
-          :is="component.component" 
+    <div v-if="rerender">
+      <div class="center macro-display-box-container">
+        <MacroDisplayBox 
+          v-for="(component, index) in macroComponents"
+          :key="component"
+          @click="slideTo(index)"
+          :label="component.label"
           :color="component.color"
           :getter="component.getter"
-          :index="index"
+          :unit="component.unit"
           :isActive="index === activeSlide"
         />
-      </ion-slide>
-    </ion-slides>
-    <div class="center">
-      <div style="width: 90%; height: 100px; background: gray">
-        more detailed stats from selected macro
+      </div>
+      <div class="modify-button-container">
+        <button 
+          @click="$router.push({ name: 'ModifyMacroDisplay' })"
+          class="modify-macros-button"
+        >
+          personalize
+        </button>
+      </div>
+      <ion-slides
+        :key="macroComponents"
+        @ionSlideDidChange="slideChangeDetector = !slideChangeDetector"
+        ref="slider"
+        class="center"
+      >
+        <ion-slide
+          v-for="(component, index) in macroComponents"
+          :key="component"
+          class="center"
+          style="width: 100%; height: 350px;"
+        >
+          <component 
+            :is="component.component" 
+            :color="component.color"
+            :getter="component.getter"
+            :index="index"
+            :isActive="index === activeSlide"
+          />
+        </ion-slide>
+      </ion-slides>
+      <div class="center">
+        <div style="width: 90%; height: 100px; background: gray">
+          more detailed stats from selected macro
+        </div>
       </div>
     </div>
   </ion-content>
@@ -54,7 +56,6 @@ import {
   defineComponent, 
   ref, 
   watch,
-  computed,
 } from "vue";
 import { useStore } from "vuex";
 import { 
@@ -106,9 +107,15 @@ export default defineComponent({
     const slider = ref(null);
     const activeSlide = ref(0);
     const store = useStore();
+    const macroComponents = ref(store.getters.macroComponents.slice(0, 8));
+    const rerender = ref(true);
 
-    const macroComponents = computed(() => {
-      return store.getters.macroComponents.slice(0, 8);
+    watch(store.getters.macroComponents, (newVal) => {
+      macroComponents.value = newVal.slice(0, 8);
+      rerender.value = false;
+      setTimeout(() => {
+        rerender.value = true;
+      }, 100);
     });
 
     watch(slideChangeDetector, async () => {
@@ -126,6 +133,7 @@ export default defineComponent({
       slider,
       slideChangeDetector,
       macroComponents,
+      rerender,
     };
   },
 });

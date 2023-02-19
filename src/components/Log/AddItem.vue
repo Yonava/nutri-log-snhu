@@ -72,6 +72,9 @@ const props = defineProps<{
 
 function addItem(item: UnloggedItem) {
   itemAdded.value = true;
+  setTimeout(() => {
+    itemAdded.value = false;
+  }, 2000);
   store.dispatch('postLoggedItem', item);
 }
 

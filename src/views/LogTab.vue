@@ -20,26 +20,27 @@
       <div v-else>
         <ion-item-group 
           v-for="dateTag in groupByDate" 
-          :key="dateTag.items.toLocaleString()"
+          :key="dateTag.items"
         >
-          <ion-item-divider sticky="true">
-            <ion-label>
+          <ion-item-divider 
+            sticky="true"
+            class="center"
+          >
+            <ion-label style="margin-top: 5px">
               {{ dateTag.date }}
             </ion-label>
           </ion-item-divider>
 
-          <TransitionGroup name="fade">
-            <div 
-              v-for="item in dateTag.items"
-              :key="item"
-            >
-              <LogItem 
-                :item="item"
-                @click="itemClicked(item)"
-                @remove-item="removeItem(item)"
-              />
-            </div>
-          </TransitionGroup>
+          <div 
+            v-for="item in dateTag.items"
+            :key="item"
+          >
+            <LogItem 
+              :item="item"
+              @click="itemClicked(item)"
+              @remove-item="removeItem(item)"
+            />
+          </div>
         </ion-item-group>
       </div>
       <ion-fab 
@@ -112,7 +113,19 @@ const groupByDate = computed(() => {
   const log = store.getters.log;
   log.forEach((item: LoggedItem) => {
     const date = new Date(item.dateAdded);
-    const dateString = date.toDateString();
+    const todaysDate = new Date();
+    let dateString = '';
+    if (date.getDate() === todaysDate.getDate() &&
+        date.getMonth() === todaysDate.getMonth() &&
+        date.getFullYear() === todaysDate.getFullYear()) {
+      dateString = 'Today';
+    } else {
+      dateString = date.toLocaleString([], {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
     const dateIndex = dates.findIndex((d) => d.date === dateString);
     if (dateIndex === -1) {
       dates.push({
@@ -126,21 +139,3 @@ const groupByDate = computed(() => {
   return dates;
 })
 </script>
-
-<style scoped>
-.fade-move,
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: scaleY(0.01) translate(30px, 0);
-}
-
-.fade-leave-active {
-  position: absolute;
-}
-</style>
