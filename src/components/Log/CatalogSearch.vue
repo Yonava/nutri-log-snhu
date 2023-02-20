@@ -1,12 +1,17 @@
 <template>
   <div v-if="searchResults.length > 0">
-    <TransitionGroup name="list">
-      <AddItem 
-        v-for="item in searchResults" 
-        :key="item._id"
-        :item="item" 
-      />
-    </TransitionGroup>
+    <div 
+      v-bind="containerProps" 
+      style="height: 100vh;"
+    >
+      <div v-bind="wrapperProps">
+        <AddItem 
+          v-for="{ data } in list" 
+          :key="data._id"
+          :item="data" 
+        />
+      </div> 
+    </div>
   </div>
   <div 
     v-else-if="searchQuery.length === 0"
@@ -23,6 +28,7 @@
   <div v-else>
     <h4 class="center">
       No items found
+      {{ list }}
     </h4>
   </div>
 </template>
@@ -30,13 +36,22 @@
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue';
 import { search } from 'ionicons/icons';
-import { defineProps } from 'vue';
+import { defineProps, toRef } from 'vue';
+import { UnloggedItem } from '@/types/Log';
+import { useVirtualList } from '@vueuse/core';
 import AddItem from '@/components/Log/AddItem.vue';
 
-defineProps<{
-  searchResults: any[];
+const props = defineProps<{
+  searchResults: UnloggedItem[];
   searchQuery: string;
 }>();
+
+const searchResults = toRef(props, 'searchResults');
+
+const addItemHeightPX = 49;
+const { list, containerProps, wrapperProps } = useVirtualList(searchResults, {
+  itemHeight: addItemHeightPX,
+});
 </script>
 
 <style scoped>
