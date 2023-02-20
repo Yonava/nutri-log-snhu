@@ -1,21 +1,24 @@
 <template>
   <div 
     :style="{ 
-      width,
       height,
       overflow: 'hidden',
     }"
     class="item-container"
   >
-    <ion-item-sliding>
+    <ion-item-sliding 
+      @touchend="checkRemove"
+      @ionDrag="updateSlidingRatio"
+      ref="removeButton"
+    >
       <ion-item button>
         <div class="item-parent">
           <div class="chip-container">
             <div 
               v-for="chip in chips"
               :key="chip"
-              class="top-chip"
               :style="{ backgroundColor: chip.color }"
+              class="top-chip"
             >
               {{ chip.value }}
               <span style="font-weight: 700"> 
@@ -24,14 +27,16 @@
             </div>
           </div>
           <h2 style="text-transform: capitalize; margin: 2px 0;">
-            {{ item.name }}
+            {{ name }}
           </h2>
         </div>
       </ion-item>
       <ion-item-options side="start">
         <ion-item-option 
+          @click.stop="removeItem"
+          expandable
           color="danger" 
-          @click.stop="removeItem(i)"
+          
         >
           Remove
         </ion-item-option>
@@ -40,7 +45,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { 
   IonIcon, 
   IonItem,
@@ -48,12 +53,17 @@ import {
   IonItemOptions,
   IonItemOption,
 } from '@ionic/vue';
-import { defineProps, defineEmits, ref } from 'vue';
+import { 
+  defineProps, 
+  defineEmits, 
+  ref, 
+  computed 
+} from 'vue';
 
 const emit = defineEmits(['remove-item']);
-
-const width = ref('100%');
+const removeButton = ref();
 const height = ref('59px');
+const amountOpen = ref(0);
 
 const props = defineProps({
   item: {
@@ -62,15 +72,35 @@ const props = defineProps({
   },
 });
 
-const removeItem = (i: any) => {
-  height.value = '0px';
-  const transitionDuration = 1000;
-  setTimeout(() => {
-    emit('remove-item', i);
-  }, transitionDuration);
-};
+const name = computed(() => {
+  if (props.item.name.length > 30) {
+    const name = props.item.name.slice(0, 28);
+    return name.trim() + '...';
+  }
+  return props.item.name;
+});
 
-const toDateTimeString = (date: Date) => {
+function updateSlidingRatio() {
+  setTimeout(async () => {
+    amountOpen.value = await removeButton.value.$el.getSlidingRatio();
+  }, 100);
+}
+
+async function checkRemove() {
+  if (amountOpen.value < -2.5) {
+    removeItem();
+  }
+}
+
+function removeItem() {
+  const transitionDuration = 1000;
+  height.value = '0px';
+  setTimeout(() => {
+    emit('remove-item', props.item);
+  }, transitionDuration);
+}
+
+const toDateTimeString = (date) => {
   const timeStamp = new Date(date);
   return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
 };
@@ -143,10 +173,5 @@ const chips = [
   transition: -webkit .3s;
   transition: -ms .3s;
   transition: .3s;
-}
-
-ion-item {
-  /* --background: "pink"; */
-  /* --color: "black"; */
 }
 </style>
