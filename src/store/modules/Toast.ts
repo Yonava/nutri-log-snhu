@@ -23,7 +23,7 @@ const Toast: Module<ToastState, any> = {
         message: 'Toast options left undefined',
         duration: 2000,
         color: 'primary',
-        position: 'bottom',
+        position: 'top',
       }
 
       const toastOptions = Object.assign(defaults, options)

@@ -2,7 +2,10 @@
   <ion-page>
     <default-header title="Modify Item">
       <template #left>
-        <ion-back-button default-href="/tabs/log"></ion-back-button>
+        <ion-back-button 
+          default-href="/tabs/log"
+          text="Log"
+        ></ion-back-button>
       </template>
     </default-header>
     <ion-content>
@@ -11,9 +14,9 @@
           v-model="item.name"
           @ionFocus="titleFocused = true"
           @ionBlur="titleFocused = false"
+          :style="titleStyle"
           type="text"
           enterkeyhint="done"
-          :style="titleStyle"
           class="title"
           placeholder="Item Name"
         ></ion-input>
