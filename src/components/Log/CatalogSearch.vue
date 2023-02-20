@@ -28,7 +28,6 @@
   <div v-else>
     <h4 class="center">
       No items found
-      {{ list }}
     </h4>
   </div>
 </template>
