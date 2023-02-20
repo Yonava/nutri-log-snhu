@@ -87,7 +87,7 @@ function updateSlidingRatio() {
 }
 
 async function checkRemove() {
-  if (slidingRatio.value < -2) {
+  if (slidingRatio.value < -1.8) {
     removeItem();
   }
 }

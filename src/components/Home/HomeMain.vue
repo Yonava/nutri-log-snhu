@@ -1,11 +1,18 @@
 <template>
   <ion-content content-id="home-tab-content">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">
+          NutriLog SNHU
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
     <div v-if="rerender">
       <div class="center macro-display-box-container">
         <MacroDisplayBox 
           v-for="(component, index) in macroComponents"
-          :key="component"
           @click="slideTo(index)"
+          :key="component"
           :label="component.label"
           :color="component.color"
           :getter="component.getter"
@@ -43,7 +50,7 @@
         </ion-slide>
       </ion-slides>
       <div class="center">
-        <div style="width: 90%; height: 100px; background: gray">
+        <div style="width: 90%; height: 80px; background: gray">
           more detailed stats from selected macro
         </div>
       </div>
@@ -64,6 +71,9 @@ import {
   IonSlide,
   IonSlides,
   IonIcon,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from "@ionic/vue";
 import CalorieProgress from "./MacroCircle/CalorieProgress.vue";
 import CarbProgress from "./MacroCircle/CarbProgress.vue";
@@ -86,6 +96,9 @@ export default defineComponent({
     IonSlide,
     IonSlides,
     IonIcon,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
 
     CalciumProgress,
     IronProgress,
