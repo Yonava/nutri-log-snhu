@@ -1,8 +1,8 @@
 <template>
   <div 
     :style="{ 
-      height,
-      overflow: 'hidden',
+      height, 
+      overflow: 'hidden' 
     }"
     class="item-container"
   >
@@ -26,8 +26,8 @@
               </span>
             </div>
           </div>
-          <h2 style="text-transform: capitalize; margin: 2px 0;">
-            {{ name }}
+          <h2 class="item-name">
+            {{ item.name }}
           </h2>
         </div>
       </ion-item>
@@ -72,14 +72,6 @@ const props = defineProps({
   },
 });
 
-const name = computed(() => {
-  if (props.item.name.length > 30) {
-    const name = props.item.name.slice(0, 28);
-    return name.trim() + '...';
-  }
-  return props.item.name;
-});
-
 function updateSlidingRatio() {
   setTimeout(async () => {
     slidingRatio.value = await removeButton.value.$el.getSlidingRatio();
@@ -93,7 +85,7 @@ async function checkRemove() {
 }
 
 function removeItem() {
-  const transitionDuration = 1000;
+  const transitionDuration = 250;
   height.value = '0px';
   setTimeout(() => {
     emit('remove-item', props.item);
@@ -116,11 +108,11 @@ const chips = [
     value: props.item.calories,
     color: 'var(--ion-color-primary)',
   },
-  {
-    label: 'carbs',
-    value: props.item.macro.carbohydrates.total + 'g',
-    color: '#F96167',
-  },
+  // {
+  //   label: 'carbs',
+  //   value: props.item.macro.carbohydrates.total + 'g',
+  //   color: '#F96167',
+  // },
   {
     label: 'protein',
     value: props.item.macro.protein + 'g',
@@ -173,5 +165,15 @@ const chips = [
   transition: -webkit .3s;
   transition: -ms .3s;
   transition: .3s;
+  overflow: 'hidden';
+}
+
+.item-name {
+  text-transform: capitalize; 
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 85vw;
 }
 </style>

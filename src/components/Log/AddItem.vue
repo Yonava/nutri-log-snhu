@@ -15,8 +15,8 @@
             {{ chip.value }}
           </div>
         </div>
-        <h4 style="text-transform: capitalize; margin: 2px 0;">
-          {{ name }}
+        <h4 class="item-name">
+          {{ item.name }}
         </h4>
       </div>
       <ion-icon 
@@ -86,14 +86,6 @@ function goToDetail(item: UnloggedItem) {
 const itemIcon = computed(() => {
   return itemAdded.value ? checkmarkCircleOutline : addCircleOutline;
 });
-
-const name = computed(() => {
-  if (props.item.name.length > 30) {
-    const name = props.item.name.slice(0, 28);
-    return name.trim() + '...';
-  }
-  return props.item.name;
-});
 </script>
 
 <style scoped>
@@ -129,5 +121,14 @@ const name = computed(() => {
   display: flex;
   align-items: left;
   flex-direction: column;
+}
+
+.item-name {
+  width: 75vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  margin: 2px 0;
 }
 </style>
