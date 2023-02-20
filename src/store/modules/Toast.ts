@@ -3,13 +3,6 @@ import { ToastState } from '@/types/Vuex'
 import { ToastOptions } from '@ionic/core';
 import { toastController } from '@ionic/vue';
 
-interface Object1 {
-  message: string,
-  duration: number,
-  color: string,
-  position: string
-}
-
 const Toast: Module<ToastState, any> = {
   mutations: {
     presentToast(state, options: ToastOptions = { 

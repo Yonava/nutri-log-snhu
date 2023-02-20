@@ -5,7 +5,7 @@
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">
-            Log Entries
+            Log
           </ion-title>
         </ion-toolbar>
       </ion-header>

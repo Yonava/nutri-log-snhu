@@ -16,7 +16,7 @@
           </div>
         </div>
         <h4 style="text-transform: capitalize; margin: 2px 0;">
-          {{ item.name }}
+          {{ name }}
         </h4>
       </div>
       <ion-icon 
@@ -85,6 +85,14 @@ function goToDetail(item: UnloggedItem) {
 
 const itemIcon = computed(() => {
   return itemAdded.value ? checkmarkCircleOutline : addCircleOutline;
+});
+
+const name = computed(() => {
+  if (props.item.name.length > 30) {
+    const name = props.item.name.slice(0, 28);
+    return name.trim() + '...';
+  }
+  return props.item.name;
 });
 </script>
 

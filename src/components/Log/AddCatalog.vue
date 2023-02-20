@@ -3,7 +3,7 @@
     <default-header title="Select Item">
       <template #left>
         <ion-back-button 
-          text="Log Entries"
+          text="Log"
           default-href="/tabs/log"
         ></ion-back-button>
       </template>
@@ -93,7 +93,7 @@ onMounted(() => {
   setTimeout(async () => {
     await store.dispatch('fetchCatalog');
     loading.value = false;
-  }, 300);
+  }, 500);
 });
 
 const items = computed(() => store.getters.catalog);

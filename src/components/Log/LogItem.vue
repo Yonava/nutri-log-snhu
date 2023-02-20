@@ -63,7 +63,7 @@ import {
 const emit = defineEmits(['remove-item']);
 const removeButton = ref();
 const height = ref('59px');
-const amountOpen = ref(0);
+const slidingRatio = ref(0);
 
 const props = defineProps({
   item: {
@@ -82,12 +82,12 @@ const name = computed(() => {
 
 function updateSlidingRatio() {
   setTimeout(async () => {
-    amountOpen.value = await removeButton.value.$el.getSlidingRatio();
+    slidingRatio.value = await removeButton.value.$el.getSlidingRatio();
   }, 100);
 }
 
 async function checkRemove() {
-  if (amountOpen.value < -2.5) {
+  if (slidingRatio.value < -1.8) {
     removeItem();
   }
 }

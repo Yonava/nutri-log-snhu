@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header :title="item.name.length < 17 ? item.name : item.name.slice(0, 17) + '...'">
+    <default-header :title="item.name.length < 17 ? item.name : item.name.slice(0, 15) + '...'">
       <template #left>
         <ion-back-button
           default-href="/tabs/log"
