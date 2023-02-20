@@ -8,7 +8,7 @@
   >
     <ion-item-sliding 
       @touchend="checkRemove"
-      @ionDrag="updateAmountOpen"
+      @ionDrag="updateSlidingRatio"
       ref="removeButton"
     >
       <ion-item button>
@@ -17,8 +17,8 @@
             <div 
               v-for="chip in chips"
               :key="chip"
-              class="top-chip"
               :style="{ backgroundColor: chip.color }"
+              class="top-chip"
             >
               {{ chip.value }}
               <span style="font-weight: 700"> 
@@ -27,13 +27,13 @@
             </div>
           </div>
           <h2 style="text-transform: capitalize; margin: 2px 0;">
-            {{ item.name }}
+            {{ name }}
           </h2>
         </div>
       </ion-item>
       <ion-item-options side="start">
         <ion-item-option 
-          @click.stop="removeItem(i)"
+          @click.stop="removeItem"
           expandable
           color="danger" 
           
@@ -53,7 +53,12 @@ import {
   IonItemOptions,
   IonItemOption,
 } from '@ionic/vue';
-import { defineProps, defineEmits, ref } from 'vue';
+import { 
+  defineProps, 
+  defineEmits, 
+  ref, 
+  computed 
+} from 'vue';
 
 const emit = defineEmits(['remove-item']);
 const removeButton = ref();
@@ -67,7 +72,15 @@ const props = defineProps({
   },
 });
 
-function updateAmountOpen() {
+const name = computed(() => {
+  if (props.item.name.length > 30) {
+    const name = props.item.name.slice(0, 28);
+    return name.trim() + '...';
+  }
+  return props.item.name;
+});
+
+function updateSlidingRatio() {
   setTimeout(async () => {
     amountOpen.value = await removeButton.value.$el.getSlidingRatio();
   }, 100);
@@ -75,22 +88,17 @@ function updateAmountOpen() {
 
 async function checkRemove() {
   if (amountOpen.value < -2.5) {
-    height.value = '0px';
-    const transitionDuration = 1000;
-    setTimeout(() => {
-      emit('remove-item', props.item);
-    }, transitionDuration);
+    removeItem();
   }
 }
 
-const removeItem = async (i) => {
-  console.log(await removeButton.value.$el.closeOpened());
-  // height.value = '0px';
-  // const transitionDuration = 1000;
-  // setTimeout(() => {
-  //   emit('remove-item', i);
-  // }, transitionDuration);
-};
+function removeItem() {
+  const transitionDuration = 1000;
+  height.value = '0px';
+  setTimeout(() => {
+    emit('remove-item', props.item);
+  }, transitionDuration);
+}
 
 const toDateTimeString = (date) => {
   const timeStamp = new Date(date);
