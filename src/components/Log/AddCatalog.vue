@@ -84,13 +84,16 @@ const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
 
-onMounted(async () => {
+onMounted(() => {
   if (store.getters.catalog.length > 0) {
     loading.value = false;
     return;
   }
-  await store.dispatch('fetchCatalog');
-  loading.value = false;
+  // ensures transition doesn't stutter
+  setTimeout(async () => {
+    await store.dispatch('fetchCatalog');
+    loading.value = false;
+  }, 300);
 });
 
 const items = computed(() => store.getters.catalog);

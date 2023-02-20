@@ -1,13 +1,16 @@
 <template>
   <div 
     :style="{ 
-      width,
       height,
       overflow: 'hidden',
     }"
     class="item-container"
   >
-    <ion-item-sliding>
+    <ion-item-sliding 
+      @touchend="checkRemove"
+      @ionDrag="updateAmountOpen"
+      ref="removeButton"
+    >
       <ion-item button>
         <div class="item-parent">
           <div class="chip-container">
@@ -30,8 +33,10 @@
       </ion-item>
       <ion-item-options side="start">
         <ion-item-option 
-          color="danger" 
           @click.stop="removeItem(i)"
+          expandable
+          color="danger" 
+          
         >
           Remove
         </ion-item-option>
@@ -40,7 +45,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { 
   IonIcon, 
   IonItem,
@@ -51,9 +56,9 @@ import {
 import { defineProps, defineEmits, ref } from 'vue';
 
 const emit = defineEmits(['remove-item']);
-
-const width = ref('100%');
+const removeButton = ref();
 const height = ref('59px');
+const amountOpen = ref(0);
 
 const props = defineProps({
   item: {
@@ -62,15 +67,32 @@ const props = defineProps({
   },
 });
 
-const removeItem = (i: any) => {
-  height.value = '0px';
-  const transitionDuration = 1000;
-  setTimeout(() => {
-    emit('remove-item', i);
-  }, transitionDuration);
+function updateAmountOpen() {
+  setTimeout(async () => {
+    amountOpen.value = await removeButton.value.$el.getSlidingRatio();
+  }, 100);
+}
+
+async function checkRemove() {
+  if (amountOpen.value < -2.5) {
+    height.value = '0px';
+    const transitionDuration = 1000;
+    setTimeout(() => {
+      emit('remove-item', props.item);
+    }, transitionDuration);
+  }
+}
+
+const removeItem = async (i) => {
+  console.log(await removeButton.value.$el.closeOpened());
+  // height.value = '0px';
+  // const transitionDuration = 1000;
+  // setTimeout(() => {
+  //   emit('remove-item', i);
+  // }, transitionDuration);
 };
 
-const toDateTimeString = (date: Date) => {
+const toDateTimeString = (date) => {
   const timeStamp = new Date(date);
   return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
 };
@@ -143,10 +165,5 @@ const chips = [
   transition: -webkit .3s;
   transition: -ms .3s;
   transition: .3s;
-}
-
-ion-item {
-  /* --background: "pink"; */
-  /* --color: "black"; */
 }
 </style>
