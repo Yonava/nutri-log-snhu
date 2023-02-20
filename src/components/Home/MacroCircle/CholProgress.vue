@@ -4,7 +4,7 @@
     :color="color"
   />
   <div style="position: absolute">
-    <div style="font-weight: 700; font-size: 4.75rem">
+    <div style="font-weight: 700; font-size: 3rem">
       <AnimateCount 
         :number="currentData.total" 
         unit="mg"

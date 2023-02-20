@@ -24,6 +24,9 @@ const Log: Module<LogState, any> = {
         date.getFullYear() === today.getFullYear()
       )
     }),
+    quickLog: state => {
+      return state.log;
+    },
   },
   mutations: {
     setSelectedLogItem(state, item: LoggedItem | null) {

@@ -54,6 +54,7 @@
           more detailed stats from selected macro
         </div>
       </div>
+      <QuickLog />
     </div>
   </ion-content>
 </template>
@@ -88,6 +89,7 @@ import IronProgress from "./MacroCircle/IronProgress.vue";
 import CalciumProgress from "./MacroCircle/CalciumProgress.vue";
 
 import MacroDisplayBox from "./MacroDisplayBox.vue";
+import QuickLog from "./QuickLog.vue";
 
 export default defineComponent({
   components: {
@@ -113,6 +115,7 @@ export default defineComponent({
     FiberProgress,
 
     MacroDisplayBox,
+    QuickLog,
   },
   setup() {
 
@@ -146,7 +149,7 @@ export default defineComponent({
       slider,
       slideChangeDetector,
       macroComponents,
-      rerender,
+      rerender
     };
   },
 });

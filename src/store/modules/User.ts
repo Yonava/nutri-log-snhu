@@ -1,6 +1,5 @@
 import { Module } from 'vuex'
 import { UserState } from '@/types/Vuex'
-// import { MacroDisplayComponent } from '@/types/User'
 
 const User: Module<UserState, any> = {
   state: {
