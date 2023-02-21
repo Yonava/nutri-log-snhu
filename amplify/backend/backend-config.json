@@ -1,6 +1,6 @@
 {
   "auth": {
-    "nutrilogsnhu45e0d8b8": {
+    "nutrilogsnhu0fb96e43": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -17,7 +17,7 @@
         ],
         "socialProviders": [],
         "usernameAttributes": [
-          "PHONE_NUMBER"
+          "EMAIL"
         ],
         "verificationMechanisms": [
           "EMAIL"

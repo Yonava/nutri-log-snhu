@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aws-amplify/cli": "^10.6.2",
-    "@aws-amplify/ui-vue": "^3.1.5",
+    "@aws-amplify/ui-vue": "^3.1.8",
     "@capacitor/android": "4.6.2",
     "@capacitor/app": "4.1.1",
     "@capacitor/core": "4.6.2",
@@ -25,7 +25,7 @@
     "@ionic/vue": "^6.0.0",
     "@ionic/vue-router": "^6.0.0",
     "@vueuse/core": "^9.13.0",
-    "aws-amplify": "^5.0.11",
+    "aws-amplify": "^5.0.15",
     "axios": "^1.2.6",
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",

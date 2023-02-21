@@ -1,19 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-nutrilogsnhu-dev-114643-authRole",
-      "UnauthRoleArn": "arn:aws:iam::436427927894:role/amplify-nutrilogsnhu-dev-114643-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::436427927894:role/amplify-nutrilogsnhu-dev-114643-authRole",
+      "AuthRoleName": "amplify-nutrilogsnhu-dev-140524-authRole",
+      "UnauthRoleArn": "arn:aws:iam::436427927894:role/amplify-nutrilogsnhu-dev-140524-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::436427927894:role/amplify-nutrilogsnhu-dev-140524-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-nutrilogsnhu-dev-114643-deployment",
-      "UnauthRoleName": "amplify-nutrilogsnhu-dev-114643-unauthRole",
-      "StackName": "amplify-nutrilogsnhu-dev-114643",
-      "StackId": "arn:aws:cloudformation:us-east-1:436427927894:stack/amplify-nutrilogsnhu-dev-114643/d9de20d0-9ccf-11ed-b649-0a33c63614bf",
-      "AmplifyAppId": "du4ot004hpb6l"
+      "DeploymentBucketName": "amplify-nutrilogsnhu-dev-140524-deployment",
+      "UnauthRoleName": "amplify-nutrilogsnhu-dev-140524-unauthRole",
+      "StackName": "amplify-nutrilogsnhu-dev-140524",
+      "StackId": "arn:aws:cloudformation:us-east-1:436427927894:stack/amplify-nutrilogsnhu-dev-140524/b2bf9ff0-b21a-11ed-955a-0e3fb12c04cf",
+      "AmplifyAppId": "d2ikuy9o3mdfte"
     },
     "categories": {
       "auth": {
-        "nutrilogsnhu45e0d8b8": {}
+        "nutrilogsnhu0fb96e43": {}
       }
     }
   }
