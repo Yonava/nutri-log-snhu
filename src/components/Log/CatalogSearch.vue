@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonIcon, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/vue';
+import { IonIcon } from '@ionic/vue';
 import { search } from 'ionicons/icons';
 import { defineProps, computed, ref, onMounted } from 'vue';
 import { UnloggedItem } from '@/types/Log';

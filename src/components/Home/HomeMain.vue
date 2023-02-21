@@ -68,11 +68,11 @@
           </div>
           <div 
             class="center" 
-            :style="`flex-direction: row; color: ${tempNum > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
+            :style="`flex-direction: row; color: ${$store.getters[macroComponents[activeSlide].getter].percent > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
           >
             <ion-icon :icon="warningOutline"></ion-icon>
             <span style="margin-left: 6px; font-weight: 300">
-              {{ tempNum - 100 }}% over daily target
+              {{ $store.getters[macroComponents[activeSlide].getter].percent - 100 }}% over daily target
             </span>
           </div>
         </div>
@@ -82,7 +82,7 @@
         >
           <div style="margin-bottom: 10px" class="center stat-box">
             <div style="font-size: 3rem; font-weight: 200">
-              {{ tempNum }}%
+              {{ $store.getters[macroComponents[activeSlide].getter].percent }}%
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               of target
@@ -91,7 +91,7 @@
           <div class="divider" style="height: 80px; width: 1px; background-color: gray"></div>
           <div style="margin-bottom: 10px" class="center stat-box">
             <div style="font-size: 3rem; font-weight: 200">
-              {{ Math.floor(Math.random() * 1000) }}
+              {{ $store.getters[macroComponents[activeSlide].getter].target.toLocaleString() }}
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               daily target
@@ -111,9 +111,20 @@
               {{ (i - 1) * 3 }}
             </div>
           </div>
-          <div style="height: 75%; width: 100%" class="center">
-            <div style="height: 100%; width: 92%; flex-direction: row; align-items: flex-end;" class="bar-container center">
-              <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px; transition: 500ms`" class="bar"></div>
+          <div 
+            style="height: 75%; width: 100%" 
+            class="center"
+          >
+            <div 
+              style="height: 100%; width: 92%; flex-direction: row; align-items: flex-end;" 
+              class="bar-container center"
+            >
+              <div 
+                v-for="i in 24" 
+                :key="i" 
+                :style="`width: 10%; background: ${macroComponents[activeSlide].color}; height: ${Math.random() * 100}%; margin: 0 2.5px; transition: 500ms`" 
+                class="bar"
+              ></div>
             </div>
           </div>
         </div>
@@ -157,7 +168,6 @@ import QuickLog from "./QuickLog.vue";
 
 import {
   statsChart,
-  terminalOutline,
   warningOutline,
 } from "ionicons/icons"
 
