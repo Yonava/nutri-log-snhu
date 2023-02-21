@@ -3,7 +3,13 @@
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title size="large">
-          Todays Breakdown
+          {{ 
+            new Date().toLocaleString([], {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            }) 
+          }}
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -49,39 +55,62 @@
           />
         </ion-slide>
       </ion-slides>
-      <div style="position: relative;" class="center ion-padding">
-        <div style="width: 100%; display: flex; align-content: flex-start; margin-bottom: 4px; margin-left: 3px">
+      <div style="position: relative; transform: translateY(-20px)" class="center ion-padding">
+        <div style="width: 98.5%; display: flex; justify-content: space-between; margin-bottom: 4px;">
           <div class="center" style="flex-direction: row;">
-            <ion-icon :icon="barChart"></ion-icon>
+            <ion-icon :icon="statsChart"></ion-icon>
             <span style="margin-left: 6px; font-weight: 300">
               stats at a glance
+            </span>
+          </div>
+          <div 
+            class="center" 
+            :style="`flex-direction: row; color: ${tempNum > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
+          >
+            <ion-icon :icon="warningOutline"></ion-icon>
+            <span style="margin-left: 6px; font-weight: 300">
+              {{ tempNum - 100 }}% over daily target
             </span>
           </div>
         </div>
         <div 
           class="center ion-padding"
-          style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px 10px 0 0; position: relative; width: 100%"
+          style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px 10px 0 0; position: relative; width: 100%;"
         >
           <div style="margin-bottom: 10px" class="center stat-box">
-            <div style="font-size: 3rem; font-weight: 200">26%</div>
-            <div style="font-size: 1.25rem; font-weight: 600">of target</div>
+            <div style="font-size: 3rem; font-weight: 200">
+              {{ tempNum }}%
+            </div>
+            <div style="font-size: 1.25rem; font-weight: 600">
+              of target
+            </div>
           </div>
           <div class="divider" style="height: 80px; width: 1px; background-color: gray"></div>
           <div style="margin-bottom: 10px" class="center stat-box">
-            <div style="font-size: 3rem; font-weight: 200">2,000</div>
-            <div style="font-size: 1.25rem; font-weight: 600">daily target</div>
+            <div style="font-size: 3rem; font-weight: 200">
+              {{ Math.floor(Math.random() * 1000) }}
+            </div>
+            <div style="font-size: 1.25rem; font-weight: 600">
+              daily target
+            </div>
           </div>
         </div>
         <div 
           class="center" 
-          style="background-color: var(--ion-color-step-100); height: 100px; width: 100%; border-radius: 0 0 10px 10px;"
+          style="background-color: var(--ion-color-step-200); height: 100px; width: 100%; border-radius: 0 0 10px 10px;"
         > 
-          <div style="color: rgba(255, 255, 255, 0.5); margin: 3px 0">
-            12am
+          <div class="center" style="height: 25%; flex-direction: row; justify-content: space-around; width: 98%">
+            <div 
+              v-for="i in 9" 
+              :key="i" 
+              style="color: rgba(255, 255, 255, 0.35);"
+            >
+              {{ (i - 1) * 3 }}
+            </div>
           </div>
-          <div style="height: 80%; width: 100%" class="center">
+          <div style="height: 75%; width: 100%" class="center">
             <div style="height: 100%; width: 92%; flex-direction: row; align-items: end;" class="bar-container center">
-              <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px`" class="bar"></div>
+              <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px; transition: 500ms`" class="bar"></div>
             </div>
           </div>
         </div>
@@ -124,7 +153,9 @@ import MacroDisplayBox from "./MacroDisplayBox.vue";
 import QuickLog from "./QuickLog.vue";
 
 import {
-  barChart,
+  statsChart,
+  terminalOutline,
+  warningOutline,
 } from "ionicons/icons"
 
 export default defineComponent({
@@ -162,6 +193,8 @@ export default defineComponent({
     const macroComponents = ref(store.getters.macroComponents.slice(0, 8));
     const rerender = ref(true);
 
+    const tempNum = ref(0);
+
     watch(store.getters.macroComponents, (newVal) => {
       macroComponents.value = newVal.slice(0, 8);
       rerender.value = false;
@@ -171,6 +204,7 @@ export default defineComponent({
     });
 
     watch(slideChangeDetector, async () => {
+      tempNum.value = Math.floor(Math.random() * 150);
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
@@ -187,7 +221,9 @@ export default defineComponent({
       macroComponents,
       rerender,
       
-      barChart,
+      statsChart,
+      warningOutline,
+      tempNum
     };
   },
 });

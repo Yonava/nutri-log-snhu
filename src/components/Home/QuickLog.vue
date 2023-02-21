@@ -1,10 +1,11 @@
 <template>
-  <div class="center ion-padding">
+  <div style="transform: translateY(-40px)" class="center">
     <ion-button 
       id="open-quicklog-modal"
       shape="round"
-      style="width: 100%; margin-bottom: 10px;  "
+      style="margin: 20px; width: 92%"
     >
+      <!-- <ion-icon slot="end" :icon="star"></ion-icon> -->
       Quick Log
     </ion-button>
     <ion-modal
@@ -35,6 +36,7 @@
 
 <script setup lang="ts">
 import { IonButton, IonModal, IonContent, IonChip } from "@ionic/vue";
+import { star } from "ionicons/icons";
 import { computed } from "vue";
 import { useStore } from "vuex";
 
