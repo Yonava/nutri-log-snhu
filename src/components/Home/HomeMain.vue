@@ -3,7 +3,7 @@
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title size="large">
-          NutriLog SNHU
+          Todays Breakdown
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -49,9 +49,28 @@
           />
         </ion-slide>
       </ion-slides>
-      <div class="center">
-        <div style="width: 90%; height: 80px; background: gray">
-          more detailed stats from selected macro
+      <div style="position: relative;" class="center ion-padding">
+        <div style="width: 100%; display: flex; align-content: flex-start; margin-bottom: 4px; margin-left: 3px">
+          <div class="center" style="flex-direction: row;">
+            <ion-icon :icon="barChart"></ion-icon>
+            <span style="margin-left: 6px; font-weight: 300">
+              stats at a glance
+            </span>
+          </div>
+        </div>
+        <div 
+          class="center ion-padding"
+          style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px; position: relative; width: 100%"
+        >
+          <div style="margin-bottom: 10px" class="center stat-box">
+            <div style="font-size: 3rem; font-weight: 200">26%</div>
+            <div style="font-size: 1.25rem; font-weight: 600">of target</div>
+          </div>
+          <div class="divider" style="height: 80px; width: 1px; background-color: gray"></div>
+          <div style="margin-bottom: 10px" class="center stat-box">
+            <div style="font-size: 3rem; font-weight: 200">2,000</div>
+            <div style="font-size: 1.25rem; font-weight: 600">daily target</div>
+          </div>
         </div>
       </div>
       <QuickLog />
@@ -90,6 +109,10 @@ import CalciumProgress from "./MacroCircle/CalciumProgress.vue";
 
 import MacroDisplayBox from "./MacroDisplayBox.vue";
 import QuickLog from "./QuickLog.vue";
+
+import {
+  barChart,
+} from "ionicons/icons"
 
 export default defineComponent({
   components: {
@@ -149,7 +172,9 @@ export default defineComponent({
       slider,
       slideChangeDetector,
       macroComponents,
-      rerender
+      rerender,
+      
+      barChart,
     };
   },
 });
@@ -171,6 +196,7 @@ export default defineComponent({
   margin-top: 3px;
   right: 0; 
   padding: 3px 5px;
+  color: white;
 }
 
 .modify-button-container {

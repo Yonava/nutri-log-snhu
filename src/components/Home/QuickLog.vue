@@ -3,6 +3,7 @@
     <ion-button 
       id="open-quicklog-modal"
       shape="round"
+      style="width: 100%; margin-bottom: 10px;  "
     >
       Quick Log
     </ion-button>
@@ -14,7 +15,7 @@
       <ion-content class="ion-padding">
         <div>
           <h1 style="margin-top: 0; font-weight: 700">
-            Quick Log
+            Log Suggestions
           </h1>
           <div>
             <ion-chip 
