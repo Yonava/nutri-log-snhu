@@ -28,6 +28,12 @@ export function useRedrawObserver(
     }
   });
 
+  watch(() => store.getters[getter], (newVal) => {
+    if (route.path.includes(homePath) && isActive.value) {
+      currentData.value = newVal;
+    }
+  });
+
   if (index === 0) {
     setTimeout(() => {
       currentData.value = store.getters[getter];

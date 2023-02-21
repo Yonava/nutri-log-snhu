@@ -91,7 +91,7 @@
           <div class="divider" style="height: 80px; width: 1px; background-color: gray"></div>
           <div style="margin-bottom: 10px" class="center stat-box">
             <div style="font-size: 3rem; font-weight: 200">
-              {{ $store.getters[macroComponents[activeSlide].getter].target.toLocaleString() }}
+              {{ $store.getters[macroComponents[activeSlide].getter].target.toLocaleString() }}{{ macroComponents[activeSlide].unit }}
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               daily target

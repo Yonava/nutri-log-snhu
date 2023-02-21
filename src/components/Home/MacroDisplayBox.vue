@@ -78,6 +78,11 @@ watch(() => route.path, (newPath) => {
   }
 });
 
+watch(() => store.getters[props.getter].total, (newValue) => {
+  if (!route.path.includes(homePath)) return;
+  displayValue.value = newValue;
+});
+
 const calculateFontSize = computed(() => {
   const totalLength = displayValue.value.toString().length + props.unit.length;
   if (totalLength < 4) {
