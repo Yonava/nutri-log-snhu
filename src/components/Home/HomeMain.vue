@@ -60,7 +60,7 @@
         </div>
         <div 
           class="center ion-padding"
-          style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px; position: relative; width: 100%"
+          style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px 10px 0 0; position: relative; width: 100%"
         >
           <div style="margin-bottom: 10px" class="center stat-box">
             <div style="font-size: 3rem; font-weight: 200">26%</div>
@@ -70,6 +70,19 @@
           <div style="margin-bottom: 10px" class="center stat-box">
             <div style="font-size: 3rem; font-weight: 200">2,000</div>
             <div style="font-size: 1.25rem; font-weight: 600">daily target</div>
+          </div>
+        </div>
+        <div 
+          class="center" 
+          style="background-color: var(--ion-color-step-100); height: 100px; width: 100%; border-radius: 0 0 10px 10px;"
+        > 
+          <div style="color: rgba(255, 255, 255, 0.5); margin: 3px 0">
+            12am
+          </div>
+          <div style="height: 80%; width: 100%" class="center">
+            <div style="height: 100%; width: 92%; flex-direction: row; align-items: end;" class="bar-container center">
+              <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px`" class="bar"></div>
+            </div>
           </div>
         </div>
       </div>
