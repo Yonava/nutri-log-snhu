@@ -55,7 +55,10 @@
           />
         </ion-slide>
       </ion-slides>
-      <div style="position: relative; transform: translateY(-20px)" class="center ion-padding">
+      <div 
+        style="position: relative; transform: translateY(-20px)" 
+        class="center ion-padding"
+      >
         <div style="width: 98.5%; display: flex; justify-content: space-between; margin-bottom: 4px;">
           <div class="center" style="flex-direction: row;">
             <ion-icon :icon="statsChart"></ion-icon>
@@ -109,7 +112,7 @@
             </div>
           </div>
           <div style="height: 75%; width: 100%" class="center">
-            <div style="height: 100%; width: 92%; flex-direction: row; align-items: end;" class="bar-container center">
+            <div style="height: 100%; width: 92%; flex-direction: row; align-items: flex-end;" class="bar-container center">
               <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px; transition: 500ms`" class="bar"></div>
             </div>
           </div>
