@@ -1,36 +1,37 @@
 <template>
   <ion-page>
     <ion-content :force-overscroll="false">
-      <ion-header style="margin-top: 20px">
-        <h3 class="center">NutriLog SNHU</h3>
-      </ion-header>
-      <Authenticator>
+      <div class="center login-header">NutriLog SNHU</div>
+      <div class="center login-box"></div>
+      <div class="center login-content">Sign In</div>
+      <!-- <Authenticator>
         <template v-slot="{ user }">
           <h1>Hello {{ user.username }}!</h1>
           <button @click="signOut">Sign Out</button>
           <br />
           <button @click="deleteUser">Delete User</button>
         </template>
-      </Authenticator>
-      <button 
+      </Authenticator> -->
+      <!-- <p class="center">Don't have an account?<router-link to="/register">Register Here</router-link></p> -->
+      <!-- <button 
         v-for="user in tempUserList"
         :key="user._id"
         style="margin: 10px; color: white; background-color: #3b3b3b; border-radius: 5px; padding: 5px;"
         @click.once="tempSignIn(user._id)"
       >
         {{ user.firstName }} {{ user.lastName }}
-      </button>
+      </button> -->
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { Authenticator } from "@aws-amplify/ui-vue";
+// import { Authenticator } from "@aws-amplify/ui-vue";
 import { Hub, Auth, I18n } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
-import { IonPage, IonContent, IonHeader } from "@ionic/vue";
+import { IonPage, IonContent } from "@ionic/vue";
 
 import axios from "axios";
 
@@ -44,8 +45,8 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonHeader,
-    Authenticator,
+    // IonHeader,
+    // Authenticator,
   },
   data() {
     return {
@@ -102,27 +103,27 @@ ion-toolbar {
   --opacity: 0;
 }
 
-.sign-in-box {
-  background-color: #f0f0f0;
+.login-header {
+  margin-top: 50px;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.login-box {
+  margin-top: 50px;
+  margin-left: 36.7%;
+  width: 400px;
+  height: 500px;
+  background-color: #3b3b3b4b;
   border-radius: 10px;
-  border-width: 4px;
-  margin-top: 25vh;
-  height: 240px;
-  width: 300px;
+  z-index: 0;
 }
 
-#sign-in-text {
-  font-size: 20px;
-  color: #000000;
-  font-weight: bold;
-  margin-top: 100px;
-  margin-left: 115px;
+.login-content {
+  margin-top: 50px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  z-index: 2;
 }
 
-.sign-in-btn {
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  width: 260px;
-}
 </style>
