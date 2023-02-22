@@ -5,6 +5,16 @@ import { LoggedItem, UnloggedItem } from '@/types/Log';
 import axios from 'axios';
 import mongoose from 'mongoose';
 
+function getPropertyFromNestedObject<T, K extends keyof T>(obj: T, keys: K[]): T[K] | undefined {
+  for (let i = 0; i < keys.length; i++) {
+    obj = obj[keys[i]] as T;
+    if (!obj) {
+      return undefined;
+    }
+  }
+  return obj as T[K];
+}
+
 const Log: Module<LogState, any> = {
   state: {
     log: [],
@@ -24,6 +34,33 @@ const Log: Module<LogState, any> = {
         date.getFullYear() === today.getFullYear()
       )
     }),
+    // nutrient may be nested, e.g. 'macro.carbohydrates.total'
+    // input: ['macro', 'carbohydrates', 'total']
+    // output: percentages of how tall each hour's bar should be 
+    nutrientByHour: (state, getters, rootState) => (nutrient: (keyof LoggedItem)[]) => {
+      const data: number[] = [];
+      let totalNutrient = 0;
+      for (let i = 0; i < 24; i++) data.push(0);
+      getters.todaysLog.forEach((item: LoggedItem) => {
+        const hour = new Date(item.dateAdded).getHours();
+        const value = getPropertyFromNestedObject(item, nutrient);
+        if (typeof value !== 'number') {
+          console.error('nutrientByHour: value is not a number', value, nutrient)
+          return;
+        }
+        data[hour] += value;
+        totalNutrient += value;
+      });
+      // if user has consumed 20%+ of a given nutrient in a given hour, make bar full height
+      const twentyPercent = totalNutrient / 5;
+      data.forEach((value, index) => {
+        if (value > twentyPercent) data[index] = 100;
+        else {
+          data[index] = Math.round((value / twentyPercent) * 100);
+        }
+      });
+      return data;
+    },
     quickLog: state => {
       return state.log;
     },
