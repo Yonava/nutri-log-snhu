@@ -20,14 +20,14 @@ export async function init() {
         email, 
         firstName, 
         lastName, 
-        macronutrientCalibrations, 
+        dailyTargets, 
         customItems,
         _id
       } = user.data;
       vuexStore.commit("setUser", { email, firstName, lastName, _id });
       vuexStore.commit("setLog", log);
       vuexStore.commit("setCustomItems", customItems);
-      vuexStore.commit("setMacronutrientCalibrations", macronutrientCalibrations);
+      vuexStore.commit("setDailyTargets", dailyTargets);
     } catch (err) {
       console.warn(err)
     }

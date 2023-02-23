@@ -19,7 +19,7 @@ export interface MacroDisplayComponent {
   label: string;
   color: string;
   target: string;
-  unit?: string;
+  unit?: "g" | "mg";
 }
 
 export interface DailyTargets {
