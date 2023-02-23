@@ -51,6 +51,16 @@ const routes: Array<RouteRecordRaw> = [
         name: 'ModifyMacroDisplay',
         path: 'modifyMacroDisplay',
         component: () => import('@/views/ModifyMacroDisplay.vue')
+      },
+      {
+        name: 'AdjustTargets',
+        path: 'adjustTargets',
+        component: () => import('@/components/Profile/AdjustTargets.vue')
+      },
+      {
+        name: 'ToS',
+        path: 'tos',
+        component: () => import('@/views/TermsOfService.vue')
       }
     ]
   },

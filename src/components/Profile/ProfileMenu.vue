@@ -5,7 +5,7 @@
     menu-id="profile-menu"
   >
     <ion-content>
-      <div class="main-container">
+      <div ref="menu" class="main-container">
         <div class="headline-content center">
           <h1 class="header-text">
             Hi, {{ firstName }}
@@ -20,8 +20,8 @@
               class="center"
             >
               <ion-button 
-                class="nav-button"
                 @click="button.action"
+                class="nav-button"
               >
                 {{ button.text() }}
               </ion-button>
@@ -45,7 +45,8 @@ import { defineComponent, computed, ref } from "vue";
 import {
   IonContent,
   IonButton,
-  IonMenu
+  IonMenu,
+  menuController
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -60,7 +61,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
-    // const caloriesHidden = ref(store.getters.caloriesHidden);
+    const menu = ref(null)
 
     const firstName = computed(() => {
       return store.getters.isLoggedIn ? store.getters.user.firstName : "";
@@ -69,8 +70,9 @@ export default defineComponent({
     const buttons = [
       {  
         text: () => "Adjust Daily Targets",
-        action: () => {
+        action: async () => {
           router.push({ name: "AdjustTargets" });
+          await menuController.close("profile-menu");
         }
       },
       { 
@@ -80,7 +82,11 @@ export default defineComponent({
         }
       },
       { 
-        text: () => "Change Password",
+        text: () => "Terms of Service",
+        action: async () => {
+          router.push({ name: "ToS" });
+          await menuController.close("profile-menu");
+        }
       }
     ];
 
