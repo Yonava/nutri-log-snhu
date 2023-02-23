@@ -15,9 +15,10 @@ export interface User {
 
 export interface MacroDisplayComponent {
   component: string;
-  getter: string;
+  getters: Map<string, string[]>;
   label: string;
   color: string;
+  target: string;
   unit?: string;
 }
 

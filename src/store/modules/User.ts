@@ -8,76 +8,112 @@ const User: Module<UserState, any> = {
         component: "CalorieProgress",
         label: "cals",
         color: "var(--ion-color-primary)",
-        getter: "todaysCalorieData",
+        getters: new Map([
+          ["total", ["calories"]],
+        ]),
+        target: "total",
       },
       {
         component: "FatProgress",
         label: "fats",
         color: "var(--ion-color-secondary)",
-        getter: "todaysFatData",
+        getters: new Map([
+          ["total", ["macro", "fat", "total"]],
+          ["saturated", ["macro", "fat", "saturated"]],
+          ["trans", ["macro", "fat", "trans"]],
+        ]),
+        target: "total",
         unit: "g"
       },
       {
         component: "ProteinProgress",
         label: "protein",
         color: "#40E0D0",
-        getter: "todaysProteinData",
+        getters: new Map([
+          ["total", ["macro", "protein"]],
+        ]),
+        target: "total",
         unit: "g",
       },
       {
         component: "CarbProgress",
         label: "carbs",
         color: "#F97D38",
-        getter: "todaysCarbData",
+        getters: new Map([
+          ["total", ["macro", "carbohydrates", "total"]],
+        ]),
+        target: "total",
         unit: "g",
       },
       {
         component: "SugarProgress",
         label: "sugars",
         color: "var(--ion-color-warning)",
-        getter: "todaysSugarData",
+        getters: new Map([
+          ["total", ["macro", "carbohydrates", "sugars"]],
+          ["added", ["macro", "carbohydrates", "added_sugars"]],
+        ]),
+        target: "total",
         unit: "g",
       },
       {
         component: "CalciumProgress",
         label: "calcium",
         color: "var(--ion-color-success)",
-        getter: "todaysCalciumData",
+        getters: new Map([
+          ["total", ["macro", "calcium"]],
+        ]),
+        target: "total",
         unit: "mg",
       },
       {
         component: "IronProgress",
         label: "iron",
         color: "var(--ion-color-danger)",
-        getter: "todaysIronData",
+        getters: new Map([
+          ["total", ["macro", "iron"]],
+        ]),
+        target: "total",
         unit: "mg",
       },
       {
         component: "FiberProgress",
         label: "fiber",
         color: "#317773",
-        getter: "todaysFiberData",
+        getters: new Map([
+          ["total", ["macro", "fiber"]],
+        ]),
+        target: "total",
         unit: "g",
       },
       {
         component: "SodiumProgress",
         label: "sodium",
         color: "#EEA47FFF",
-        getter: "todaysSodiumData",
+        getters: new Map([
+          ["total", ["macro", "sodium"]],
+        ]),
+        target: "total",
         unit: "mg",
       },
       {
         component: "PotasProgress",
         label: "potas",
         color: "#8A2BE2",
-        getter: "todaysPotassiumData",
+        getters: new Map([
+          ["total", ["macro", "potassium"]],
+        ]),
+        target: "total",
         unit: "mg",
       },
       {
         component: "CholProgress",
         label: "chol",
         color: "pink",
-        getter: "todaysCholesterolData",
+        getters: new Map([
+          ["total", ["macro", "cholesterol"]],
+        ]),
+        target: "total",
         unit: "mg",
       }
     ]

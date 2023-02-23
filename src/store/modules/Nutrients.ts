@@ -1,6 +1,6 @@
 import { Module } from 'vuex'
 import { NutrientState } from '@/types/Vuex'
-import { LoggedItem } from '@/types/Log'
+import { DailyTargets } from '@/types/User'
 import { getPropertyFromNestedObject } from '@/utils/GetNested'
 
 const Nutrients: Module<NutrientState, any> = {
@@ -29,7 +29,10 @@ const Nutrients: Module<NutrientState, any> = {
     }
   },
   getters: {
-    dailyTargets: state => state.dailyTargets,
+    allDailyTargets: state => state.dailyTargets,
+    dailyTarget: state => (targetPath: (keyof DailyTargets)[]) => {
+      return getPropertyFromNestedObject(state.dailyTargets, targetPath)
+    }
   },
   mutations: {
     setDailyTargets(state, targets) {

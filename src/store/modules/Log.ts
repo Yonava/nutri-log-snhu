@@ -64,11 +64,10 @@ const Log: Module<LogState, any> = {
         return total + value;
       }, 0);
     },
-    
     quickLog: state => state.log,
   },
   mutations: {
-    setSelectedLogItem(state, item: LoggedItem | null) {
+    setSelectedLogItem(state, item: LoggedItem) {
       state.selectedLogItem = item
     },
     addLogItem(state, loggedItem: LoggedItem) {
