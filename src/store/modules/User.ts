@@ -19,8 +19,8 @@ const User: Module<UserState, any> = {
         color: "var(--ion-color-secondary)",
         getters: new Map([
           ["total", ["macro", "fat", "total"]],
-          ["saturated", ["macro", "fat", "saturated"]],
           ["trans", ["macro", "fat", "trans"]],
+          ["saturated", ["macro", "fat", "saturated"]],
         ]),
         target: "total",
         unit: "g"

@@ -55,7 +55,7 @@ const Log: Module<LogState, any> = {
     dailyTotal:
       (state, getters) => 
       (nutrientPath: (keyof LoggedItem)[]) => {
-      return getters.todaysLog.reduce((total: number, item: LoggedItem) => {
+        return getters.loggedToday.reduce((total: number, item: LoggedItem) => {
         const value = getPropertyFromNestedObject(item, nutrientPath);
         if (typeof value !== 'number') {
           console.error('dailyTotal: value is not a number', value, nutrientPath);

@@ -42,4 +42,10 @@ export function useRedrawObserver(
       }, 100);
     }
   });
+
+  setTimeout(() => {
+    if (route.path.includes(homePath) && isActive.value) {
+      getNewData();
+    }
+  }, 100);
 }

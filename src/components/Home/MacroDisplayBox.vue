@@ -42,8 +42,8 @@ import AnimateCount from "@/base/AnimateCount.vue";
 const props = defineProps({
   label: String,
   color: String,
-  getter: {
-    type: String,
+  getters: {
+    type: Map<string, string[]>,
     required: true,
   },
   isActive: Boolean,
@@ -58,14 +58,16 @@ const route = useRoute();
 
 const homePath = "/tabs/home";
 
-const displayValue = ref(store.getters[props.getter].total);
+const getter = () => store.getters.dailyTotal(props.getters.get('total'));
+
+const displayValue = ref(getter());
 const rerenderKey = ref(true);
 
 onMounted(() => {
   rerenderKey.value = !rerenderKey.value;
 });
 
-const watchForInit = watch(() => store.getters[props.getter].total, (newValue) => {
+const watchForInit = watch(() => getter(), (newValue) => {
   watchForInit();
   rerenderKey.value = !rerenderKey.value;
   if (!route.path.includes(homePath)) return;
@@ -74,11 +76,11 @@ const watchForInit = watch(() => store.getters[props.getter].total, (newValue) =
 
 watch(() => route.path, (newPath) => {
   if (newPath.includes(homePath)) {
-    displayValue.value = store.getters[props.getter].total;
+    displayValue.value = getter();
   }
 });
 
-watch(() => store.getters[props.getter].total, (newValue) => {
+watch(() => getter(), (newValue) => {
   if (!route.path.includes(homePath)) return;
   displayValue.value = newValue;
 });

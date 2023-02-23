@@ -21,7 +21,7 @@
           :key="component"
           :label="component.label"
           :color="component.color"
-          :getter="component.getter"
+          :getters="component.getters"
           :unit="component.unit"
           :isActive="index === activeSlide"
         />
@@ -49,7 +49,7 @@
           <component 
             :is="component.component" 
             :color="component.color"
-            :getter="component.getter"
+            :getters="component.getters"
             :index="index"
             :isActive="index === activeSlide"
           />
@@ -71,11 +71,11 @@
           </div>
           <div 
             class="center" 
-            :style="`flex-direction: row; color: ${$store.getters[macroComponents[activeSlide].getter].percent > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
+            :style="`flex-direction: row; color: ${(Math.random() * 150) > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
           >
             <ion-icon :icon="warningOutline"></ion-icon>
             <span style="margin-left: 6px; font-weight: 300">
-              {{ $store.getters[macroComponents[activeSlide].getter].percent - 100 }}% over daily target
+              {{ '12' }}% over daily target
             </span>
           </div>
         </div>
@@ -88,7 +88,7 @@
             class="center stat-box"
           >
             <div style="font-size: 3rem; font-weight: 200">
-              {{ $store.getters[macroComponents[activeSlide].getter].percent }}%
+              {{ Math.floor(Math.random() * 140) }}%
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               of target
@@ -103,7 +103,7 @@
             class="center stat-box"
           >
             <div style="font-size: 3rem; font-weight: 200">
-              {{ $store.getters[macroComponents[activeSlide].getter].target.toLocaleString() }}{{ macroComponents[activeSlide].unit }}
+              {{ '2,000' }}{{ macroComponents[activeSlide].unit }}
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               daily target
