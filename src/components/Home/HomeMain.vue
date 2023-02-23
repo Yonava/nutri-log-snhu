@@ -50,7 +50,7 @@
             :is="component.component" 
             :color="component.color"
             :getters="component.getters"
-            :index="index"
+            :target="component.target"
             :isActive="index === activeSlide"
           />
         </ion-slide>

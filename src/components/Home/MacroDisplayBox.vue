@@ -140,5 +140,6 @@ const borderRadius = computed(() => {
 .number-text {
   font-weight: 600; 
   margin-top: 12px;
+  color: rgb(230, 230, 230);
 }
 </style>

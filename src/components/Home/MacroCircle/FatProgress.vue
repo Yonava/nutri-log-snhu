@@ -1,6 +1,6 @@
 <template>
   <CircularProgress 
-    :percent="currentData.percent"
+    :percent="percent"
     :color="color"
   />
   <div style="position: absolute; ">
@@ -58,8 +58,8 @@ import { useRedrawObserver } from "@/composables/RedrawObserver";
 const props = defineProps({
   isActive: Boolean,
   color: String,
-  index: {
-    type: Number,
+  target: {
+    type: String,
     required: true,
   },
   getters: {
@@ -74,8 +74,7 @@ const currentData = ref({
   total: 0,
   saturated: 0,
   trans: 0,
-  percent: 0,
 });
 
-useRedrawObserver(props.getters, currentData, isActive);
+const { percent} = useRedrawObserver(props.getters, currentData, isActive, props.target);
 </script>

@@ -120,10 +120,10 @@ const User: Module<UserState, any> = {
   },
   mutations: {
     swapMacroComponents(state, payload: { from: number, to: number }) {
-      const { from, to } = payload
-      const temp = state.macroDisplayComponents[from]
-      state.macroDisplayComponents[from] = state.macroDisplayComponents[to]
-      state.macroDisplayComponents[to] = temp
+      const { from, to } = payload;
+      const temp = state.macroDisplayComponents[from];
+      state.macroDisplayComponents[from] = state.macroDisplayComponents[to];
+      state.macroDisplayComponents[to] = temp;
     }
   },
   getters: {

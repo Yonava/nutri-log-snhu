@@ -1,6 +1,6 @@
 <template>
   <CircularProgress 
-    :percent="currentData.percent"
+    :percent="percent"
     :color="color"
   />
   <div 
@@ -30,8 +30,8 @@ const store = useStore();
 const props = defineProps({
   isActive: Boolean,
   color: String,
-  index: {
-    type: Number,
+  target: {
+    type: String,
     required: true,
   },
   getters: {
@@ -44,8 +44,7 @@ const { isActive } = toRefs(props);
 
 const currentData = ref({
   total: 0,
-  percent: 0,
 });
 
-useRedrawObserver(props.getters, currentData, isActive);
+const { percent } = useRedrawObserver(props.getters, currentData, isActive, props.target);
 </script>
