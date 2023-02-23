@@ -8,7 +8,7 @@
     style="position: absolute"
   >
     <div style="font-weight: 700; font-size: 4.75rem">
-      <AnimateCount 
+      <AnimateCount
         :number="currentData.total" 
       />
     </div>
@@ -34,8 +34,8 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  getter: {
-    type: String,
+  getters: {
+    type: Map<string, string[]>,
     required: true,
   },
 });
@@ -47,5 +47,5 @@ const currentData = ref({
   percent: 0,
 });
 
-useRedrawObserver(props.getter, currentData, isActive, props.index);
+useRedrawObserver(props.getters, currentData, isActive);
 </script>

@@ -2,7 +2,7 @@ interface GenericItem {
   _id: string;
   name: string;
   calories: number;
-  macro: Macronutrients;
+  macro: Macro;
 }
 
 export interface LoggedItem extends GenericItem {
@@ -31,7 +31,7 @@ export interface Allergens {
   fish: boolean;
 }
 
-export interface Macronutrients {
+export interface Macro {
   carbohydrates: {
     total: number;
     added_sugars: number;

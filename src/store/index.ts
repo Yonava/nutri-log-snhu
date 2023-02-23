@@ -1,7 +1,6 @@
 import { createStore } from 'vuex'
 import { State } from '@/types/Vuex'
 import { Storage, Drivers } from "@ionic/storage"
-import { MacronutrientCalibrations } from '@/types/User'
 import Log from './modules/Log'
 import Auth from './modules/Auth'
 import Toast from './modules/Toast'
@@ -58,10 +57,6 @@ export default createStore<State>({
     toggleCaloriesHidden({ commit }) {
       // HTTP request to update user's caloriesHidden setting
       commit('toggleCaloriesHidden')
-    },
-    updateMacronutrientCalibrations({ commit }, calibrations: MacronutrientCalibrations) {
-      // HTTP request to update user's macronutrient calibrations
-      commit('updateMacronutrientCalibrations', calibrations)
     },
     async configClientStore({ commit }) {
       const clientStore = new Storage({

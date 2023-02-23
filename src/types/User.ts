@@ -1,7 +1,7 @@
-import { UnloggedItem, LoggedItem } from './Log';
+import { UnloggedItem, LoggedItem, Macro } from './Log';
 
 export interface UserDetail extends User {
-  macronutrientCalibrations: MacronutrientCalibrations;
+  dailyTargets: DailyTargets;
   customItems: UnloggedItem[];
   log: LoggedItem[];
 }
@@ -13,27 +13,16 @@ export interface User {
   email: string;
 }
 
-export interface MacronutrientCalibrations {
-  targetCalories: number;
-  targetCarbs: number;
-  targetSugar: number;
-  targetAddedSugar: number;
-  targetFiber: number;
-  targetFat: number;
-  targetSaturatedFat: number;
-  targetTransFat: number;
-  targetProtein: number;
-  targetSodium: number;
-  targetCholesterol: number;
-  targetPotassium: number;
-  targetCalcium: number;
-  targetIron: number;
-}
-
 export interface MacroDisplayComponent {
   component: string;
-  getter: string;
+  getters: Map<string, string[]>;
   label: string;
   color: string;
-  unit?: string;
+  target: string;
+  unit?: "g" | "mg";
+}
+
+export interface DailyTargets {
+  calories: number,
+  macro: Macro
 }

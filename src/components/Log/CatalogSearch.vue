@@ -1,23 +1,18 @@
 <template>
   <div v-if="searchResults.length > 0">
-    <div 
-      v-bind="containerProps" 
-      style="height: 100vh;"
-    >
-      <div v-bind="wrapperProps">
-        <AddItem 
-          v-for="{ data } in list" 
-          :key="data._id"
-          :item="data" 
-        />
-      </div> 
-    </div>
+    <TransitionGroup name="list">
+      <AddItem 
+        v-for="item in searchResults" 
+        :key="item"
+        :item="item" 
+      />
+    </TransitionGroup>
   </div>
   <div 
     v-else-if="searchQuery.length === 0"
     class="center"
   >
-    <h2 class="center">
+    <h2>
       Search for an item
     </h2>
     <ion-icon 
@@ -25,35 +20,36 @@
       style="font-size: 100px;"
     ></ion-icon>
   </div>
-  <div v-else>
-    <h4 class="center">
+  <div 
+    v-else
+    class="center"
+  >
+    <h1 style="font-size: 2rem; font-weight: 200">
       No items found
-    </h4>
+    </h1>
   </div>
 </template>
 
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue';
 import { search } from 'ionicons/icons';
-import { defineProps, toRef } from 'vue';
+import { defineProps, computed, ref, onMounted } from 'vue';
 import { UnloggedItem } from '@/types/Log';
-import { useVirtualList } from '@vueuse/core';
 import AddItem from '@/components/Log/AddItem.vue';
 
 const props = defineProps<{
   searchResults: UnloggedItem[];
   searchQuery: string;
 }>();
-
-const searchResults = toRef(props, 'searchResults');
-
-const addItemHeightPX = 49;
-const { list, containerProps, wrapperProps } = useVirtualList(searchResults, {
-  itemHeight: addItemHeightPX,
-});
 </script>
 
 <style scoped>
+.bottom-div {
+    height: 20px;
+    position: absolute;
+    bottom: -10px;
+}
+
 .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {

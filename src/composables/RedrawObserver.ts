@@ -4,38 +4,48 @@ import { useRoute } from "vue-router";
 import type { Ref } from "vue";
 
 export function useRedrawObserver(
-  getter: string, 
+  getters: Map<string, string[]>,
   currentData: Ref, 
-  isActive: Ref<boolean>,
-  index: number
+  isActive: Ref<boolean>
 ) {
   const store = useStore();
   const route = useRoute();
 
   const homePath = "/tabs/home";
 
+  function getNewData() {
+    getters.forEach((value, key) => {
+      currentData.value[key] = store.getters.dailyTotal(value);
+    });
+  }
+
+  getters.forEach((value, key) => {
+    watch(() => store.getters.dailyTotal(value), (newVal) => {
+      if (route.path.includes(homePath) && isActive.value) {
+        currentData.value[key] = newVal;
+      }
+    });
+  });
+
   watch(() => route.path, (newPath) => {
     if (newPath.includes(homePath) && isActive.value) {
       setTimeout(() => {
-        currentData.value = store.getters[getter];
+        getNewData();
       }, 100);
     }
   });
 
   watch(isActive, (newVal) => {
     if (newVal) {
-      currentData.value = store.getters[getter];
+      setTimeout(() => {
+        getNewData();
+      }, 100);
     }
   });
 
-  if (index === 0) {
-    setTimeout(() => {
-      currentData.value = store.getters[getter];
-    }, 100);
-    const watchForInit = watch(() => store.getters[getter].total, () => {
-      watchForInit();
-      if (!route.path.includes(homePath)) return;
-      currentData.value = store.getters[getter];
-    });
-  }
+  setTimeout(() => {
+    if (route.path.includes(homePath) && isActive.value) {
+      getNewData();
+    }
+  }, 100);
 }

@@ -21,6 +21,7 @@
           <div>
             <ion-chip 
               v-for="item in quickLog"
+              @click="addItem(item)"
               :key="item"
               :outline="true"
               style="margin-left: 0; margin-right: 5px; margin-bottom: 5px;"
@@ -39,7 +40,11 @@ import { IonButton, IonModal, IonContent, IonChip } from "@ionic/vue";
 import { star } from "ionicons/icons";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { UnloggedItem } from "@/types/Log";
 
 const store = useStore();
 const quickLog = computed(() => store.getters.quickLog);
+const addItem = (item: UnloggedItem) => {
+  store.dispatch('postLoggedItem', item);
+};
 </script>

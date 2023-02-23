@@ -1,5 +1,5 @@
 import { UnloggedItem, LoggedItem } from './Log'
-import { User, MacronutrientCalibrations, MacroDisplayComponent } from './User'
+import { User, MacroDisplayComponent, DailyTargets } from './User'
 
 export interface State {
   caloriesHidden: boolean,
@@ -23,10 +23,8 @@ export interface AuthState {
   token: string | null
 }
 
-export interface ToastState {
-
-}
+export interface ToastState {}
 
 export interface NutrientState {
-  macronutrientCalibrations: MacronutrientCalibrations
+  dailyTargets: DailyTargets
 }

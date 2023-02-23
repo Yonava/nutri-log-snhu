@@ -8,7 +8,11 @@
         ></ion-back-button>
       </template>
     </default-header>
-    <ion-content :fullscreen="true">
+    <ion-content 
+      :fullscreen="true" 
+      :scroll-events="true"
+      @ionScroll="scroll($event)"
+    >
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">
@@ -47,7 +51,7 @@
       <div v-else>
         <CatalogSearch 
           :searchQuery="searchQuery"
-          :searchResults="searchResults"
+          :searchResults="searchResults.slice(0, displayNumber)"
         />
       </div>
     </ion-content>
@@ -71,6 +75,7 @@ import {
   computed, 
   ref,
   onMounted,
+  watch,
 } from 'vue'
 import { useStore } from 'vuex'
 import { UnloggedItem } from '@/types/Log'
@@ -83,6 +88,30 @@ const store = useStore();
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
+
+const numResults = ref(18);
+
+const displayNumber = computed(() => {
+  if (searchResults.value.length > numResults.value) {
+    return numResults.value;
+  } else {
+    return searchResults.value.length;
+  }
+});
+
+watch(searchQuery, () => {
+  numResults.value = 18;
+  refreshY.value = 170;
+});
+
+const refreshY = ref(170);
+
+function scroll(e: any) {
+  if (refreshY.value < e.detail.currentY) {
+    numResults.value += 5;
+    refreshY.value = e.detail.currentY + 200;
+  }
+}
 
 onMounted(() => {
   if (store.getters.catalog.length > 0) {

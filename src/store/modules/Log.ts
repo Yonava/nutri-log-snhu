@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
 import { LoggedItem, UnloggedItem } from '@/types/Log';
+import { getPropertyFromNestedObject } from '@/utils/GetNested';
 
 import axios from 'axios';
 import mongoose from 'mongoose';
@@ -15,7 +16,7 @@ const Log: Module<LogState, any> = {
     log: state => state.log,
     customItems: state => state.customItems,
     selectedLogItem: state => state.selectedLogItem,
-    todaysLog: state => state.log.filter(item => {
+    loggedToday: state => state.log.filter(item => {
       const date = new Date(item.dateAdded)
       const today = new Date()
       return (
@@ -24,12 +25,49 @@ const Log: Module<LogState, any> = {
         date.getFullYear() === today.getFullYear()
       )
     }),
-    quickLog: state => {
-      return state.log;
+    // nutrient may be nested, e.g. 'macro.carbohydrates.total'
+    // input: ['macro', 'carbohydrates', 'total']
+    // output: percentages of how tall each hour's bar should be 
+    nutrientByHour: (state, getters) => (nutrient: (keyof LoggedItem)[]) => {
+      const data: number[] = [];
+      let totalNutrient = 0;
+      for (let i = 0; i < 24; i++) data.push(0);
+      getters.loggedToday.forEach((item: LoggedItem) => {
+        const hour = new Date(item.dateAdded).getHours();
+        const value = getPropertyFromNestedObject(item, nutrient);
+        if (typeof value !== 'number') {
+          console.error('nutrientByHour: value is not a number', value, nutrient)
+          return;
+        }
+        data[hour] += value;
+        totalNutrient += value;
+      });
+      // if user has consumed 20%+ of a given nutrient in a given hour, make bar full height
+      const twentyPercent = totalNutrient / 5;
+      data.forEach((value, index) => {
+        if (value > twentyPercent) data[index] = 100;
+        else {
+          data[index] = Math.round((value / twentyPercent) * 100);
+        }
+      });
+      return data;
     },
+    dailyTotal:
+      (state, getters) => 
+      (nutrientPath: (keyof LoggedItem)[]) => {
+        return getters.loggedToday.reduce((total: number, item: LoggedItem) => {
+        const value = getPropertyFromNestedObject(item, nutrientPath);
+        if (typeof value !== 'number') {
+          console.error('dailyTotal: value is not a number', value, nutrientPath);
+          return;
+        }
+        return total + value;
+      }, 0);
+    },
+    quickLog: state => state.log,
   },
   mutations: {
-    setSelectedLogItem(state, item: LoggedItem | null) {
+    setSelectedLogItem(state, item: LoggedItem) {
       state.selectedLogItem = item
     },
     addLogItem(state, loggedItem: LoggedItem) {

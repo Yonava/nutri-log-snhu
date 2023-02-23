@@ -23,7 +23,7 @@
         </div>
         <div style="font-weight: 700; font-size: 3rem">
           <AnimateCount 
-            :number="currentData.totalAdded" 
+            :number="currentData.added" 
             unit="g"
           />
         </div>
@@ -45,8 +45,8 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  getter: {
-    type: String,
+  getters: {
+    type: Map<string, string[]>,
     required: true,
   },
 });
@@ -55,9 +55,9 @@ const { isActive } = toRefs(props);
 
 const currentData = ref({
   total: 0,
-  totalAdded: 0,
+  added: 0,
   percent: 0,
 });
 
-useRedrawObserver(props.getter, currentData, isActive, props.index);
+useRedrawObserver(props.getters, currentData, isActive);
 </script>

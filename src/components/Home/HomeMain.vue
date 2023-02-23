@@ -21,7 +21,7 @@
           :key="component"
           :label="component.label"
           :color="component.color"
-          :getter="component.getter"
+          :getters="component.getters"
           :unit="component.unit"
           :isActive="index === activeSlide"
         />
@@ -49,15 +49,21 @@
           <component 
             :is="component.component" 
             :color="component.color"
-            :getter="component.getter"
+            :getters="component.getters"
             :index="index"
             :isActive="index === activeSlide"
           />
         </ion-slide>
       </ion-slides>
-      <div style="position: relative; transform: translateY(-20px)" class="center ion-padding">
+      <div 
+        style="position: relative; transform: translateY(-20px)" 
+        class="center ion-padding"
+      >
         <div style="width: 98.5%; display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <div class="center" style="flex-direction: row;">
+          <div 
+            class="center" 
+            style="flex-direction: row;"
+          >
             <ion-icon :icon="statsChart"></ion-icon>
             <span style="margin-left: 6px; font-weight: 300">
               stats at a glance
@@ -65,11 +71,11 @@
           </div>
           <div 
             class="center" 
-            :style="`flex-direction: row; color: ${tempNum > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
+            :style="`flex-direction: row; color: ${(Math.random() * 150) > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
           >
             <ion-icon :icon="warningOutline"></ion-icon>
             <span style="margin-left: 6px; font-weight: 300">
-              {{ tempNum - 100 }}% over daily target
+              {{ '12' }}% over daily target
             </span>
           </div>
         </div>
@@ -77,18 +83,27 @@
           class="center ion-padding"
           style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px 10px 0 0; position: relative; width: 100%;"
         >
-          <div style="margin-bottom: 10px" class="center stat-box">
+          <div 
+            style="margin-bottom: 10px" 
+            class="center stat-box"
+          >
             <div style="font-size: 3rem; font-weight: 200">
-              {{ tempNum }}%
+              {{ Math.floor(Math.random() * 140) }}%
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               of target
             </div>
           </div>
-          <div class="divider" style="height: 80px; width: 1px; background-color: gray"></div>
-          <div style="margin-bottom: 10px" class="center stat-box">
+          <div 
+            class="divider" 
+            style="height: 80px; width: 1px; background-color: gray"
+          ></div>
+          <div 
+            style="margin-bottom: 10px" 
+            class="center stat-box"
+          >
             <div style="font-size: 3rem; font-weight: 200">
-              {{ Math.floor(Math.random() * 1000) }}
+              {{ '2,000' }}{{ macroComponents[activeSlide].unit }}
             </div>
             <div style="font-size: 1.25rem; font-weight: 600">
               daily target
@@ -99,7 +114,10 @@
           class="center" 
           style="background-color: var(--ion-color-step-200); height: 100px; width: 100%; border-radius: 0 0 10px 10px;"
         > 
-          <div class="center" style="height: 25%; flex-direction: row; justify-content: space-around; width: 98%">
+          <div 
+            class="center" 
+            style="height: 25%; flex-direction: row; justify-content: space-around; width: 98%"
+          >
             <div 
               v-for="i in 9" 
               :key="i" 
@@ -108,9 +126,20 @@
               {{ (i - 1) * 3 }}
             </div>
           </div>
-          <div style="height: 75%; width: 100%" class="center">
-            <div style="height: 100%; width: 92%; flex-direction: row; align-items: end;" class="bar-container center">
-              <div v-for="i in 24" :key="i" :style="`width: 10%; background: var(--ion-color-primary); height: ${Math.random() * 100}%; margin: 0 2.5px; transition: 500ms`" class="bar"></div>
+          <div 
+            style="height: 75%; width: 100%" 
+            class="center"
+          >
+            <div 
+              style="height: 100%; width: 92%; flex-direction: row; align-items: flex-end;" 
+              class="bar-container center"
+            >
+              <div 
+                v-for="i in $store.getters.nutrientByHour(['calories'])" 
+                :key="i.id"
+                :style="`width: 10%; background: ${macroComponents[activeSlide].color}; height: ${i}%; margin: 0 2.5px; transition: 500ms`" 
+                class="bar"
+              ></div>
             </div>
           </div>
         </div>
@@ -154,7 +183,6 @@ import QuickLog from "./QuickLog.vue";
 
 import {
   statsChart,
-  terminalOutline,
   warningOutline,
 } from "ionicons/icons"
 
@@ -193,8 +221,6 @@ export default defineComponent({
     const macroComponents = ref(store.getters.macroComponents.slice(0, 8));
     const rerender = ref(true);
 
-    const tempNum = ref(0);
-
     watch(store.getters.macroComponents, (newVal) => {
       macroComponents.value = newVal.slice(0, 8);
       rerender.value = false;
@@ -204,7 +230,6 @@ export default defineComponent({
     });
 
     watch(slideChangeDetector, async () => {
-      tempNum.value = Math.floor(Math.random() * 150);
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
@@ -222,8 +247,7 @@ export default defineComponent({
       rerender,
       
       statsChart,
-      warningOutline,
-      tempNum
+      warningOutline
     };
   },
 });
