@@ -5,20 +5,12 @@
         <ion-title>Adjust Daily Targets</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>Here you will adjust your calories,carbs,etc...</ion-content>
+    <ion-content>
+      Here you will adjust your calories,carbs,etc...
+    </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { IonContent, IonHeader, IonToolbar, IonTitle } from "@ionic/vue";
-
-export default defineComponent({
-  components: {
-    IonContent,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-  },
-});
 </script>

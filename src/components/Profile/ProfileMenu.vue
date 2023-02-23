@@ -7,18 +7,23 @@
     <ion-content>
       <div class="main-container">
         <div class="headline-content center">
-          <h1 class="header-text">Hi, {{ firstName }}</h1>
-          <div style="background: orange; width: 120px; height: 120px; border-radius: 50%"></div>
+          <h1 class="header-text">
+            Hi, {{ firstName }}
+          </h1>
+          <div class="pfp"></div>
         </div>
         <div class="action-content">
           <div>
             <div 
               v-for="button in buttons"
-              :key="button.text"
+              :key="button"
               class="center"
             >
-              <ion-button class="nav-button">
-                {{ button.text }}
+              <ion-button 
+                class="nav-button"
+                @click="button.action"
+              >
+                {{ button.text() }}
               </ion-button>
             </div>
           </div>
@@ -36,13 +41,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import {
   IonContent,
   IonButton,
   IonMenu
 } from "@ionic/vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -52,13 +58,30 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
+
+    // const caloriesHidden = ref(store.getters.caloriesHidden);
+
     const firstName = computed(() => {
       return store.getters.isLoggedIn ? store.getters.user.firstName : "";
     });
+
     const buttons = [
-      { text: "Adjust Daily Targets" },
-      { text: "Hide Calories" },
-      { text: "Terms of Use" }
+      {  
+        text: () => "Adjust Daily Targets",
+        action: () => {
+          router.push({ name: "AdjustTargets" });
+        }
+      },
+      { 
+        text: () => `${store.getters.caloriesHidden ? "Show" : "Hide"} Calories`,
+        action: () => {
+          store.dispatch("toggleCaloriesHidden");
+        }
+      },
+      { 
+        text: () => "Change Password",
+      }
     ];
 
     return {
@@ -71,6 +94,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.pfp {
+  background: orange; 
+  width: 120px; 
+  height: 120px; 
+  border-radius: 50%;
+}
+
 .nav-button {
   width: 90%;
   margin: 5px 0px 5px 0px;

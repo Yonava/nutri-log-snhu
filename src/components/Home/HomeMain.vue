@@ -59,9 +59,7 @@
         style="position: relative; transform: translateY(-20px)" 
         class="center ion-padding"
       >
-        <StatsPanel
-          :selectedComponent="macroComponents[activeSlide]"
-        />
+        <StatsPanel :selectedComponent="macroComponents[activeSlide]" />
       </div>
       <QuickLog />
     </div>
