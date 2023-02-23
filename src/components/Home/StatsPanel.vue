@@ -1,63 +1,48 @@
 <template>
-  <div style="width: 98.5%; display: flex; justify-content: space-between; margin-bottom: 4px;">
+  <div class="top-parent">
     <div 
       class="center" 
       style="flex-direction: row;"
     >
       <ion-icon :icon="statsChart"></ion-icon>
-      <span style="margin-left: 6px; font-weight: 300">
+      <span class="top-text">
         stats at a glance
       </span>
     </div>
     <div 
       class="center" 
-      :style="`flex-direction: row; color: ${(Math.random() * 150) > 100 ? 'var(--ion-color-danger)' : 'transparent'};`"
+      :style="{
+        color: targetInfo.percent > 100 ? 'var(--ion-color-danger)' : 'transparent',
+        flexDirection: 'row',
+      }"
     >
       <ion-icon :icon="warningOutline"></ion-icon>
-      <span style="margin-left: 6px; font-weight: 300">
-        {{ '12' }}% over daily target
+      <span class="top-text">
+        {{ targetInfo.percent - 100 }}% over daily target
       </span>
     </div>
   </div>
-  <div 
-    class="center ion-padding"
-    style="flex-direction: row; justify-content: space-around; background-color: var(--ion-color-step-150); border-radius: 10px 10px 0 0; position: relative; width: 100%;"
-  >
-    <div 
-      style="margin-bottom: 10px" 
-      class="center stat-box"
-    >
-      <div style="font-size: 3rem; font-weight: 200">
-        {{ Math.floor(Math.random() * 140) }}%
+  <div class="target-display-parent center ion-padding">
+    <div class="center stat-box">
+      <div class="target-display">
+        {{ targetInfo.percent }}%
       </div>
-      <div style="font-size: 1.25rem; font-weight: 600">
+      <div class="target-label">
         of target
       </div>
     </div>
-    <div 
-      class="divider" 
-      style="height: 80px; width: 1px; background-color: gray"
-    ></div>
-    <div 
-      style="margin-bottom: 10px" 
-      class="center stat-box"
-    >
-      <div style="font-size: 3rem; font-weight: 200">
-        {{ '2,000' }}{{ selectedComponent.unit }}
+    <div class="divider"></div>
+    <div class="center stat-box">
+      <div class="target-display">
+        {{ targetInfo.value.toLocaleString() }}{{ selectedComponent.unit }}
       </div>
-      <div style="font-size: 1.25rem; font-weight: 600">
+      <div class="target-label">
         daily target
       </div>
     </div>
   </div>
-  <div 
-    class="center" 
-    style="background-color: var(--ion-color-step-200); height: 100px; width: 100%; border-radius: 0 0 10px 10px;"
-  > 
-    <div 
-      class="center" 
-      style="height: 25%; flex-direction: row; justify-content: space-around; width: 98%"
-    >
+  <div class="graph-parent center"> 
+    <div class="time-label-container center">
       <div 
         v-for="i in 9" 
         :key="i" 
@@ -66,18 +51,15 @@
         {{ (i - 1) * 3 }}
       </div>
     </div>
-    <div 
-      style="height: 75%; width: 100%" 
-      class="center"
-    >
-      <div 
-        style="height: 100%; width: 92%; flex-direction: row; align-items: flex-end;" 
-        class="bar-container center"
-      >
+    <div class="chart-container center">
+      <div class="bar-container center">
         <div 
-          v-for="i in $store.getters.nutrientByHour(['calories'])" 
+          v-for="i in nutrientByHour" 
           :key="i.id"
-          :style="`width: 10%; background: ${selectedComponent.color}; height: ${i}%; margin: 0 2.5px; transition: 500ms`" 
+          :style="{
+            background: selectedComponent.color,
+            height: `${i}%`,
+          }"
           class="bar"
         ></div>
       </div>
@@ -93,9 +75,97 @@ import {
 import { IonIcon } from "@ionic/vue"
 import { defineProps } from "vue"
 import { MacroDisplayComponent } from "@/types/User"
+import { computed } from "vue"
+import { useStore } from "vuex"
+
+const store = useStore();
 
 const props = defineProps<{
-  selectedComponent: MacroDisplayComponent
+  selectedComponent: MacroDisplayComponent;
 }>()
 
+const targetInfo = computed(() => {
+  const comp = props.selectedComponent;
+  return store.getters.dailyTarget(comp.getters.get(comp.target));
+})
+
+const nutrientByHour = computed(() => {
+  const comp = props.selectedComponent;
+  return store.getters.nutrientByHour(comp.getters.get(comp.target));
+})
 </script>
+
+<style scoped>
+.bar-container{
+  height: 100%; 
+  width: 92%; 
+  flex-direction: row; 
+  align-items: flex-end;
+}
+
+.chart-container {
+  height: 75%; 
+  width: 100%; 
+}
+
+.bar {
+  width: 10%;
+  margin: 0 2.5px;
+  transition: 500ms ease-in-out;
+}
+
+.time-label-container {
+  height: 25%; 
+  flex-direction: row; 
+  justify-content: space-around; 
+  width: 98%;
+}
+
+.graph-parent {
+  background-color: var(--ion-color-step-200); 
+  height: 100px; 
+  width: 100%; 
+  border-radius: 0 0 10px 10px;
+}
+
+.target-label {
+  font-size: 1.25rem; 
+  font-weight: 600;
+}
+
+.target-display {
+  font-size: 3rem; 
+  font-weight: 200;
+}
+
+.divider {
+  height: 80px; 
+  width: 1px; 
+  background-color: gray;
+}
+
+.stat-box {
+  margin-bottom: 10px;
+}
+
+.target-display-parent {
+  flex-direction: row; 
+  justify-content: space-around; 
+  background-color: var(--ion-color-step-150); 
+  border-radius: 10px 10px 0 0; 
+  position: relative; 
+  width: 100%;
+}
+
+.top-text {
+  margin-left: 6px;
+  font-weight: 300;
+}
+
+.top-parent {
+  width: 98.5%; 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 4px;
+}
+</style>

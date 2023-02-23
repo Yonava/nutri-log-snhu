@@ -30,8 +30,19 @@ const Nutrients: Module<NutrientState, any> = {
   },
   getters: {
     allDailyTargets: state => state.dailyTargets,
-    dailyTarget: state => (targetPath: (keyof DailyTargets)[]) => {
-      return getPropertyFromNestedObject(state.dailyTargets, targetPath)
+    dailyTarget: 
+      (state, getters, rootState, rootGetters) => 
+      (targetPath: (keyof DailyTargets)[]) => {
+      const value = getPropertyFromNestedObject(state.dailyTargets, targetPath);
+      if (typeof value !== 'number') {
+        throw new Error(`Target path ${targetPath.join('.')} expected number, got ${value}`);
+      }
+      // for divide by zero edge case
+      const percent = value !== 0 ? Math.round(rootGetters.dailyTotal(targetPath) / value * 100) : 100;
+      return {
+        value,
+        percent,
+      }
     }
   },
   mutations: {
