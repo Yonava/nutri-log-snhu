@@ -85,10 +85,10 @@ export default defineComponent({
     // Listen for Auth events
     const AuthListener = (data) => {
       switch (data.payload.event) {
-        case "signIn":
-          console.log("signed in")
+        case 'signIn':
+          console.log("signed in");
           break;
-        case "signOut":
+        case 'signOut':
           // Do sign out stuff
           break;
       }
@@ -99,7 +99,8 @@ export default defineComponent({
   methods: {
     async signIn() {
       try {
-        await Auth.signIn(this.email, this.password);
+        const user = await Auth.signIn(this.email, this.password);
+        console.log(`User: ${user.username}`);
         this.$router.push({ path: '/' });
       } catch (error) {
         console.log(error);
