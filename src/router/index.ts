@@ -61,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'ToS',
         path: 'tos',
         component: () => import('@/views/TermsOfService.vue')
+      },
+      {
+        name: 'NotifPanel',
+        path: 'notifs',
+        component: () => import('@/views/NotifPanel.vue')
       }
     ]
   },
