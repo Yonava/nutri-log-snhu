@@ -11,7 +11,7 @@
         </ion-button>
       </ion-buttons>
       <ion-buttons slot="primary">
-        <ion-button>
+        <ion-button @click="openNotifs">
           <ion-icon 
             slot="icon-only" 
             :icon="notifications"
@@ -39,8 +39,15 @@ import {
   notifications 
 } from "ionicons/icons";
 import { menuController } from "@ionic/vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const openMenu = async () => {
   await menuController.open("profile-menu");
 };
+
+const openNotifs = () => {
+  router.push({ name: "NotifPanel" })
+}
 </script>
