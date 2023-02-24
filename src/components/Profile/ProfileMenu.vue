@@ -61,8 +61,6 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
-    const menu = ref(null)
-
     const firstName = computed(() => {
       return store.getters.isLoggedIn ? store.getters.user.firstName : "";
     });

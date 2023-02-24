@@ -14,6 +14,7 @@ export interface User {
 }
 
 export interface MacroDisplayComponent {
+  title: string;
   component: string;
   getters: Map<string, string[]>;
   label: string;

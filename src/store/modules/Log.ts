@@ -28,7 +28,9 @@ const Log: Module<LogState, any> = {
     // nutrient may be nested, e.g. 'macro.carbohydrates.total'
     // input: ['macro', 'carbohydrates', 'total']
     // output: percentages of how tall each hour's bar should be 
-    nutrientByHour: (state, getters, rootState, rootGetters) => (nutrient: (keyof LoggedItem)[]) => {
+    nutrientByHour: 
+      (state, getters, rootState, rootGetters) => 
+      (nutrient: (keyof LoggedItem)[]) => {
       const data = new Array(24).fill(0);
       getters.loggedToday.forEach((item: LoggedItem) => {
         const hour = new Date(item.dateAdded).getHours();

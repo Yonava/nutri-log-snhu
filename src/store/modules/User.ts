@@ -5,6 +5,7 @@ const User: Module<UserState, any> = {
   state: {
     macroDisplayComponents: [
       {
+        title: "Calories",
         component: "CalorieProgress",
         label: "cals",
         color: "var(--ion-color-primary)",
@@ -14,6 +15,7 @@ const User: Module<UserState, any> = {
         target: "total",
       },
       {
+        title: "Fat",
         component: "FatProgress",
         label: "fats",
         color: "var(--ion-color-secondary)",
@@ -26,6 +28,7 @@ const User: Module<UserState, any> = {
         unit: "g"
       },
       {
+        title: "Protein",
         component: "ProteinProgress",
         label: "protein",
         color: "#40E0D0",
@@ -36,6 +39,7 @@ const User: Module<UserState, any> = {
         unit: "g",
       },
       {
+        title: "Carbohydrates",
         component: "CarbProgress",
         label: "carbs",
         color: "#F97D38",
@@ -46,6 +50,7 @@ const User: Module<UserState, any> = {
         unit: "g",
       },
       {
+        title: "Sugars",
         component: "SugarProgress",
         label: "sugars",
         color: "var(--ion-color-warning)",
@@ -57,6 +62,7 @@ const User: Module<UserState, any> = {
         unit: "g",
       },
       {
+        title: "Calcium",
         component: "CalciumProgress",
         label: "calcium",
         color: "var(--ion-color-success)",
@@ -67,6 +73,7 @@ const User: Module<UserState, any> = {
         unit: "mg",
       },
       {
+        title: "Iron",
         component: "IronProgress",
         label: "iron",
         color: "var(--ion-color-danger)",
@@ -77,6 +84,7 @@ const User: Module<UserState, any> = {
         unit: "mg",
       },
       {
+        title: "Fiber",
         component: "FiberProgress",
         label: "fiber",
         color: "#317773",
@@ -87,6 +95,7 @@ const User: Module<UserState, any> = {
         unit: "g",
       },
       {
+        title: "Sodium",
         component: "SodiumProgress",
         label: "sodium",
         color: "#EEA47FFF",
@@ -97,6 +106,7 @@ const User: Module<UserState, any> = {
         unit: "mg",
       },
       {
+        title: "Potassium",
         component: "PotasProgress",
         label: "potas",
         color: "#8A2BE2",
@@ -107,6 +117,7 @@ const User: Module<UserState, any> = {
         unit: "mg",
       },
       {
+        title: "Cholesterol",
         component: "CholProgress",
         label: "chol",
         color: "pink",
