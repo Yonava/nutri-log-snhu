@@ -14,6 +14,9 @@
             <span></span>
             <label>Password</label>
           </div>
+          <div class="pass-reset">Forgot Password?</div>
+          <input type="submit" value="Login" @click="$router.push({ path: '/' })">
+          <div class="register">Don't have an account? <router-link to="/register">Register</router-link></div>
         </div>
       </div>
       <!-- <Authenticator>
@@ -112,24 +115,27 @@ export default defineComponent({
 
 <style scoped>
 
+/* Login box */
 .login-box {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -80%);
+  width: 350px;
   background: white;
   border-radius: 10px;
 }
 
+/* Login heading */
 .login-box h1 {
   color: black;
-  font-size: 30px;
-  font-weight: 600;
+  font-size: 40px;
   text-align: center;
   padding: 0 0 20px 0;
   border-bottom: 1px solid silver;
 }
 
+/* Adjust the contents of the login box */
 .form {
   padding: 0 40px;
   box-sizing: border-box;
@@ -164,6 +170,7 @@ export default defineComponent({
   transition: 0.25s;
 }
 
+/* input field select */
 .text-field span::before {
   content: '';
   position: absolute;
@@ -185,5 +192,37 @@ export default defineComponent({
   width: 100%;
 }
 
+/* forgot password */
+.pass-reset {
+  color: #adadad;
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+/* login button */
+input[type="submit"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid;
+  background: #2691d9;
+  border-radius: 20px;
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+input[type="submit"]:hover {
+  border-color: #2691d9;
+  transition: 0.25s;
+}
+
+/* sign up */
+.register {
+  color: #696969;
+  font-size: 14px;
+  text-align: center;
+  margin: 0 0 30px 0;
+}
 
 </style>
