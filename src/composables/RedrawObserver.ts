@@ -30,6 +30,12 @@ export function useRedrawObserver(
     });
   });
 
+  watch(() => store.getters.dailyTarget(getters.get(target)).percent, (newVal) => {
+    if (route.path.includes(homePath) && isActive.value) {
+      percent.value = newVal;
+    }
+  });
+
   watch(() => route.path, (newPath) => {
     if (newPath.includes(homePath) && isActive.value) {
       setTimeout(() => {

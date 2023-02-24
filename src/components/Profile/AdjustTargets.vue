@@ -2,7 +2,10 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-back-button slot="start" default-href="/" />
+        <ion-back-button 
+          slot="start" 
+          default-href="/" 
+        />
         <ion-title>
           Adjust Daily Targets
         </ion-title>
@@ -16,7 +19,6 @@
           </ion-title>
         </ion-toolbar>
       </ion-header>
-      <!-- {{ targets }} -->
       <div class="center">
         <div
           v-for="item in targets" 
@@ -35,6 +37,7 @@
           <div style="width: 90%">
             <ion-range 
               v-model="item.value"
+              @ionChange="updateTempDailyTargets(item.path, item.value)"
               :min="item.range.min"
               :max="item.range.max"
               :style="{ 
@@ -45,6 +48,7 @@
           </div>
         </div>
       </div>
+      {{ tempDailyTargets }}
     </ion-content>
   </ion-page>
 </template>
@@ -60,24 +64,51 @@ import {
   IonRange
 } from "@ionic/vue";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 import { MacroDisplayComponent } from "@/types/User";
 
+type Target = {
+  title: string;
+  value: number;
+  unit: string;
+  color: string;
+  path: string[];
+  range: {
+    min: number;
+    max: number;
+  }
+}
+
 const store = useStore();
-const targetsAtStart = structuredClone(store.getters.allDailyTargets);
-const targets = ref(store.getters.macroComponents.map((component: MacroDisplayComponent) => {
-  const path = component.getters.get('total')
+const tempDailyTargets = ref(structuredClone(store.getters.allDailyTargets));
+const targets = ref<Target[]>(store.getters.macroComponents.map((component: MacroDisplayComponent) => {
+  const path = component.getters.get(component.target)
   return {
     title: component.title,
     value: store.getters.dailyTarget(path).value,
     unit: component.unit,
     color: component.color,
+    path,
     range: {
       min: store.getters.dailyTargetRange(path).min,
       max: store.getters.dailyTargetRange(path).max
     }
   }
 }));
+
+function updateTempDailyTargets(path: string[], value: number) {
+  let current = tempDailyTargets.value;
+  for (let i = 0; i < path.length - 1; i++) {
+    current = current[path[i]];
+  }
+  current[path[path.length - 1]] = value;
+}
+
+onUnmounted(async () => {
+  if (JSON.stringify(tempDailyTargets.value) !== JSON.stringify(store.getters.allDailyTargets)) {
+    await store.dispatch("updateDailyTargets", tempDailyTargets.value);
+  }
+});
 </script>
 
 <style scoped>

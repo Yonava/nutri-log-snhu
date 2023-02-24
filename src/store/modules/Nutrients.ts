@@ -113,7 +113,6 @@ const Nutrients: Module<NutrientState, any> = {
     dailyTargetRange:
       (state, getters, rootState, rootGetters) =>
       (targetPath: (keyof DailyTargets)[]) => {
-      console.log(targetPath)
       const { min, max } = getPropertyFromNestedObject(state.dailyTargetsRange, targetPath) as { min: number, max: number };
       if (typeof min !== 'number' || typeof max !== 'number') {
         throw new Error(`Target path ${targetPath.join('.')} expected number`);
