@@ -16,7 +16,7 @@
           </div>
           <div class="pass-reset">Forgot Password?</div>
           <input type="submit" value="Login" @click="$router.push({ path: '/' })">
-          <div class="register">Don't have an account? <router-link to="/register">Register</router-link></div>
+          <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
       </div>
       <!-- <Authenticator>
@@ -197,6 +197,11 @@ export default defineComponent({
   color: #adadad;
   text-align: center;
   margin: 0 0 20px 0;
+  cursor: pointer;
+}
+
+.pass-reset:hover {
+  text-decoration: underline;
 }
 
 /* login button */
@@ -210,6 +215,7 @@ input[type="submit"] {
   font-size: 18px;
   font-weight: 600;
   color: white;
+  cursor: pointer;
 }
 
 input[type="submit"]:hover {
@@ -223,6 +229,11 @@ input[type="submit"]:hover {
   font-size: 14px;
   text-align: center;
   margin: 0 0 30px 0;
+}
+
+.register-link {
+  color: #2691d9;
+  text-decoration: none;
 }
 
 </style>
