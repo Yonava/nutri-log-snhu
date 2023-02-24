@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'log',
-        component: () => import('@/views/LogTab.vue'),
+        component: () => import('@/views/LogTab.vue')
       },
       {
         name: 'LogEditDetail',

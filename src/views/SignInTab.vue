@@ -1,9 +1,21 @@
 <template>
   <ion-page>
     <ion-content :force-overscroll="false">
-      <div class="center login-header">NutriLog SNHU</div>
-      <div class="center login-box"></div>
-      <div class="center login-content">Sign In</div>
+      <div class="login-box">
+        <h1>Login</h1>
+        <div class="form">
+          <div class="text-field">
+            <input type="text" required>
+            <span></span>
+            <label>Email</label>
+          </div>
+          <div class="text-field">
+            <input type="password" required>
+            <span></span>
+            <label>Password</label>
+          </div>
+        </div>
+      </div>
       <!-- <Authenticator>
         <template v-slot="{ user }">
           <h1>Hello {{ user.username }}!</h1>
@@ -99,31 +111,79 @@ export default defineComponent({
 </script>
 
 <style scoped>
-ion-toolbar {
-  --opacity: 0;
-}
-
-.login-header {
-  margin-top: 50px;
-  font-size: 2rem;
-  font-weight: 800;
-}
 
 .login-box {
-  margin-top: 50px;
-  margin-left: 36.7%;
-  width: 400px;
-  height: 500px;
-  background-color: #3b3b3b4b;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
   border-radius: 10px;
-  z-index: 0;
 }
 
-.login-content {
-  margin-top: 50px;
-  font-size: 1.5rem;
-  font-weight: 800;
-  z-index: 2;
+.login-box h1 {
+  color: black;
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid silver;
 }
+
+.form {
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.text-field {
+  position: relative;
+  border-bottom: 2px solid #adadad;
+  margin: 30px 0;
+}
+
+.text-field input {
+  width: 100;
+  padding: 0 5px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  background: none;
+  outline: none;
+  color: black;
+}
+
+.text-field label {
+  color: black;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.25s;
+}
+
+.text-field span::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2691d9;
+}
+
+.text-field input:focus ~ label,
+.text-field input:valid ~ label {
+  top: -5px;
+  color: #2691d9;
+}
+
+.text-field input:focus ~ span::before,
+.text-field input:valid ~ span::before {
+  width: 100%;
+}
+
 
 </style>
