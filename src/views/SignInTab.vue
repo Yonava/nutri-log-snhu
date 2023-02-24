@@ -5,17 +5,17 @@
         <h1>Login</h1>
         <div class="form">
           <div class="text-field">
-            <input type="text" required>
+            <input type="text" v-model="email" required>
             <span></span>
             <label>Email</label>
           </div>
           <div class="text-field">
-            <input type="password" required>
+            <input type="password" v-model="password" required>
             <span></span>
             <label>Password</label>
           </div>
           <div class="pass-reset">Forgot Password?</div>
-          <input type="submit" value="Login" @click="$router.push({ path: '/' })">
+          <input type="submit" value="Login" @click="signIn">
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
       </div>
@@ -67,6 +67,8 @@ export default defineComponent({
     return {
       userId: "",
       tempUserList: [],
+      email: "",
+      password: ""
     }
   },
   created() {
@@ -84,7 +86,7 @@ export default defineComponent({
     const AuthListener = (data) => {
       switch (data.payload.event) {
         case "signIn":
-          // Do sign in stuff
+          console.log("signed in")
           break;
         case "signOut":
           // Do sign out stuff
@@ -95,8 +97,20 @@ export default defineComponent({
     Hub.listen("auth", AuthListener);
   },
   methods: {
+    async signIn() {
+      try {
+        await Auth.signIn(this.email, this.password);
+        this.$router.push({ path: '/' });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async signOut() {
-      await Auth.signOut();
+      try {
+        await Auth.signOut();
+      } catch (error) {
+        console.log(error);
+      }
     },
     async deleteUser() {
       try {
@@ -109,7 +123,7 @@ export default defineComponent({
       localStorage.setItem("userId", userId);
       window.location.replace("/");
     },
-  },
+  }
 });
 </script>
 
