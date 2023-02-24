@@ -38,7 +38,7 @@ const Nutrients: Module<NutrientState, any> = {
         throw new Error(`Target path ${targetPath.join('.')} expected number, got ${value}`);
       }
       // for divide by zero edge case
-      const percent = value !== 0 ? Math.round(rootGetters.dailyTotal(targetPath) / value * 100) : 100;
+      const percent = value !== 0 ? Math.round(rootGetters.dailyTotal(targetPath) / value * 100) : 0;
       return {
         value,
         percent,

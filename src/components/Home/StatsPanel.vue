@@ -54,8 +54,8 @@
     <div class="chart-container center">
       <div class="bar-container center">
         <div 
-          v-for="i in nutrientByHour" 
-          :key="i.id"
+          v-for="(i, index) in nutrientByHour" 
+          :key="index"
           :style="{
             background: selectedComponent.color,
             height: `${i}%`,

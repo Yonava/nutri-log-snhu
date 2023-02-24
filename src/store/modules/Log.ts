@@ -28,10 +28,8 @@ const Log: Module<LogState, any> = {
     // nutrient may be nested, e.g. 'macro.carbohydrates.total'
     // input: ['macro', 'carbohydrates', 'total']
     // output: percentages of how tall each hour's bar should be 
-    nutrientByHour: (state, getters) => (nutrient: (keyof LoggedItem)[]) => {
-      const data: number[] = [];
-      let totalNutrient = 0;
-      for (let i = 0; i < 24; i++) data.push(0);
+    nutrientByHour: (state, getters, rootState, rootGetters) => (nutrient: (keyof LoggedItem)[]) => {
+      const data = new Array(24).fill(0);
       getters.loggedToday.forEach((item: LoggedItem) => {
         const hour = new Date(item.dateAdded).getHours();
         const value = getPropertyFromNestedObject(item, nutrient);
@@ -40,10 +38,10 @@ const Log: Module<LogState, any> = {
           return;
         }
         data[hour] += value;
-        totalNutrient += value;
       });
-      // if user has consumed 20%+ of a given nutrient in a given hour, make bar full height
-      const twentyPercent = totalNutrient / 5;
+      // if user has consumed 20%+ of target in a given hour, make bar full height
+      const nutrientTarget = rootGetters.dailyTarget(nutrient).value;
+      const twentyPercent = nutrientTarget / 5;
       data.forEach((value, index) => {
         if (value > twentyPercent) data[index] = 100;
         else {
