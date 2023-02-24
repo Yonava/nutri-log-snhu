@@ -14,6 +14,7 @@
             <span></span>
             <label>Password</label>
           </div>
+          <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
           <div class="pass-reset">Forgot Password?</div>
           <input type="submit" value="Login" @click="signIn">
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
@@ -42,19 +43,13 @@
 
 <script>
 // import { Authenticator } from "@aws-amplify/ui-vue";
-import { Hub, Auth, I18n } from "aws-amplify";
+import { Hub, Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
 import { IonPage, IonContent } from "@ionic/vue";
 
 import axios from "axios";
-
-// Typographical changes for the UI
-I18n.putVocabulariesForLanguage("en", {
-  "Sign in": "Sign In",
-  "Forgot your password? ": "Reset Password",
-});
 
 export default defineComponent({
   components: {
@@ -68,7 +63,8 @@ export default defineComponent({
       userId: "",
       tempUserList: [],
       email: "",
-      password: ""
+      password: "",
+      loginErr: ""
     }
   },
   created() {
@@ -86,7 +82,7 @@ export default defineComponent({
     const AuthListener = (data) => {
       switch (data.payload.event) {
         case 'signIn':
-          console.log("signed in");
+          // Do sign in stuff
           break;
         case 'signOut':
           // Do sign out stuff
@@ -99,25 +95,19 @@ export default defineComponent({
   methods: {
     async signIn() {
       try {
+        if (this.email === "" || this.password === "") throw Error("Username and password cannot be empty");
+
         const user = await Auth.signIn(this.email, this.password);
         console.log(`User: ${user.username}`);
         this.$router.push({ path: '/' });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async signOut() {
-      try {
-        await Auth.signOut();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async deleteUser() {
-      try {
-        await Auth.deleteUser();
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        const strErr = String(err); // make the error a string for printing
+        // Remove the error type from the string
+        if (strErr.includes("User does not exist")) {
+          this.loginErr = "Username or password is incorrect";
+          return;
+        }
+        this.loginErr = strErr.replace(/.+: /, "");
       }
     },
     tempSignIn(userId) {
@@ -129,6 +119,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* page */
+ion-content {
+  --background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(40,42,47,1) 54%, rgba(38,145,217,1) 100%);;
+}
 
 /* Login box */
 .login-box {
@@ -137,7 +131,7 @@ export default defineComponent({
   left: 50%;
   transform: translate(-50%, -80%);
   width: 350px;
-  background: white;
+  background: rgb(233, 226, 226);
   border-radius: 10px;
 }
 
@@ -205,6 +199,13 @@ export default defineComponent({
 .text-field input:focus ~ span::before,
 .text-field input:valid ~ span::before {
   width: 100%;
+}
+
+/* login errors */
+.login-err {
+  color: red;
+  text-align: center;
+  margin: 0 0 20px 0;
 }
 
 /* forgot password */
