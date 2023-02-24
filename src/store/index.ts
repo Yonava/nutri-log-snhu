@@ -25,7 +25,7 @@ export default createStore<State>({
   },
   mutations: {
     toggleCaloriesHidden(state) {
-      state.caloriesHidden = !state.caloriesHidden
+      state.caloriesHidden = !state.caloriesHidden;
     },
     setCatalog(state, catalog) {
       state.catalog = catalog
@@ -54,9 +54,14 @@ export default createStore<State>({
         console.log(err);
       }
     },
-    toggleCaloriesHidden({ commit }) {
+    async toggleCaloriesHidden({ commit, getters }) {
       // HTTP request to update user's caloriesHidden setting
       commit('toggleCaloriesHidden')
+      commit('presentToast', {
+        message: `Calories now ${getters.caloriesHidden ? 'hidden' : 'shown'}`,
+        color: 'primary',
+        position: 'top'
+      });
     },
     async configClientStore({ commit }) {
       const clientStore = new Storage({
