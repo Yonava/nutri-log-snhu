@@ -60,6 +60,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/SignInTab.vue')
   },
   {
+    name: 'ResetPassword',
+    path: '/reset-password',
+    component: () => import('@/views/ResetPassword.vue')
+  },
+  {
     name: 'Register',
     path: '/register',
     component: () => import('@/views/RegisterTab.vue')

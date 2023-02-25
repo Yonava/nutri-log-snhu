@@ -15,7 +15,7 @@
             <label>Password</label>
           </div>
           <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
-          <div class="pass-reset">Forgot Password?</div>
+          <router-link class="pass-reset" to="/reset-password">Forgot Password?</router-link>
           <input type="submit" value="Login" @click="signIn">
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
