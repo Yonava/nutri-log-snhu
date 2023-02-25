@@ -137,7 +137,7 @@ const Nutrients: Module<NutrientState, any> = {
         console.error(err)
         commit('presentToast', {
           message: 'Error updating daily targets',
-          color: 'error',
+          color: 'danger',
         })
       }
     }

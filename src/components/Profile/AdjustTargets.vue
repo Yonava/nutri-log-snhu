@@ -48,7 +48,6 @@
           </div>
         </div>
       </div>
-      {{ tempDailyTargets }}
     </ion-content>
   </ion-page>
 </template>
@@ -104,9 +103,9 @@ function updateTempDailyTargets(path: string[], value: number) {
   current[path[path.length - 1]] = value;
 }
 
-onUnmounted(async () => {
+onUnmounted(() => {
   if (JSON.stringify(tempDailyTargets.value) !== JSON.stringify(store.getters.allDailyTargets)) {
-    await store.dispatch("updateDailyTargets", tempDailyTargets.value);
+    store.dispatch("updateDailyTargets", tempDailyTargets.value);
   }
 });
 </script>
