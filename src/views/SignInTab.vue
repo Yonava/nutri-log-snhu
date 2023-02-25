@@ -15,7 +15,7 @@
             <label>Password</label>
           </div>
           <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
-          <router-link class="pass-reset" to="/reset-password">Forgot Password?</router-link>
+          <div class="pass-reset"><router-link class="reset-link" to="/reset-password">Forgot Password?</router-link></div>
           <input type="submit" value="Login" @click="signIn">
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
@@ -121,7 +121,7 @@ export default defineComponent({
 <style scoped>
 /* page */
 ion-content {
-  --background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(40,42,47,1) 54%, rgba(38,145,217,1) 100%);;
+  --background: linear-gradient(45deg, rgba(4,1,55,1) 9%, rgba(45,116,195,1) 81%, rgba(38,145,217,1) 100%);
 }
 
 /* Login box */
@@ -131,17 +131,17 @@ ion-content {
   left: 50%;
   transform: translate(-50%, -80%);
   width: 350px;
-  background: rgb(233, 226, 226);
+  background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }
 
 /* Login heading */
 .login-box h1 {
-  color: black;
+  color: rgb(192, 185, 185);
   font-size: 40px;
   text-align: center;
   padding: 0 0 20px 0;
-  border-bottom: 1px solid silver;
+  border-bottom: 1px solid rgb(192, 185, 185);
 }
 
 /* Adjust the contents of the login box */
@@ -152,7 +152,7 @@ ion-content {
 
 .text-field {
   position: relative;
-  border-bottom: 2px solid #adadad;
+  border-bottom: 2px solid rgb(192, 185, 185);
   margin: 30px 0;
 }
 
@@ -164,15 +164,14 @@ ion-content {
   border: none;
   background: none;
   outline: none;
-  color: black;
+  color: rgb(192, 185, 185);
 }
 
 .text-field label {
-  color: black;
   position: absolute;
   top: 50%;
   left: 5px;
-  color: #adadad;
+  color: rgb(192, 185, 185);
   transform: translateY(-50%);
   font-size: 16px;
   pointer-events: none;
@@ -203,20 +202,24 @@ ion-content {
 
 /* login errors */
 .login-err {
-  color: red;
+  color: rgb(214, 26, 26);
   text-align: center;
   margin: 0 0 20px 0;
 }
 
 /* forgot password */
 .pass-reset {
-  color: #adadad;
   text-align: center;
   margin: 0 0 20px 0;
   cursor: pointer;
 }
 
-.pass-reset:hover {
+.reset-link {
+  color: rgb(192, 185, 185);
+  text-decoration: none;
+}
+
+.reset-link:hover {
   text-decoration: underline;
 }
 
@@ -227,10 +230,11 @@ input[type="submit"] {
   border: 1px solid;
   background: #2691d9;
   border-radius: 20px;
+  border-color: rgba(9, 26, 63, 0.925);
   margin: 0 0 10px 0;
   font-size: 18px;
   font-weight: 600;
-  color: white;
+  color: rgb(230, 227, 227);
   cursor: pointer;
 }
 
@@ -241,7 +245,7 @@ input[type="submit"]:hover {
 
 /* sign up */
 .register {
-  color: #696969;
+  color: rgb(192, 185, 185);
   font-size: 14px;
   text-align: center;
   margin: 0 0 30px 0;
