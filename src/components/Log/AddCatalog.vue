@@ -52,6 +52,7 @@
           :key="item"
         >
           <QuickAdd 
+            v-if="item.items().length > 0"
             :title="item.title"
             :items="item.items()"
           />

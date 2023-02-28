@@ -24,6 +24,7 @@ defineProps<{
 <style scoped>
 .title {
   text-transform: capitalize;
+  padding-left: 12px;
   font-weight: 700;
   font-size: 1.9rem;
 }

@@ -111,13 +111,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-  ion-range::part(pin) {
-    color: #efefef;
-    font-weight: 900;
-    font-size: 1rem;
-    border-radius: 50%;
-  }
-
   ion-range::part(pin)::before {
     content: none;
   }
