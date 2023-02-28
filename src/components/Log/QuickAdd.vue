@@ -13,11 +13,11 @@
 
 <script setup lang="ts">
 import AddItem from '@/components/Log/AddItem.vue';
-import { UnloggedItem } from '@/types/Log';
+import { LoggedItem, UnloggedItem } from '@/types/Log';
 
 defineProps<{
   title: string;
-  items: UnloggedItem[];
+  items: UnloggedItem[] | LoggedItem[];
 }>()
 </script>
 

@@ -47,9 +47,15 @@
       <div 
         v-else-if="!searching"
       >
-        <AddPopular />
-        <AddCustom />
-        <AddRecent />
+        <div 
+          v-for="item in quickAddCategories"
+          :key="item"
+        >
+          <QuickAdd 
+            :title="item.title"
+            :items="item.items()"
+          />
+        </div>
       </div>
       <div v-else>
         <CatalogSearch 
@@ -81,17 +87,68 @@ import {
   watch,
 } from 'vue'
 import { useStore } from 'vuex'
-import { UnloggedItem } from '@/types/Log'
+import { LoggedItem, UnloggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
-import AddPopular from '@/components/Log/AddPopular.vue'
-import AddRecent from '@/components/Log/AddRecent.vue'
-import AddCustom from '@/components/Log/AddCustom.vue'
+import QuickAdd from '@/components/Log/QuickAdd.vue'
+import { getMealPeriod } from '@/utils/GetMeal';
 
 const store = useStore();
 
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
+
+type QuickAddCategory = {
+  title: string;
+  items: () => UnloggedItem[] | LoggedItem[];
+}
+
+const quickAddCategories = ref<QuickAddCategory[]>([
+  {
+    title: 'Recently Added',
+    items: () => {
+      const maxRecentItems = 5;
+      const output: UnloggedItem[] = [];
+      const loggedItems = store.getters.log;
+      for (let i = 0; i < loggedItems.length; i++) {
+        if (output.length === maxRecentItems) break;
+        if (output.find(item => item.name === loggedItems[i].name)) continue;
+        output.push(loggedItems[i]);
+      }
+      
+      return output;
+    }
+  },
+  {
+    title: 'Your Custom Items',
+    items: () => {
+      const output: LoggedItem[] = [];
+      const customItems = store.getters.customItems;
+      customItems.forEach((item: LoggedItem) => {
+        output.push(item);
+      });
+      
+      return output;
+    }
+  },
+  {
+    // temp patch job to get around snack + late night miscategorization
+    title: `Popular For ${getMealPeriod() === 'snack' ? 'Late Night' : getMealPeriod()}`,
+    items: () => {
+      const items = store.getters.catalog;
+      const maxPopularItems = 5;
+      const output: UnloggedItem[] = [];
+      items.forEach((item: UnloggedItem) => {
+        if (output.length === maxPopularItems) return;
+        if (item.time === getMealPeriod()) {
+          output.push(item);
+        }
+      });
+
+      return output;
+    }
+  }
+]);
 
 const numResults = ref(18);
 

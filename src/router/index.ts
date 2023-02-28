@@ -29,11 +29,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/LogItemEdit.vue')
       },
       {
-        name: 'AddCustom',
-        path: 'log/addCustom',
-        component: () => import('@/components/Log/AddCustom.vue')
-      },
-      {
         name: 'AddCatalog',
         path: 'log/addCatalog',
         component: () => import('@/components/Log/AddCatalog.vue')
