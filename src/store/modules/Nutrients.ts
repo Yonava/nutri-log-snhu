@@ -111,7 +111,7 @@ const Nutrients: Module<NutrientState, any> = {
     },
     allDailyTargetRanges: state => state.dailyTargetsRange,
     dailyTargetRange:
-      (state, getters, rootState, rootGetters) =>
+      (state) =>
       (targetPath: (keyof DailyTargets)[]) => {
       const { min, max } = getPropertyFromNestedObject(state.dailyTargetsRange, targetPath) as { min: number, max: number };
       if (typeof min !== 'number' || typeof max !== 'number') {
