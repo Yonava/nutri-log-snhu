@@ -178,7 +178,6 @@ export default {
     onUnmounted(() => {
       if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return;
       const dispatchTo = route.query.dispatchTo ?? 'updateLoggedItem';
-      console.log(route.query.dispatchTo)
       store.dispatch(dispatchTo, item.value);
     });
 

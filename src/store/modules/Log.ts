@@ -99,7 +99,11 @@ const Log: Module<LogState, any> = {
     setCustomItem(state, customItem: UnloggedItem) {
       const index = state.customItems.findIndex(item => item._id === customItem._id)
       state.customItems[index] = customItem;
-    }
+    },
+    removeCustomItem(state, itemId: string) {
+      const index = state.customItems.findIndex(item => item._id === itemId);
+      state.customItems.splice(index, 1);
+    },
   },
   actions: {
     fetchLoggedItems({ commit }) {
@@ -154,11 +158,25 @@ const Log: Module<LogState, any> = {
         console.error('Error updating logged item in database')
       }
     },
+    async deleteCustomItem({ commit, getters }, item: UnloggedItem) {
+      try {
+        await axios.delete(`/users/${getters.userId}/customItems/${item._id}`)
+        commit('presentToast', {
+          message: `${item.name} deleted.`,
+          color: 'danger',
+        })
+        commit('removeCustomItem', item._id)
+      } catch {
+        commit('presentToast', {
+          message: 'Error deleting custom item',
+          color: 'danger',
+        })
+      }
+    },
     async updateCustomItem({ commit, getters }, item: UnloggedItem) {
       console.log('updateCustomItem', item)
       try {
-        const hi = await axios.put(`/users/${getters.userId}/customItems/${item._id}`, item)
-        console.log(hi)
+        await axios.put(`/users/${getters.userId}/customItems/${item._id}`, item)
         commit('setCustomItem', item)
       } catch {
         commit('presentToast', {

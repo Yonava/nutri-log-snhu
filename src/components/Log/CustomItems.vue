@@ -37,16 +37,19 @@ import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButton, IonBac
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
-import { LoggedItem } from '@/types/Log';
+import { UnloggedItem } from '@/types/Log';
 import LogItem from '@/components/Log/LogItem.vue';
  
 const store = useStore();
 const router = useRouter();
 const customItems = computed(() => store.getters.customItems);
 
-const editItem = (item: LoggedItem) => {
+const editItem = (item: UnloggedItem) => {
   store.commit('setSelectedLogItem', item);
   router.push({ name: 'LogEditDetail' });
 }
 
+const removeItem = (item: UnloggedItem) => {
+  store.dispatch('deleteCustomItem', item);
+}
 </script>
