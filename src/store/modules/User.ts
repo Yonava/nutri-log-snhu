@@ -139,7 +139,7 @@ const User: Module<UserState, any> = {
   },
   getters: {
     macroComponents: state => state.macroDisplayComponents
-  },
+  }
 }
 
 export default User

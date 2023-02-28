@@ -7,6 +7,14 @@
           default-href="/tabs/log"
         ></ion-back-button>
       </template>
+      <template #right>
+        <ion-button 
+          fill="clear" 
+          @click="$router.push({ name: 'CustomItems', query: { dispatchTo: 'updateCustomItem' } })"
+        >
+          Custom Items
+        </ion-button>
+      </template>
     </default-header>
     <ion-content 
       :fullscreen="true" 
@@ -80,6 +88,7 @@ import {
   IonContent,
   IonHeader,
   IonPage,
+  IonButton,
 } from '@ionic/vue';
 import { 
   computed, 

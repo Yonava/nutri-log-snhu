@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/AddCatalogDetail.vue')
       },
       {
+        name: 'CustomItems',
+        path: 'log/customItems',
+        component: () => import('@/components/Log/CustomItems.vue')
+      },
+      {
         path: 'scan',
         component: () => import('@/views/ScanTab.vue')
       },

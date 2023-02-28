@@ -138,6 +138,7 @@ import {
   IonInput,
 } from '@ionic/vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { 
   computed, 
   ref,
@@ -155,6 +156,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const route = useRoute();
     const itemSelected = store.getters.selectedLogItem;
 
     const item = ref(structuredClone(itemSelected));
@@ -174,8 +176,10 @@ export default {
     });
 
     onUnmounted(() => {
-      if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return
-      store.dispatch('updateLoggedItem', item.value);
+      if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return;
+      const dispatchTo = route.query.dispatchTo ?? 'updateLoggedItem';
+      console.log(route.query.dispatchTo)
+      store.dispatch(dispatchTo, item.value);
     });
 
     return {

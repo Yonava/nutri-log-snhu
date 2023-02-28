@@ -95,6 +95,10 @@ const Log: Module<LogState, any> = {
     },
     setCustomItems(state, customItems: UnloggedItem[]) {
       state.customItems = customItems;
+    },
+    setCustomItem(state, customItem: UnloggedItem) {
+      const index = state.customItems.findIndex(item => item._id === customItem._id)
+      state.customItems[index] = customItem;
     }
   },
   actions: {
@@ -148,6 +152,19 @@ const Log: Module<LogState, any> = {
         commit('updateLogItem', item)
       } catch {
         console.error('Error updating logged item in database')
+      }
+    },
+    async updateCustomItem({ commit, getters }, item: UnloggedItem) {
+      console.log('updateCustomItem', item)
+      try {
+        const hi = await axios.put(`/users/${getters.userId}/customItems/${item._id}`, item)
+        console.log(hi)
+        commit('setCustomItem', item)
+      } catch {
+        commit('presentToast', {
+          message: 'Error updating custom item',
+          color: 'danger',
+        })
       }
     }
   },
