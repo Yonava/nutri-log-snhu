@@ -59,7 +59,6 @@ function getMealPeriod() {
 <style scoped>
 .title {
   text-transform: capitalize;
-  text-align: center;
   font-weight: 700;
   font-size: 1.9rem;
 }

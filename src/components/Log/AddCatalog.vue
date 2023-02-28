@@ -44,8 +44,11 @@
           ></ion-skeleton-text>
         </div>
       </ion-list>
-      <div v-else-if="!searching">
+      <div 
+        v-else-if="!searching"
+      >
         <AddPopular />
+        <AddCustom />
         <AddRecent />
       </div>
       <div v-else>
@@ -82,6 +85,7 @@ import { UnloggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
 import AddPopular from '@/components/Log/AddPopular.vue'
 import AddRecent from '@/components/Log/AddRecent.vue'
+import AddCustom from '@/components/Log/AddCustom.vue'
 
 const store = useStore();
 

@@ -18,11 +18,21 @@
 
 <script setup lang="ts">
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { LoggedItem } from '@/types/Log';
 import AddItem from '@/components/Log/AddItem.vue';
 
 const store = useStore();
+
+type QuickAddCategory = {
+  title: string;
+}
+
+const quickAddCategories = ref<QuickAddCategory[]>([
+  {
+    title: 'Recently Added'
+  }
+])
 
 const recentItems = computed(() => {
   const maxRecentItems = 5;
@@ -41,7 +51,6 @@ const recentItems = computed(() => {
 <style scoped>
 .title {
   text-transform: capitalize;
-  text-align: center;
   font-weight: 700;
   font-size: 1.9rem;
 }
