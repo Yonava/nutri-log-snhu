@@ -28,8 +28,8 @@
       </div>
       <div class="modify-button-container">
         <button 
-          @click="$router.push({ name: 'ModifyMacroDisplay' })"
-          class="modify-macros-button"
+          @click="$router.push({ name: 'Personalize' })"
+          class="personalize-button"
         >
           personalize
         </button>
@@ -133,6 +133,9 @@ export default defineComponent({
     const activeSlide = ref(0);
     const store = useStore();
     const macroComponents = ref(store.getters.macroComponents.slice(0, 8));
+    // rerender is a hack to force the slider to rerender when the macroComponents
+    // array changes. It is temporary until SVG circular progress bars are
+    // implemented. Normally, don't do this.
     const rerender = ref(true);
 
     watch(store.getters.macroComponents, (newVal) => {
@@ -140,6 +143,7 @@ export default defineComponent({
       rerender.value = false;
       setTimeout(() => {
         rerender.value = true;
+        activeSlide.value = 0;
       }, 100);
     });
 
@@ -172,7 +176,7 @@ export default defineComponent({
   width: 100%; 
 }
 
-.modify-macros-button {
+.personalize-button {
   border-radius: 5px; 
   background-color: var(--ion-color-primary); 
   font-weight: 600; 

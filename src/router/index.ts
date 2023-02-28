@@ -48,9 +48,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/ScanTab.vue')
       },
       {
-        name: 'ModifyMacroDisplay',
-        path: 'modifyMacroDisplay',
-        component: () => import('@/views/ModifyMacroDisplay.vue')
+        name: 'Personalize',
+        path: 'personalize',
+        component: () => import('@/views/PersonalizeMenu.vue')
       },
       {
         name: 'AdjustTargets',

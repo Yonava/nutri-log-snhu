@@ -51,7 +51,7 @@ export interface NutrientState {
   }
 }
 
-interface MinMax {
+type MinMax = {
   min: number,
   max: number
 }
