@@ -1,22 +1,8 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Scan Stuff</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Scan</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div class="ion-padding">
-        <ion-button @click="takePicture">Take Picture</ion-button>
-        <img 
-          v-if="imageFrame" 
-          :src="imageFrame" 
-        />
+    <ion-content>
+      <div>
+        <div id="cameraPreview"></div>
       </div>
     </ion-content>
   </ion-page>
@@ -31,17 +17,35 @@ import {
   IonContent,
   IonButton,
 } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { CameraPreview } from '@capacitor-community/camera-preview';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const imageFrame = ref<string | undefined>(undefined);
 
-const takePicture = async () => {
-  const capturedPhoto = await Camera.getPhoto({
-    resultType: CameraResultType.Uri,
-    source: CameraSource.Camera,
-    quality: 100
+watchEffect(() => {
+  if (route.path.includes('scan')) {
+    startCameraPreview();
+  } else {
+    stopCameraPreview();
+  }
+});
+
+async function startCameraPreview() {
+  await CameraPreview.start({
+    parent: 'cameraPreview',
+    position: 'rear',
+    toBack: true,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    className: 'cameraPreview',
   });
-  imageFrame.value = capturedPhoto.webPath;
+}
+
+async function stopCameraPreview() {
+  await CameraPreview.stop();
 }
 </script>

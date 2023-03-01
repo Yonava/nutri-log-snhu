@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photos are cool!</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -23,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>give me access to your camera, pinky promise I won't do anything weird!</string>
+	<string>give me access to your camera, pinky promise I won&apos;t do anything weird!</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>I need your camera!</string>
 	<key>UILaunchStoryboardName</key>
