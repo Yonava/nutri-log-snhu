@@ -11,7 +11,7 @@
     <ion-modal
       trigger="open-quicklog-modal"
       :initial-breakpoint="0.3"
-      :breakpoints="[0, 0.3, 0.6, 1]"
+      :breakpoints="[0, 0.3, 0.6, 0.9]"
     >
       <ion-content class="ion-padding">
         <div>

@@ -7,6 +7,14 @@
           default-href="/tabs/log"
         ></ion-back-button>
       </template>
+      <template #right>
+        <ion-button 
+          fill="clear" 
+          @click="$router.push({ name: 'CustomItems' })"
+        >
+          Custom Items
+        </ion-button>
+      </template>
     </default-header>
     <ion-content 
       :fullscreen="true" 
@@ -44,9 +52,22 @@
           ></ion-skeleton-text>
         </div>
       </ion-list>
-      <div v-else-if="!searching">
-        <AddPopular />
-        <AddRecent />
+      <div 
+        v-else-if="!searching"
+        style="margin-bottom: 50px"
+      >
+        <div 
+          v-for="item in quickAddCategories"
+          :key="item"
+        >
+          <div>
+            <QuickAdd 
+              v-if="item.items().length > 0"
+              :title="item.title"
+              :items="item.items()"
+            />
+          </div>
+        </div>
       </div>
       <div v-else>
         <CatalogSearch 
@@ -70,6 +91,7 @@ import {
   IonContent,
   IonHeader,
   IonPage,
+  IonButton,
 } from '@ionic/vue';
 import { 
   computed, 
@@ -78,16 +100,68 @@ import {
   watch,
 } from 'vue'
 import { useStore } from 'vuex'
-import { UnloggedItem } from '@/types/Log'
+import { LoggedItem, UnloggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
-import AddPopular from '@/components/Log/AddPopular.vue'
-import AddRecent from '@/components/Log/AddRecent.vue'
+import QuickAdd from '@/components/Log/QuickAdd.vue'
+import { getMealPeriod } from '@/utils/GetMeal';
 
 const store = useStore();
 
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
+
+type QuickAddCategory = {
+  title: string;
+  items: () => UnloggedItem[] | LoggedItem[];
+}
+
+const quickAddCategories = ref<QuickAddCategory[]>([
+  {
+    title: 'Recently Added',
+    items: () => {
+      const maxRecentItems = 5;
+      const output: UnloggedItem[] = [];
+      const loggedItems = store.getters.log;
+      for (let i = 0; i < loggedItems.length; i++) {
+        if (output.length === maxRecentItems) break;
+        if (output.find(item => item.name === loggedItems[i].name)) continue;
+        output.push(loggedItems[i]);
+      }
+      
+      return output;
+    }
+  },
+  {
+    title: 'Your Custom Items',
+    items: () => {
+      const output: LoggedItem[] = [];
+      const customItems = store.getters.customItems;
+      customItems.forEach((item: LoggedItem) => {
+        output.push(item);
+      });
+      
+      return output;
+    }
+  },
+  {
+    // temp patch job to get around snack + late night miscategorization
+    title: `Popular For ${getMealPeriod() === 'snack' ? 'Late Night' : getMealPeriod()}`,
+    items: () => {
+      const items = store.getters.catalog;
+      const maxPopularItems = 5;
+      const output: UnloggedItem[] = [];
+      items.forEach((item: UnloggedItem) => {
+        if (output.length === maxPopularItems) return;
+        if (item.time === getMealPeriod()) {
+          output.push(item);
+        }
+      });
+
+      return output;
+    }
+  }
+]);
 
 const numResults = ref(18);
 
@@ -125,13 +199,15 @@ onMounted(() => {
   }, 500);
 });
 
-const items = computed(() => store.getters.catalog);
+const searchableItems = computed(() => {
+  return store.getters.catalog.concat(store.getters.customItems);
+});
 
 const searchResults = computed(() => {
   if (searchQuery.value === '') return [];
   const output: UnloggedItem[] = [];
-  for (let i = 0; i < items.value.length; i++) {
-    const item = items.value[i];
+  for (let i = 0; i < searchableItems.value.length; i++) {
+    const item = searchableItems.value[i];
     if (item.name.toLowerCase().includes(searchQuery.value.toLowerCase())) {
       output.push(item);
     }

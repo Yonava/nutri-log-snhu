@@ -19,6 +19,13 @@ export interface UnloggedItem extends GenericItem {
   },
 }
 
+// no id because it's pre database
+export interface CustomItem {
+  name: string,
+  calories: number,
+  macro: Macro,
+}
+
 export interface Allergens {
   gluten: boolean;
   peanuts: boolean;

@@ -28,67 +28,30 @@ export interface ToastState {}
 export interface NutrientState {
   dailyTargets: DailyTargets,
   dailyTargetsRange: {
-    calories: {
-      min: number,
-      max: number,
-    },
+    calories: MinMax,
     macro: {
       carbohydrates: {
-        total: {
-          min: number,
-          max: number,
-        },
-        added_sugars: {
-          min: number,
-          max: number,
-        },
-        sugars: {
-          min: number,
-          max: number,
-        },
+        total: MinMax,
+        added_sugars: MinMax,
+        sugars: MinMax,
       },
       fat: {
-        total: {
-          min: number,
-          max: number,
-        },
-        saturated: {
-          min: number,
-          max: number,
-        },
-        trans: {
-          min: number,
-          max: number,
-        },
+        total: MinMax,
+        saturated: MinMax,
+        trans: MinMax,
       },
-      protein: {
-        min: number,
-        max: number,
-      },
-      fiber: {
-        min: number,
-        max: number,
-      },
-      sodium: {
-        min: number,
-        max: number,
-      },
-      cholesterol: {
-        min: number,
-        max: number,
-      },
-      calcium: {
-        min: number,
-        max: number,
-      },
-      potassium: {
-        min: number,
-        max: number,
-      },
-      iron: {
-        min: number,
-        max: number,
-      }
+      protein: MinMax,
+      fiber: MinMax,
+      sodium: MinMax,
+      cholesterol: MinMax,
+      calcium: MinMax,
+      potassium: MinMax,
+      iron: MinMax
     }
   }
+}
+
+type MinMax = {
+  min: number,
+  max: number
 }

@@ -95,7 +95,18 @@ const Log: Module<LogState, any> = {
     },
     setCustomItems(state, customItems: UnloggedItem[]) {
       state.customItems = customItems;
-    }
+    },
+    setCustomItem(state, customItem: UnloggedItem) {
+      const index = state.customItems.findIndex(item => item._id === customItem._id)
+      state.customItems[index] = customItem;
+    },
+    addCustomItem(state, customItem: UnloggedItem) {
+      state.customItems.unshift(customItem);
+    },
+    removeCustomItem(state, itemId: string) {
+      const index = state.customItems.findIndex(item => item._id === itemId);
+      state.customItems.splice(index, 1);
+    },
   },
   actions: {
     fetchLoggedItems({ commit }) {
@@ -148,6 +159,53 @@ const Log: Module<LogState, any> = {
         commit('updateLogItem', item)
       } catch {
         console.error('Error updating logged item in database')
+      }
+    },
+    async deleteCustomItem({ commit, getters }, item: UnloggedItem) {
+      try {
+        await axios.delete(`/users/${getters.userId}/customItems/${item._id}`)
+        commit('presentToast', {
+          message: `${item.name} deleted.`,
+          color: 'danger',
+        })
+        commit('removeCustomItem', item._id)
+      } catch {
+        commit('presentToast', {
+          message: 'Error deleting custom item',
+          color: 'danger',
+        })
+      }
+    },
+    async postCustomItem({ commit, getters }, item: UnloggedItem) {
+      try {
+        await axios.post(`/users/${getters.userId}/customItems`, item)
+        commit('presentToast', {
+          message: `${item.name} added.`,
+          color: 'success',
+        })
+        commit('addCustomItem', item)
+      } catch {
+        commit('presentToast', {
+          message: 'Error adding custom item',
+          color: 'danger',
+        })
+      }
+    },
+    async updateCustomItem({ commit, getters }, item: UnloggedItem) {
+      console.log('updateCustomItem', item)
+      try {
+        await axios.put(`/users/${getters.userId}/customItems/${item._id}`, item)
+        commit('setCustomItem', item)
+        commit('presentToast', {
+          message: `${item.name} updated.`,
+          color: 'primary',
+          position: 'top',
+        })
+      } catch {
+        commit('presentToast', {
+          message: 'Error updating custom item',
+          color: 'danger',
+        })
       }
     }
   },

@@ -29,11 +29,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/LogItemEdit.vue')
       },
       {
-        name: 'AddCustom',
-        path: 'log/addCustom',
-        component: () => import('@/components/Log/AddCustom.vue')
-      },
-      {
         name: 'AddCatalog',
         path: 'log/addCatalog',
         component: () => import('@/components/Log/AddCatalog.vue')
@@ -44,13 +39,18 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/AddCatalogDetail.vue')
       },
       {
+        name: 'CustomItems',
+        path: 'log/customItems',
+        component: () => import('@/components/Log/CustomItems.vue')
+      },
+      {
         path: 'scan',
         component: () => import('@/views/ScanTab.vue')
       },
       {
-        name: 'ModifyMacroDisplay',
-        path: 'modifyMacroDisplay',
-        component: () => import('@/views/ModifyMacroDisplay.vue')
+        name: 'Personalize',
+        path: 'personalize',
+        component: () => import('@/views/PersonalizeMenu.vue')
       },
       {
         name: 'AdjustTargets',

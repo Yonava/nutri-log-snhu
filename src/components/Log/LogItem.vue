@@ -20,10 +20,12 @@
               :style="{ backgroundColor: chip.color }"
               class="top-chip"
             >
-              {{ chip.value }}
-              <span style="font-weight: 700"> 
-                {{ chip.label }} 
-              </span>
+              <div>
+                {{ chip.value }}
+                <span style="font-weight: 700"> 
+                  {{ chip.label }} 
+                </span>
+              </div>
             </div>
           </div>
           <h2 class="item-name">
@@ -57,7 +59,8 @@ import {
   defineProps, 
   defineEmits, 
   ref, 
-  computed 
+  computed,
+  onMounted,
 } from 'vue';
 
 const emit = defineEmits(['remove-item']);
@@ -97,10 +100,11 @@ const toDateTimeString = (date) => {
   return timeStamp.toLocaleTimeString([], { timeStyle: 'short' });
 };
 
-const chips = [
+const chips = ref([]);
+const potentialChips = [
   {
     label: '',
-    value: toDateTimeString(props.item.dateAdded),
+    value: toDateTimeString(props.item.dateAdded) || 'N/A',
     color: 'rgb(50, 50, 50)',
   },
   {
@@ -108,11 +112,6 @@ const chips = [
     value: props.item.calories,
     color: 'var(--ion-color-primary)',
   },
-  // {
-  //   label: 'carbs',
-  //   value: props.item.macro.carbohydrates.total + 'g',
-  //   color: '#F96167',
-  // },
   {
     label: 'protein',
     value: props.item.macro.protein + 'g',
@@ -123,8 +122,14 @@ const chips = [
     value: props.item.macro.fat.total + 'g',
     color: '#990011FF',
   },
-];
+]
 
+onMounted(() => {
+  potentialChips.forEach((chip) => {
+    if (chip.value === 'Invalid Date') return;
+    chips.value.push(chip);
+  });
+});
 </script>
 
 <style scoped>

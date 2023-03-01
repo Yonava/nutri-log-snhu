@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header title="Modify Item">
+    <default-header title="Log Item">
       <template #left>
         <ion-back-button 
           default-href="/tabs/log"
@@ -138,6 +138,7 @@ import {
   IonInput,
 } from '@ionic/vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { 
   computed, 
   ref,
@@ -155,7 +156,10 @@ export default {
   },
   setup() {
     const store = useStore();
+    const route = useRoute();
     const itemSelected = store.getters.selectedLogItem;
+
+    const dispatchTo = route.query.dispatchTo ?? 'updateLoggedItem';
 
     const item = ref(structuredClone(itemSelected));
     const titleFocused = ref(false);
@@ -174,8 +178,8 @@ export default {
     });
 
     onUnmounted(() => {
-      if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return
-      store.dispatch('updateLoggedItem', item.value);
+      if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return;
+      store.dispatch(dispatchTo, item.value);
     });
 
     return {
