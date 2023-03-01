@@ -100,6 +100,9 @@ const Log: Module<LogState, any> = {
       const index = state.customItems.findIndex(item => item._id === customItem._id)
       state.customItems[index] = customItem;
     },
+    addCustomItem(state, customItem: UnloggedItem) {
+      state.customItems.unshift(customItem);
+    },
     removeCustomItem(state, itemId: string) {
       const index = state.customItems.findIndex(item => item._id === itemId);
       state.customItems.splice(index, 1);
@@ -173,11 +176,31 @@ const Log: Module<LogState, any> = {
         })
       }
     },
+    async postCustomItem({ commit, getters }, item: UnloggedItem) {
+      try {
+        await axios.post(`/users/${getters.userId}/customItems`, item)
+        commit('presentToast', {
+          message: `${item.name} added.`,
+          color: 'success',
+        })
+        commit('addCustomItem', item)
+      } catch {
+        commit('presentToast', {
+          message: 'Error adding custom item',
+          color: 'danger',
+        })
+      }
+    },
     async updateCustomItem({ commit, getters }, item: UnloggedItem) {
       console.log('updateCustomItem', item)
       try {
         await axios.put(`/users/${getters.userId}/customItems/${item._id}`, item)
         commit('setCustomItem', item)
+        commit('presentToast', {
+          message: `${item.name} updated.`,
+          color: 'primary',
+          position: 'top',
+        })
       } catch {
         commit('presentToast', {
           message: 'Error updating custom item',

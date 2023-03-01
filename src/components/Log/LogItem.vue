@@ -126,7 +126,7 @@ const potentialChips = [
 
 onMounted(() => {
   potentialChips.forEach((chip) => {
-    if (!chip.value || chip.value === 'Invalid Date') return;
+    if (chip.value === 'Invalid Date') return;
     chips.value.push(chip);
   });
 });

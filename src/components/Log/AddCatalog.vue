@@ -10,7 +10,7 @@
       <template #right>
         <ion-button 
           fill="clear" 
-          @click="$router.push({ name: 'CustomItems', query: { dispatchTo: 'updateCustomItem' } })"
+          @click="$router.push({ name: 'CustomItems' })"
         >
           Custom Items
         </ion-button>
@@ -54,16 +54,19 @@
       </ion-list>
       <div 
         v-else-if="!searching"
+        style="margin-bottom: 50px"
       >
         <div 
           v-for="item in quickAddCategories"
           :key="item"
         >
-          <QuickAdd 
-            v-if="item.items().length > 0"
-            :title="item.title"
-            :items="item.items()"
-          />
+          <div>
+            <QuickAdd 
+              v-if="item.items().length > 0"
+              :title="item.title"
+              :items="item.items()"
+            />
+          </div>
         </div>
       </div>
       <div v-else>
@@ -196,13 +199,15 @@ onMounted(() => {
   }, 500);
 });
 
-const items = computed(() => store.getters.catalog);
+const searchableItems = computed(() => {
+  return store.getters.catalog.concat(store.getters.customItems);
+});
 
 const searchResults = computed(() => {
   if (searchQuery.value === '') return [];
   const output: UnloggedItem[] = [];
-  for (let i = 0; i < items.value.length; i++) {
-    const item = items.value[i];
+  for (let i = 0; i < searchableItems.value.length; i++) {
+    const item = searchableItems.value[i];
     if (item.name.toLowerCase().includes(searchQuery.value.toLowerCase())) {
       output.push(item);
     }

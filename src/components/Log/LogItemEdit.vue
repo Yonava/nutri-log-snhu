@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header title="Modify Item">
+    <default-header title="Log Item">
       <template #left>
         <ion-back-button 
           default-href="/tabs/log"
@@ -159,6 +159,8 @@ export default {
     const route = useRoute();
     const itemSelected = store.getters.selectedLogItem;
 
+    const dispatchTo = route.query.dispatchTo ?? 'updateLoggedItem';
+
     const item = ref(structuredClone(itemSelected));
     const titleFocused = ref(false);
 
@@ -177,7 +179,6 @@ export default {
 
     onUnmounted(() => {
       if (JSON.stringify(item.value) === JSON.stringify(itemSelected)) return;
-      const dispatchTo = route.query.dispatchTo ?? 'updateLoggedItem';
       store.dispatch(dispatchTo, item.value);
     });
 
