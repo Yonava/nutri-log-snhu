@@ -177,6 +177,7 @@ const Log: Module<LogState, any> = {
       }
     },
     async postCustomItem({ commit, getters }, item: UnloggedItem) {
+      item._id = new mongoose.Types.ObjectId().toString();
       try {
         await axios.post(`/users/${getters.userId}/customItems`, item)
         commit('presentToast', {
