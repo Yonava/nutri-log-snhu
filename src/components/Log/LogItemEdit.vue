@@ -4,7 +4,7 @@
       <template #left>
         <ion-back-button 
           default-href="/tabs/log"
-          text="Log"
+          text="Save & Exit"
         ></ion-back-button>
       </template>
     </default-header>

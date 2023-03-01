@@ -72,7 +72,7 @@ watch(editableValue, (newValue) => {
   if (newValue === "") return;
   if (isNaN(newValue)) return;
   if (newValue < 0) return;
-  emits('valueChange', newValue);
+  emits('valueChange', Number(newValue));
 });
 </script>
 

@@ -29,7 +29,7 @@
             </div>
           </div>
           <h2 class="item-name">
-            {{ item.name }}
+            {{ item.name || 'Untitled' }}
           </h2>
         </div>
       </ion-item>
