@@ -16,7 +16,7 @@
           </div>
         </div>
         <h4 class="item-name">
-          {{ item.name }}
+          {{ item.name || '(No title)' }}
         </h4>
       </div>
       <ion-icon 

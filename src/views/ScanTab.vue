@@ -6,7 +6,10 @@
           v-if="loading"  
           type="indeterminate"
         ></ion-progress-bar>
-        <div id="cameraPreview"></div>
+        <img
+          v-if="imageFrame" 
+          :src="imageFrame" 
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -23,7 +26,7 @@ import {
   IonProgressBar,
 } from '@ionic/vue';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+// import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CameraPreview } from '@capacitor-community/camera-preview';
 import { useRoute } from 'vue-router';
 
@@ -31,6 +34,7 @@ const route = useRoute();
 
 const imageFrame = ref<string | undefined>(undefined);
 const loading = ref(true);
+const capture = ref<any>(undefined);
 
 watch(() => route.path, async (newVal: string, oldVal: string) => {
   if (newVal.includes('scan')) {
@@ -49,17 +53,23 @@ onMounted(async () => {
 
 async function startCameraPreview() {
   await CameraPreview.start({
-    parent: 'cameraPreview',
+    parent: 'app',
     position: 'rear',
-    width: innerWidth,
-    height: innerHeight - 52,
-    className: 'cameraPreview',
-    enableHighResolution: true,
+    width: window.innerWidth,
+    height: window.innerHeight - 52,
     disableAudio: true,
   });
+  capture.value = setInterval(async () => {
+    const image = await CameraPreview.capture({ 
+      quality: 2,
+    });
+    console.log('Picture taken');
+    imageFrame.value = 'data:image/jpeg;base64,' + image.value;
+  }, 50);
 }
 
 async function stopCameraPreview() {
+  clearInterval(capture.value);
   await CameraPreview.stop();
 }
 </script>
