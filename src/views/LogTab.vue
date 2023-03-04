@@ -25,6 +25,7 @@
           <ion-item-divider 
             sticky="true"
             class="center"
+            style="background-color: #192841"
           >
             <ion-label style="margin-top: 5px">
               {{ dateTag.date }}

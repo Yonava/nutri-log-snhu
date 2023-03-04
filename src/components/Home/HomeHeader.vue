@@ -19,7 +19,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        NutriLog SNHU
+        Todays Nutrition
       </ion-title>
     </ion-toolbar>
   </ion-header>

@@ -100,16 +100,20 @@ import {
   watch,
 } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import { LoggedItem, UnloggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
 import QuickAdd from '@/components/Log/QuickAdd.vue'
 import { getMealPeriod } from '@/utils/GetMeal';
 
 const store = useStore();
+const route = useRoute();
 
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
+const recentItems = ref<LoggedItem[]>([]);
+let suggestedItems: LoggedItem[] = [];
 
 type QuickAddCategory = {
   title: string;
@@ -118,19 +122,12 @@ type QuickAddCategory = {
 
 const quickAddCategories = ref<QuickAddCategory[]>([
   {
+    title: 'Suggested For You',
+    items: () => suggestedItems
+  },
+  {
     title: 'Recently Added',
-    items: () => {
-      const maxRecentItems = 5;
-      const output: UnloggedItem[] = [];
-      const loggedItems = store.getters.log;
-      for (let i = 0; i < loggedItems.length; i++) {
-        if (output.length === maxRecentItems) break;
-        if (output.find(item => item.name === loggedItems[i].name)) continue;
-        output.push(loggedItems[i]);
-      }
-      
-      return output;
-    }
+    items: () => recentItems.value,
   },
   {
     title: 'Your Custom Items',
@@ -197,6 +194,14 @@ onMounted(() => {
     await store.dispatch('fetchCatalog');
     loading.value = false;
   }, 500);
+
+  refreshRecentItems();
+  
+  if (store.getters.quickLog.length > 5) {
+    suggestedItems = store.getters.quickLog.slice(0, 5);
+  } else {
+    suggestedItems = store.getters.quickLog;
+  }
 });
 
 const searchableItems = computed(() => {
@@ -215,6 +220,23 @@ const searchResults = computed(() => {
   
   return output;
 });
+
+function refreshRecentItems() {
+  const maxRefreshItems = 5;
+  for (const item in store.getters.log) {
+    if (recentItems.value.length === maxRefreshItems) break;
+    if (recentItems.value.findIndex(
+      (i: LoggedItem) => i.name === store.getters.log[item].name) !== -1
+    ) continue;
+    recentItems.value.push(store.getters.log[item]);
+  }
+}
+
+watch(() => route.path, async (newVal: string) => {
+  if (newVal.includes('addCatalog')) {
+    refreshRecentItems();
+  }
+}, { immediate: true });
 </script>
 
 <style scoped>

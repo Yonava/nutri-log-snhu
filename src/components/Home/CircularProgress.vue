@@ -3,6 +3,7 @@
     <div class="radial-bar__circle">
       <div 
         :style="{ 
+          opacity: 1,
           transform: `rotate(${1.8 * percentage}deg)` 
         }" 
         class="radial-bar__mask js-radial-mask"
@@ -70,7 +71,7 @@ export default {
   margin: 50px;
   width: 80px;
   height: 80px;
-  background-color: var(--ion-color-step-150);
+  background-color: #0d1624;
   border-radius: 50%;
 }
 
@@ -104,7 +105,7 @@ export default {
   position: absolute;
   margin-left: 5px;
   margin-top: 5px;
-  background-color: var(--ion-color-step-50);
+  background-color: #162336;
   border-radius: 50%;
   display: table-cell;
 }

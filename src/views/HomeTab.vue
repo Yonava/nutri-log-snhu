@@ -1,5 +1,5 @@
 <template>
-  <ion-page id="home-tab-content">
+  <ion-page ref="home-tab-content" id="home-tab-content">
     <HomeHeader />
     <HomeMain />
   </ion-page>

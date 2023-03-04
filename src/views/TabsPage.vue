@@ -15,7 +15,7 @@
         </ion-tab-button>
           
         <ion-tab-button tab="log" href="/tabs/log">
-          <ion-icon :icon="document" />
+          <ion-icon :icon="listOutline" />
           <ion-label>Log</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
@@ -37,7 +37,7 @@ import {
 } from '@ionic/vue';
 import { 
   scanOutline, 
-  document, 
+  listOutline, 
   nutrition
 } from 'ionicons/icons';
 
@@ -56,7 +56,7 @@ export default defineComponent({
   setup() {
     return {
       scanOutline,
-      document,
+      listOutline,
       nutrition,
     }
   }

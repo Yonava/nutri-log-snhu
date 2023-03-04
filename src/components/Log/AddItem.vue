@@ -16,7 +16,7 @@
           </div>
         </div>
         <h4 class="item-name">
-          {{ item.name }}
+          {{ item.name || '(No title)' }}
         </h4>
       </div>
       <ion-icon 
@@ -114,7 +114,6 @@ const itemIcon = computed(() => {
   padding: 1px 4px;
   margin-right: 5px;
   display: inline-block;
-  font-weight: 700;
 }
 
 .item-parent {

@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <default-header title="Select Item">
+    <default-header title="Custom Items">
       <template #left>
         <ion-back-button 
           text="Select Item"
