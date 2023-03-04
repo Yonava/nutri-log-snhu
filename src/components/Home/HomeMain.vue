@@ -186,11 +186,15 @@ export default defineComponent({
           value: date
         });
       }
+      const selectedIndex = dates.findIndex(
+        (date) => date.value.toDateString() === store.getters.selectedDate.toDateString()
+      );
       const picker = await pickerController.create({
         columns: [
           {
             name: "date",
             options: dates,
+            selectedIndex,
           }
         ],
         buttons: [

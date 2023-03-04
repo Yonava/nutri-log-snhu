@@ -30,6 +30,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 // import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CameraPreview } from '@capacitor-community/camera-preview';
 import { useRoute } from 'vue-router';
+import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 
 const route = useRoute();
 
