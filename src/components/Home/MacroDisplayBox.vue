@@ -113,7 +113,7 @@ const borderRadius = computed(() => {
 .box {
   width: 22%; 
   height: 60px; 
-  background: var(--ion-color-light); 
+  background: #192841; 
   margin: 4px; 
   padding: 2px;
 }

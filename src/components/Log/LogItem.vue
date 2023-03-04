@@ -22,7 +22,7 @@
             >
               <div>
                 {{ chip.value }}
-                <span style="font-weight: 700"> 
+                <span> 
                   {{ chip.label }} 
                 </span>
               </div>
@@ -110,7 +110,7 @@ const potentialChips = [
   {
     label: 'cals',
     value: props.item.calories,
-    color: 'var(--ion-color-primary)',
+    color: '#23395d',
   },
   {
     label: 'protein',

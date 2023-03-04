@@ -46,9 +46,9 @@
       <div 
         v-for="i in 9" 
         :key="i" 
-        style="color: rgba(255, 255, 255, 0.35);"
+        style="color: rgba(255, 255, 255, 0.35); font-size: .8rem;"
       >
-        {{ (i - 1) * 3 }}
+        {{ toHourFormat((i - 1) * 3) }}
       </div>
     </div>
     <div class="chart-container center">
@@ -93,6 +93,13 @@ const nutrientByHour = computed(() => {
   const comp = props.selectedComponent;
   return store.getters.nutrientByHour(comp.getters.get(comp.target));
 })
+
+function toHourFormat(hour: number) {
+  if (hour === 0 || hour === 24) return '12a';
+  if (hour === 12) return '12p';
+  if (hour > 12) return `${hour - 12}p`;
+  return `${hour}a`;
+}
 </script>
 
 <style scoped>
@@ -118,11 +125,11 @@ const nutrientByHour = computed(() => {
   height: 25%; 
   flex-direction: row; 
   justify-content: space-around; 
-  width: 98%;
+  width: 100%;
 }
 
 .graph-parent {
-  background-color: var(--ion-color-step-200); 
+  background-color: #192841; 
   height: 100px; 
   width: 100%; 
   border-radius: 0 0 10px 10px;
@@ -151,7 +158,7 @@ const nutrientByHour = computed(() => {
 .target-display-parent {
   flex-direction: row; 
   justify-content: space-around; 
-  background-color: var(--ion-color-step-150); 
+  background-color: #121c2e; 
   border-radius: 10px 10px 0 0; 
   position: relative; 
   width: 100%;

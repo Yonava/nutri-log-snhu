@@ -10,6 +10,7 @@
     <input
       v-model.number="editableValue"
       :readonly="!editable"
+      inputmode="decimal"
       ref="inputField"
       type="number"
       class="macros"

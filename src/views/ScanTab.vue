@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content class="camera-preview-content">
+    <ion-content class="scan-content">
       <div>
         <ion-progress-bar
           v-if="loading"  
@@ -10,7 +10,7 @@
           :src="imageFrame" 
           style="width: 100px; height: 150px; position: fixed; z-index: 99; top: 0; right: 0; border: 1px solid red; object-fit: cover;"
         />
-        <div style="z-index: 1" id="camera-feedback"></div>
+        <div id="camera-feedback"></div>
       </div>
     </ion-content>
   </ion-page>
@@ -41,14 +41,17 @@ const capture = ref<any>(undefined);
 watch(() => route.path, async (newVal: string, oldVal: string) => {
   if (newVal.includes('scan')) {
     loading.value = true;
+    document.body.style.background = 'transparent';
     await startCameraPreview();
     loading.value = false;
   } else if (oldVal.includes('scan')) {
+    document.body.style.background = '';
     await stopCameraPreview();
   }
 });
 
 onMounted(async () => {
+  document.body.style.background = 'transparent';
   await startCameraPreview();
   loading.value = false;
 });
@@ -67,7 +70,7 @@ async function startCameraPreview() {
       quality: 2,
     });
     imageFrame.value = 'data:image/jpeg;base64,' + image.value;
-  }, 1000);
+  }, 3000);
 }
 
 async function stopCameraPreview() {
@@ -76,11 +79,8 @@ async function stopCameraPreview() {
 }
 </script>
 
-<style>
-body {
-  background: transparent !important;
-}
-ion-content {
-  --background: transparent !important;
+<style scoped>
+ion-content.scan-content {
+  --background: transparent;
 }
 </style>

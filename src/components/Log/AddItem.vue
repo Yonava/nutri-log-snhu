@@ -114,7 +114,6 @@ const itemIcon = computed(() => {
   padding: 1px 4px;
   margin-right: 5px;
   display: inline-block;
-  font-weight: 700;
 }
 
 .item-parent {

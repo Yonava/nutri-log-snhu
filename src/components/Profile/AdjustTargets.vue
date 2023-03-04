@@ -27,10 +27,15 @@
           class="center"
         >
           <div style="width: 90%; display: flex; flex-direction: row; justify-content: space-between">
-            <h3 style="margin: 0">
+            <h3 style="margin: 0; font-weight: 700;">
               {{ item.title }}
             </h3>
-            <h3 style="margin: 0">
+            <h3 
+              :style="{
+                transform: itemMoving === item.title ? 'scale(1.2)' : 'scale(1)',
+              }"
+              class="value-text"
+            >
               {{ item.value }}{{ item.unit }} 
             </h3>
           </div>
@@ -38,6 +43,9 @@
             <ion-range 
               v-model="item.value"
               @ionChange="updateTempDailyTargets(item.path, item.value)"
+              @touchstart="itemMoving = item.title"
+              @touchend="itemMoving = ''"
+              :step="getStep(item.range.min, item.range.max)"
               :min="item.range.min"
               :max="item.range.max"
               :style="{ 
@@ -79,7 +87,9 @@ type Target = {
 }
 
 const store = useStore();
+const itemMoving = ref("");
 const tempDailyTargets = ref(structuredClone(store.getters.allDailyTargets));
+
 const targets = ref<Target[]>(store.getters.macroComponents.map((component: MacroDisplayComponent) => {
   const path = component.getters.get(component.target)
   return {
@@ -108,22 +118,41 @@ onUnmounted(() => {
     store.dispatch("updateDailyTargets", tempDailyTargets.value);
   }
 });
+
+function getStep(min: number, max: number) {
+  const range = max - min;
+  if (range < 10) {
+    return 0.1;
+  } else if (range < 100) {
+    return 1;
+  } else if (range < 1000) {
+    return 10;
+  } else {
+    return 50;
+  }
+}
 </script>
 
 <style scoped>
-  ion-range::part(pin)::before {
-    content: none;
-  }
+.value-text {
+  margin: 0;
+  transition: 200ms ease-in-out;
+}
 
-  ion-range::part(knob) {
-    background: #99ccfb;
-  }
+ion-range::part(pin)::before {
+  content: none;
+}
 
-  ion-range::part(bar) {
-    background: #2bc0f1;
-  }
+ion-range::part(knob) {
+  transform: scale(0.6);
+  background: #99ccfb;
+}
 
-  ion-range::part(bar-active) {
-    background: #0c63a9;
-  }
+ion-range::part(bar) {
+  background: #2bc0f1;
+}
+
+ion-range::part(bar-active) {
+  background: #0c63a9;
+}
 </style>

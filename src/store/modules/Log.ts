@@ -64,7 +64,10 @@ const Log: Module<LogState, any> = {
         return total + value;
       }, 0);
     },
-    quickLog: state => state.log,
+    quickLog: state => {
+      const unique = new Set(state.log.map(item => item.name));
+      return [...unique]
+    },
   },
   mutations: {
     setSelectedLogItem(state, item: LoggedItem) {
