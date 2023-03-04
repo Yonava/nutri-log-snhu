@@ -2,9 +2,12 @@
   <ion-content content-id="home-tab-content">
     <ion-header collapse="condense">
       <ion-toolbar>
-        <ion-title size="large">
+        <ion-title 
+          @click="openDatePicker"
+          size="large" 
+        >
           {{ 
-            new Date().toLocaleString([], {
+            $store.getters.selectedDate.toLocaleString([], {
               month: 'long',
               day: 'numeric',
               year: 'numeric'
@@ -72,6 +75,7 @@ import {
   ref, 
   watch,
 } from "vue";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { useStore } from "vuex";
 import { 
   IonButton,
@@ -82,6 +86,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  pickerController,
 } from "@ionic/vue";
 import CalorieProgress from "./MacroCircle/CalorieProgress.vue";
 import CarbProgress from "./MacroCircle/CarbProgress.vue";
@@ -151,9 +156,47 @@ export default defineComponent({
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
-    function slideTo(index) {
+    async function slideTo(index) {
       activeSlide.value = index;
       slider.value.$el.slideTo(index);
+      await Haptics.impact({ style: ImpactStyle.Light });
+    }
+
+    async function openDatePicker() {
+      const dates = []
+      for (let i = 0; i < 7; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        dates.push({
+          text: date.toLocaleString([], {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          }),
+          value: date
+        });
+      }
+      const picker = await pickerController.create({
+        columns: [
+          {
+            name: "date",
+            options: dates,
+          }
+        ],
+        buttons: [
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+          {
+            text: "Confirm",
+            handler: (value) => {
+              store.commit("setSelectedDate", value.date.value);
+            },
+          },
+        ]
+      });
+      await picker.present();
     }
 
     return {
@@ -163,6 +206,7 @@ export default defineComponent({
       slideChangeDetector,
       macroComponents,
       rerender,
+      openDatePicker
     };
   },
 });
