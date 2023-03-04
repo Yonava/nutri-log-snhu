@@ -233,7 +233,6 @@ function refreshRecentItems() {
 }
 
 watch(() => route.path, async (newVal: string) => {
-  console.log(newVal)
   if (newVal.includes('addCatalog')) {
     refreshRecentItems();
   }

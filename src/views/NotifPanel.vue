@@ -51,7 +51,6 @@ type Notification = {
 }
 
 function removeItem(notifId: string) {
-	console.log(notifId)
 	const index = notifications.value.findIndex((item: Notification) => item._id === notifId);
 	notifications.value.splice(index, 1);
 }
