@@ -6,13 +6,19 @@
           @click="openDatePicker"
           size="large" 
         >
-          {{ 
-            $store.getters.selectedDate.toLocaleString([], {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric'
-            }) 
-          }}
+          <ion-icon 
+            style="position: absolute; top: 2px;"
+            :icon="calendarOutline" 
+          />
+          <span style="margin-left: 45px">
+            {{ 
+              $store.getters.selectedDate.toLocaleString([], {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              }) 
+            }}
+          </span>
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -88,6 +94,9 @@ import {
   IonTitle,
   pickerController,
 } from "@ionic/vue";
+import { 
+  calendarOutline,
+} from "ionicons/icons";
 import CalorieProgress from "./MacroCircle/CalorieProgress.vue";
 import CarbProgress from "./MacroCircle/CarbProgress.vue";
 import ProteinProgress from "./MacroCircle/ProteinProgress.vue";
@@ -164,7 +173,8 @@ export default defineComponent({
 
     async function openDatePicker() {
       const dates = []
-      for (let i = 0; i < 7; i++) {
+      const daysShown = 60;
+      for (let i = 0; i < daysShown; i++) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         dates.push({
@@ -206,7 +216,8 @@ export default defineComponent({
       slideChangeDetector,
       macroComponents,
       rerender,
-      openDatePicker
+      openDatePicker,
+      calendarOutline
     };
   },
 });
