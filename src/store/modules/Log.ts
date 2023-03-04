@@ -2,6 +2,7 @@ import { Module } from 'vuex';
 import { LogState } from '@/types/Vuex';
 import { LoggedItem, UnloggedItem } from '@/types/Log';
 import { getPropertyFromNestedObject } from '@/utils/GetNested';
+import { getQuickLog } from '@/utils/Log';
 
 import axios from 'axios';
 import mongoose from 'mongoose';
@@ -14,6 +15,7 @@ const Log: Module<LogState, any> = {
   },
   getters: {
     log: state => state.log,
+    quickLog: state => getQuickLog(state.log),
     customItems: state => state.customItems,
     selectedLogItem: state => state.selectedLogItem,
     loggedToday: state => state.log.filter(item => {
@@ -63,10 +65,6 @@ const Log: Module<LogState, any> = {
         }
         return total + value;
       }, 0);
-    },
-    quickLog: state => {
-      const unique = new Set(state.log.map(item => item.name));
-      return [...unique]
     },
   },
   mutations: {
