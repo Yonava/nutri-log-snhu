@@ -112,7 +112,7 @@ const route = useRoute();
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
-let recentItems: LoggedItem[] = [];
+const recentItems = ref<LoggedItem[]>([]);
 
 type QuickAddCategory = {
   title: string;
@@ -122,7 +122,7 @@ type QuickAddCategory = {
 const quickAddCategories = ref<QuickAddCategory[]>([
   {
     title: 'Recently Added',
-    items: () => recentItems,
+    items: () => recentItems.value,
   },
   {
     title: 'Your Custom Items',
@@ -211,15 +211,26 @@ const searchResults = computed(() => {
 });
 
 function refreshRecentItems() {
-  if (store.getters.log.length > 5) recentItems = store.getters.log.slice(0, 5)
-  else recentItems = store.getters.log;
+  const maxRefreshItems = 5;
+  for (const item in store.getters.log) {
+    if (recentItems.value.length === maxRefreshItems) break;
+    if (recentItems.value.findIndex(
+      (i: LoggedItem) => i.name === store.getters.log[item].name) !== -1
+    ) continue;
+    recentItems.value.push(store.getters.log[item]);
+  }
 }
 
-watch(() => route.path, async (newVal: string, oldVal: string) => {
+function refreshRecommenedItems() {
+
+}
+
+watch(() => route.path, async (newVal: string) => {
+  console.log(newVal)
   if (newVal.includes('addCatalog')) {
     refreshRecentItems();
   }
-});
+}, { immediate: true });
 </script>
 
 <style scoped>
