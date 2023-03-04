@@ -100,16 +100,19 @@ import {
   watch,
 } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import { LoggedItem, UnloggedItem } from '@/types/Log'
 import CatalogSearch from '@/components/Log/CatalogSearch.vue'
 import QuickAdd from '@/components/Log/QuickAdd.vue'
 import { getMealPeriod } from '@/utils/GetMeal';
 
 const store = useStore();
+const route = useRoute();
 
 const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
+let recentItems: LoggedItem[] = [];
 
 type QuickAddCategory = {
   title: string;
@@ -119,18 +122,7 @@ type QuickAddCategory = {
 const quickAddCategories = ref<QuickAddCategory[]>([
   {
     title: 'Recently Added',
-    items: () => {
-      const maxRecentItems = 5;
-      const output: UnloggedItem[] = [];
-      const loggedItems = store.getters.log;
-      for (let i = 0; i < loggedItems.length; i++) {
-        if (output.length === maxRecentItems) break;
-        if (output.find(item => item.name === loggedItems[i].name)) continue;
-        output.push(loggedItems[i]);
-      }
-      
-      return output;
-    }
+    items: () => recentItems,
   },
   {
     title: 'Your Custom Items',
@@ -197,6 +189,8 @@ onMounted(() => {
     await store.dispatch('fetchCatalog');
     loading.value = false;
   }, 500);
+
+  refreshRecentItems();
 });
 
 const searchableItems = computed(() => {
@@ -214,6 +208,17 @@ const searchResults = computed(() => {
   }
   
   return output;
+});
+
+function refreshRecentItems() {
+  if (store.getters.log.length > 5) recentItems = store.getters.log.slice(0, 5)
+  else recentItems = store.getters.log;
+}
+
+watch(() => route.path, async (newVal: string, oldVal: string) => {
+  if (newVal.includes('addCatalog')) {
+    refreshRecentItems();
+  }
 });
 </script>
 
