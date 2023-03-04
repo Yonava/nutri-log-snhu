@@ -1,10 +1,15 @@
 import { LoggedItem } from '@/types/Log';
+import store from '@/store';
 
 type ScoreItem = {
   name: string,
   score: number
 }
 
+/*
+  Time: n * log(n)
+  Space: n
+*/
 export function getQuickLog(log: LoggedItem[]) {
   const scoreMap = new Map<string, number>()
 
@@ -31,12 +36,21 @@ export function getQuickLog(log: LoggedItem[]) {
   })
 
   scoreArray.sort((a, b) => b.score - a.score)
-  const output = scoreArray.map(i => i.name)
-
+  
   const maxItems = 15;
-  if (output.length > maxItems) {
-    return output.slice(0, maxItems)
-  } else{
-    return output
+  const output: LoggedItem[] = [];
+  for (let i = 0; i < scoreArray.length; i++) {
+    if (i === maxItems) break;
+    const outputItem = log.find(item => item.name === scoreArray[i].name);
+    if (outputItem) output.push(outputItem);
+    else {
+      console.error('getQuickLog: outputItem is undefined', scoreArray[i].name)
+      store.commit('presentToast', {
+        message: 'Error! getQuickLog: outputItem is undefined (utils/Log.ts 45)',
+        color: 'danger'
+      })
+    }
   }
+
+  return output;
 }

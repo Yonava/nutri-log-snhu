@@ -113,6 +113,7 @@ const loading = ref(true);
 const searching = ref(false);
 const searchQuery = ref('');
 const recentItems = ref<LoggedItem[]>([]);
+let suggestedItems: LoggedItem[] = [];
 
 type QuickAddCategory = {
   title: string;
@@ -120,6 +121,10 @@ type QuickAddCategory = {
 }
 
 const quickAddCategories = ref<QuickAddCategory[]>([
+  {
+    title: 'Suggested For You',
+    items: () => suggestedItems
+  },
   {
     title: 'Recently Added',
     items: () => recentItems.value,
@@ -191,6 +196,12 @@ onMounted(() => {
   }, 500);
 
   refreshRecentItems();
+  
+  if (store.getters.quickLog.length > 5) {
+    suggestedItems = store.getters.quickLog.slice(0, 5);
+  } else {
+    suggestedItems = store.getters.quickLog;
+  }
 });
 
 const searchableItems = computed(() => {
@@ -219,10 +230,6 @@ function refreshRecentItems() {
     ) continue;
     recentItems.value.push(store.getters.log[item]);
   }
-}
-
-function refreshRecommenedItems() {
-
 }
 
 watch(() => route.path, async (newVal: string) => {
