@@ -44,6 +44,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/CustomItems.vue')
       },
       {
+        name: 'Scan',
         path: 'scan',
         component: () => import('@/views/ScanTab.vue')
       },

@@ -58,6 +58,7 @@ import { informationCircleOutline, closeOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { LoggedItem } from "@/types/Log";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const store = useStore();
 const quickLog = ref<LoggedItem[]>([]);
@@ -71,14 +72,15 @@ const showInfo = () => {
     message: `Suggestions are personalized and based on a variety of factors, 
     including your most recent logs, 
     your most common logs, and time of day.`,
-    duration: 8000,
+    duration: 7_500,
     position: 'bottom',
     icon: informationCircleOutline,
   })
 };
 
-const open = () => {
+const open = async () => {
   quickLog.value = store.getters.quickLog;
+  await Haptics.impact({ style: ImpactStyle.Light });
 };
 
 const close = () => {

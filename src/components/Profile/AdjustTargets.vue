@@ -23,7 +23,7 @@
         <div
           v-for="item in targets" 
           :key="item" 
-          :style="`background-color: var(--ion-color-step-150); width: 93%; height: 100px; border-radius: 15px; margin-bottom: 10px; border: 2px solid ${item.color};`"
+          :style="`width: 93%; height: 100px; border-radius: 15px; margin-bottom: 10px; border: 2px solid ${item.color};`"
           class="center"
         >
           <div style="width: 90%; display: flex; flex-direction: row; justify-content: space-between">
@@ -73,6 +73,7 @@ import {
 import { useStore } from "vuex";
 import { ref, onUnmounted } from "vue";
 import { MacroDisplayComponent } from "@/types/User";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 type Target = {
   title: string;
@@ -105,12 +106,13 @@ const targets = ref<Target[]>(store.getters.macroComponents.map((component: Macr
   }
 }));
 
-function updateTempDailyTargets(path: string[], value: number) {
+async function updateTempDailyTargets(path: string[], value: number) {
   let current = tempDailyTargets.value;
   for (let i = 0; i < path.length - 1; i++) {
     current = current[path[i]];
   }
   current[path[path.length - 1]] = value;
+  await Haptics.impact({ style: ImpactStyle.Light });
 }
 
 onUnmounted(() => {

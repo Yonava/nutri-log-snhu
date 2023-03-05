@@ -2,14 +2,23 @@
   <ion-content content-id="home-tab-content">
     <ion-header collapse="condense">
       <ion-toolbar>
-        <ion-title size="large">
-          {{ 
-            new Date().toLocaleString([], {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric'
-            }) 
-          }}
+        <ion-title 
+          @click="openDatePicker"
+          size="large" 
+        >
+          <ion-icon 
+            style="position: absolute; top: 2px;"
+            :icon="calendarOutline" 
+          />
+          <span style="margin-left: 45px">
+            {{ 
+              $store.getters.selectedDate.toLocaleString([], {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              })
+            }}
+          </span>
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -72,6 +81,7 @@ import {
   ref, 
   watch,
 } from "vue";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { useStore } from "vuex";
 import { 
   IonButton,
@@ -82,7 +92,11 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  pickerController,
 } from "@ionic/vue";
+import { 
+  calendarOutline,
+} from "ionicons/icons";
 import CalorieProgress from "./MacroCircle/CalorieProgress.vue";
 import CarbProgress from "./MacroCircle/CarbProgress.vue";
 import ProteinProgress from "./MacroCircle/ProteinProgress.vue";
@@ -151,9 +165,52 @@ export default defineComponent({
       activeSlide.value = await slider.value.$el.getActiveIndex();
     });
 
-    function slideTo(index) {
+    async function slideTo(index) {
       activeSlide.value = index;
       slider.value.$el.slideTo(index);
+      await Haptics.impact({ style: ImpactStyle.Light });
+    }
+
+    async function openDatePicker() {
+      const dates = []
+      const daysShown = 60;
+      for (let i = 0; i < daysShown; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        dates.push({
+          text: date.toLocaleString([], {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          }),
+          value: date
+        });
+      }
+      const selectedIndex = dates.findIndex(
+        (date) => date.value.toDateString() === store.getters.selectedDate.toDateString()
+      );
+      const picker = await pickerController.create({
+        columns: [
+          {
+            name: "date",
+            options: dates,
+            selectedIndex,
+          }
+        ],
+        buttons: [
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+          {
+            text: "Confirm",
+            handler: (value) => {
+              store.commit("setSelectedDate", value.date.value);
+            },
+          },
+        ]
+      });
+      await picker.present();
     }
 
     return {
@@ -163,6 +220,8 @@ export default defineComponent({
       slideChangeDetector,
       macroComponents,
       rerender,
+      openDatePicker,
+      calendarOutline
     };
   },
 });

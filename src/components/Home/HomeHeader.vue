@@ -19,7 +19,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        Todays Nutrition
+        Daily Progress
       </ion-title>
     </ion-toolbar>
   </ion-header>

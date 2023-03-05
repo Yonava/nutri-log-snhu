@@ -3,6 +3,7 @@ import { LogState } from '@/types/Vuex';
 import { LoggedItem, UnloggedItem } from '@/types/Log';
 import { getPropertyFromNestedObject } from '@/utils/GetNested';
 import { getQuickLog } from '@/utils/Log';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import axios from 'axios';
 import mongoose from 'mongoose';
@@ -12,19 +13,20 @@ const Log: Module<LogState, any> = {
     log: [],
     customItems: [],
     selectedLogItem: null,
+    selectedDate: new Date(),
   },
   getters: {
     log: state => state.log,
     quickLog: state => getQuickLog(state.log),
     customItems: state => state.customItems,
     selectedLogItem: state => state.selectedLogItem,
-    loggedToday: state => state.log.filter(item => {
+    selectedDate: state => state.selectedDate,
+    selectedDateLog: state => state.log.filter(item => {
       const date = new Date(item.dateAdded)
-      const today = new Date()
       return (
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear()
+        date.getDate() === state.selectedDate.getDate() &&
+        date.getMonth() === state.selectedDate.getMonth() &&
+        date.getFullYear() === state.selectedDate.getFullYear()
       )
     }),
     // nutrient may be nested, e.g. 'macro.carbohydrates.total'
@@ -34,7 +36,7 @@ const Log: Module<LogState, any> = {
       (state, getters, rootState, rootGetters) => 
       (nutrient: (keyof LoggedItem)[]) => {
       const data = new Array(24).fill(0);
-      getters.loggedToday.forEach((item: LoggedItem) => {
+      getters.selectedDateLog.forEach((item: LoggedItem) => {
         const hour = new Date(item.dateAdded).getHours();
         const value = getPropertyFromNestedObject(item, nutrient);
         if (typeof value !== 'number') {
@@ -57,7 +59,7 @@ const Log: Module<LogState, any> = {
     dailyTotal:
       (state, getters) => 
       (nutrientPath: (keyof LoggedItem)[]) => {
-        return getters.loggedToday.reduce((total: number, item: LoggedItem) => {
+        return getters.selectedDateLog.reduce((total: number, item: LoggedItem) => {
         const value = getPropertyFromNestedObject(item, nutrientPath);
         if (typeof value !== 'number') {
           console.error('dailyTotal: value is not a number', value, nutrientPath);
@@ -68,6 +70,9 @@ const Log: Module<LogState, any> = {
     },
   },
   mutations: {
+    setSelectedDate(state, date: Date) {
+      state.selectedDate = date;
+    },
     setSelectedLogItem(state, item: LoggedItem) {
       state.selectedLogItem = item
     },
@@ -131,6 +136,7 @@ const Log: Module<LogState, any> = {
       try {
         await axios.post(`/users/${getters.userId}/log`, loggedItem)
         commit('addLogItem', loggedItem)
+        await Haptics.impact({ style: ImpactStyle.Medium })
         commit('presentToast', {
           message: `Added ${loggedItem.name} to log`,
           color: 'success',

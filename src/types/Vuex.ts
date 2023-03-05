@@ -15,7 +15,8 @@ export interface UserState {
 export interface LogState {
   log: LoggedItem[],
   customItems: UnloggedItem[],
-  selectedLogItem: LoggedItem | null
+  selectedLogItem: LoggedItem | null,
+  selectedDate: Date
 }
 
 export interface AuthState {
