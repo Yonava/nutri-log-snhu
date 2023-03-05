@@ -2,29 +2,41 @@
   <ion-page id="scan-tab-content">
     <ion-content class="scan-content">
       <ion-modal
+        @didDismiss="startScan"
         trigger="open-modal"
         id="product-display-modal"
-        :initial-breakpoint="1"
-        :breakpoints="[0, 1]"
+        :initial-breakpoint="0.95"
+        :breakpoints="[0, 0.95]"
       >
-        <ion-content>
+        <ion-content class="ion-padding">
           <div class="center">
-            <ion-button
-              @click="closeModal"
-              id="close-modal"
-              shape="round"
-              color="danger"
-              style="margin: 20px; width: 92%"
-            >
-              Close
-            </ion-button>
-            <img :src="relevantData.image" />
+            <div style="display: flex; flex-direction: row;">
+              <img 
+                :src="relevantData.image" 
+                style="width: 100px; height: 100px; border-radius: 10px; object-fit: cover; margin-right: 10px;"
+              />
+              <h1 style="margin: 0; font-weight: 700;">
+                {{ relevantData.name }}
+              </h1>
+            </div>
+            <div style="width: 100%; background: rgba(255, 255, 255, 0.1); margin-top: 15px; border-radius: 5px; padding: 10px">
+              <div style="font-weight: bold; font-size: 2rem">
+                Nutrition Facts
+              </div>
+              <div style="margin-top: 5px;">
+                {{ relevantData.nutrition.fat_serving }}g Fat
+                {{ relevantData.nutrition.carbs_serving }}g Carbs
+                {{ relevantData.nutrition.protein_serving }}g Protein
+                {{ relevantData.nutrition.calcium_serving }}g Calcium
+                {{ relevantData.nutrition.iron_serving * 1000 }}mg Iron
+              </div>
+            </div>
             <code style="width: 90%">
               {{ relevantData.nutrition }}
-              ______________________________________
+              <!-- ______________________________________
               {{ relevantData.ingredients }}
               ______________________________________
-              {{ relevantData.name }}
+              {{ relevantData.name }} -->
             </code>
           </div>
         </ion-content>
@@ -39,8 +51,10 @@ import {
   IonContent,
   IonButton,
   IonModal,
-  alertController
+  alertController,
+  IonIcon
 } from '@ionic/vue';
+import { closeOutline } from 'ionicons/icons';
 import { onMounted, watch, ref } from 'vue';
 // import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CameraPreview } from '@capacitor-community/camera-preview';
@@ -51,7 +65,22 @@ const route = useRoute();
 const router = useRouter();
 const barcodeContent = ref<string>('');
 const relevantData = ref<any>({});
-const productModal = ref<HTMLElement>();
+const productModal = ref<any>();
+
+async function startPreview() {
+  await CameraPreview.start({
+    parent: 'camera-preview',
+    position: 'rear',
+    toBack: true,
+    disableAudio: true,
+    width: window.innerWidth,
+    height: window.innerHeight - 52,
+  });
+}
+
+async function stopPreview() {
+  await CameraPreview.stop();
+}
 
 watch(() => route.path, async (newVal: string, oldVal: string) => {
   if (newVal === '/tabs/scan') {
@@ -65,28 +94,22 @@ watch(() => route.path, async (newVal: string, oldVal: string) => {
 
 onMounted(async () => {
   document.body.style.background = 'transparent';
+  productModal.value = document.getElementById('product-display-modal')!;
   startScan();
 });
 
 async function startScan() {
   const result = await BarcodeScanner.startScan();
-  if (!result.content) return;
+  if (!result.content) return; 
   barcodeContent.value = result.content;
-  await getBarcodeData();
-  // open product modal
-  productModal.value = document.getElementById('product-display-modal')!;
+  startScan();
   // ts-expect-error for now we just want to get the modal to open
+  await getBarcodeData();
   productModal.value.present();
 }
 
 async function closeModal() {
-  barcodeContent.value = '';
-  productModal.value = document.getElementById('product-display-modal')!;
-  // ts-expect-error for now we just want to get the modal to open
   productModal.value.dismiss();
-  setTimeout(() => {
-    startScan();
-  }, 500);
 }
 
 async function getBarcodeData() {
