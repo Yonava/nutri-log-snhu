@@ -44,8 +44,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/components/Log/CustomItems.vue')
       },
       {
+        name: 'Scan',
         path: 'scan',
         component: () => import('@/views/ScanTab.vue')
+      },
+      {
+        name: "BarcodeResults",
+        path: 'scan/barcode',
+        component: () => import('@/components/Scan/BarcodeResults.vue'),
       },
       {
         name: 'Personalize',

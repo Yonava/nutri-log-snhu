@@ -5,13 +5,17 @@ const config: CapacitorConfig = {
   appName: 'nutrilog',
   webDir: 'dist',
   bundledWebRuntime: false,
+  server: {
+    url: "http://169.254.87.122:8100",
+    cleartext: true
+  },
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
       backgroundColor: "#005500",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
-      showSpinner: true,
+      showSpinner: false,
       androidSpinnerStyle: "large",
       iosSpinnerStyle: "large",
       spinnerColor: "#FF0000",

@@ -16,7 +16,7 @@
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric'
-              }) 
+              })
             }}
           </span>
         </ion-title>
