@@ -4,7 +4,8 @@
       <ion-modal
         trigger="open-modal"
         id="product-display-modal"
-        :presenting-element="presentingElement"
+        :initial-breakpoint="1"
+        :breakpoints="[0, 1]"
       >
         <ion-content>
           <div class="center">
@@ -37,7 +38,8 @@ import {
   IonPage,
   IonContent,
   IonButton,
-  IonModal
+  IonModal,
+  alertController
 } from '@ionic/vue';
 import { onMounted, watch, ref } from 'vue';
 // import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
@@ -49,34 +51,20 @@ const route = useRoute();
 const router = useRouter();
 const barcodeContent = ref<string>('');
 const relevantData = ref<any>({});
-const presentingElement = ref<HTMLElement>();
 const productModal = ref<HTMLElement>();
-
-async function startCameraPreview() {
-  console.log('starting camera preview')
-  await CameraPreview.start({
-    parent: 'scan-tab-content',
-    position: 'rear',
-    toBack: true,
-    width: window.innerWidth,
-    height: window.innerHeight - 52,
-    disableAudio: true,
-  });
-}
 
 watch(() => route.path, async (newVal: string, oldVal: string) => {
   if (newVal === '/tabs/scan') {
-    await startCameraPreview();
+    document.body.style.background = 'transparent';
     startScan();
   } else if (oldVal === '/tabs/scan') {
     await BarcodeScanner.stopScan();
-    await CameraPreview.stop();
+    document.body.style.background = '';
   }
 });
 
-onMounted(() => {
+onMounted(async () => {
   document.body.style.background = 'transparent';
-  presentingElement.value = document.getElementById('scan-tab-content') as HTMLElement;
   startScan();
 });
 
@@ -85,7 +73,6 @@ async function startScan() {
   if (!result.content) return;
   barcodeContent.value = result.content;
   await getBarcodeData();
-  await BarcodeScanner.stopScan();
   // open product modal
   productModal.value = document.getElementById('product-display-modal')!;
   // ts-expect-error for now we just want to get the modal to open
@@ -93,12 +80,13 @@ async function startScan() {
 }
 
 async function closeModal() {
+  barcodeContent.value = '';
   productModal.value = document.getElementById('product-display-modal')!;
   // ts-expect-error for now we just want to get the modal to open
   productModal.value.dismiss();
   setTimeout(() => {
     startScan();
-  }, 2000);
+  }, 500);
 }
 
 async function getBarcodeData() {
@@ -117,7 +105,7 @@ async function getBarcodeData() {
 </script>
 
 <style scoped>
-ion-content.scan-content {
+ion-content {
   --background: transparent;
 }
 </style>
