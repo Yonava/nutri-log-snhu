@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'nutrilog',
   webDir: 'dist',
   bundledWebRuntime: false,
-  server: {
-    url: "http://169.254.87.122:8100",
-    cleartext: true
-  },
+  // server: {
+  //   url: "http://169.254.87.122:8100",
+  //   cleartext: true
+  // },
   plugins: {
     SplashScreen: {
       launchAutoHide: false,

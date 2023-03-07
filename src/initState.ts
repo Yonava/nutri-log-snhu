@@ -33,7 +33,10 @@ export async function init() {
     }
   }
 
-  SplashScreen.hide();
+  // TODO: remove this... temporary to show off/test splash screen
+  setTimeout(() => {
+    SplashScreen.hide();
+  }, 3000);
 
   if (!vuexStore.getters.isLoggedIn) {
     setTimeout(() => {
