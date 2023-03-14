@@ -149,7 +149,7 @@ ion-content {
   left: 50%;
   transform: translate(-50%, -80%);
   width: 390px;
-  background: rgba(4, 42, 112, 0.925);
+  background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }
 
