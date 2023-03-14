@@ -121,6 +121,7 @@ export default defineComponent({
         catch (err) {
             const strErr = String(err);
             this.emailErr = strErr.replace(/.+: /, "");
+            this.emailErr = this.emailErr.replace(/Username/, "Email");
         }
     }
   },
