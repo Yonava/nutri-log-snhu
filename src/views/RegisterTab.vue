@@ -45,6 +45,7 @@
           </div>
           <div class="register-err" v-if="confirmErr != ''">{{ confirmErr }}</div>
           <div class="subtext">Didn't get an email? <button class="subtext-link" @click="resendCode">Resend Code</button></div>
+          <div class="subtext">Already have an account? <router-link class="subtext-link" to="/signin">Sign In</router-link></div>
         </div>
       </div>
     </ion-content>
