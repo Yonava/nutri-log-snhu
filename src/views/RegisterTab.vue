@@ -13,4 +13,6 @@ export default defineComponent({
         IonPage,
     },
 });
+
+// rgba(0,34,50,1) 0%, rgba(11,80,98,1) 54%, rgba(38,193,217,1) 100%
 </script>
