@@ -108,7 +108,7 @@ export default defineComponent({
         catch (err) {
             const strErr = String(err);
             this.registerErr = strErr.replace(/.+: /, "");
-            this.registerErr = this.emailErr.replace(/Username/, "Email");
+            this.registerErr = this.registerErr.replace(/Username/, "Email");
         }
     },
     async confirmAcct() {
@@ -119,7 +119,7 @@ export default defineComponent({
         catch (err) {
             const strErr = String(err);
             this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.emailErr.replace(/Username/, "Email");
+            this.confirmErr = this.registerErr.replace(/Username/, "Email");
         }
     },
     async resendCode() {
@@ -130,7 +130,7 @@ export default defineComponent({
         catch (err) {
             const strErr = String(err);
             this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.emailErr.replace(/Username/, "Email");
+            this.confirmErr = this.confirmErr.replace(/Username/, "Email");
         }
     }
   },
