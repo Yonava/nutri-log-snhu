@@ -5,12 +5,12 @@
         <h1>Login</h1>
         <div class="form">
           <div class="text-field">
-            <input type="text" v-model="email" required>
+            <input type="text" v-model="email" @keyup.enter="signIn" required>
             <span></span>
             <label>Email</label>
           </div>
           <div class="text-field">
-            <input type="password" v-model="password" required>
+            <input type="password" v-model="password" @keyup.enter="signIn" required>
             <span></span>
             <label>Password</label>
           </div>
@@ -20,30 +20,12 @@
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
       </div>
-      <!-- <Authenticator>
-        <template v-slot="{ user }">
-          <h1>Hello {{ user.username }}!</h1>
-          <button @click="signOut">Sign Out</button>
-          <br />
-          <button @click="deleteUser">Delete User</button>
-        </template>
-      </Authenticator> -->
-      <!-- <p class="center">Don't have an account?<router-link to="/register">Register Here</router-link></p> -->
-      <!-- <button 
-        v-for="user in tempUserList"
-        :key="user._id"
-        style="margin: 10px; color: white; background-color: #3b3b3b; border-radius: 5px; padding: 5px;"
-        @click.once="tempSignIn(user._id)"
-      >
-        {{ user.firstName }} {{ user.lastName }}
-      </button> -->
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-// import { Authenticator } from "@aws-amplify/ui-vue";
-import { Hub, Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
@@ -54,9 +36,7 @@ import axios from "axios";
 export default defineComponent({
   components: {
     IonPage,
-    IonContent,
-    // IonHeader,
-    // Authenticator,
+    IonContent
   },
   data() {
     return {
@@ -76,21 +56,6 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  mounted() {
-    // Listen for Auth events
-    const AuthListener = (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          // Do sign in stuff
-          break;
-        case 'signOut':
-          // Do sign out stuff
-          break;
-      }
-    };
-
-    Hub.listen("auth", AuthListener);
   },
   methods: {
     async signIn() {
