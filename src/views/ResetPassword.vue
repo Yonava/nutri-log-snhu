@@ -21,10 +21,9 @@
           <div class="text-field">
             <input type="text" v-model="code" @keyup.enter="confirmReset" required>
             <span></span>
-            <label>Code</label>
+            <label>Confirmation Code</label>
           </div>
           <div class="reset-err" v-if="codeErr != ''">{{ codeErr }}</div>
-          <input type="submit" value="Verify" @click="confirmReset">
           <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
         </div>
       </div>
@@ -69,7 +68,6 @@ export default defineComponent({
       userId: "",
       tempUserList: [],
       email: "",
-      code: "",
       firstPass: "",
       secondPass: "",
       emailErr: "",
@@ -117,20 +115,27 @@ export default defineComponent({
             if (!this.matchPwd()) throw Error("Passwords do not match");
 
             await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
+
+            this.$router.push({ path: '/tabs/home'});
         }
         catch (err) {
             const strErr = String(err);
-            this.emailErr = strErr.replace(/.+: /, "");
-            this.emailErr = this.emailErr.replace(/Username/, "Email");
+            this.resetErr = strErr.replace(/.+: /, "");
+            this.resetErr = this.resetErr.replace(/Username/, "Email");
         }
     }
   },
   watch: {
     firstPass() {
         if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+        else this.resetErr = "";
     },
     secondPass() {
         if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+        else this.resetErr = "";
+    },
+    code() {
+        if (this.code.length == 6) this.confirmReset();
     }
   }
 });
@@ -149,7 +154,7 @@ ion-content {
   left: 50%;
   transform: translate(-50%, -80%);
   width: 390px;
-  background: rgba(4, 42, 112, 0.925);
+  background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }
 
