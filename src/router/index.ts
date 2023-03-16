@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'log',
-        component: () => import('@/views/LogTab.vue'),
+        component: () => import('@/views/LogTab.vue')
       },
       {
         name: 'LogEditDetail',
@@ -74,6 +74,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'SignIn',
     path: '/signin',
     component: () => import('@/views/SignInTab.vue')
+  },
+  {
+    name: 'ResetPassword',
+    path: '/reset-password',
+    component: () => import('@/views/ResetPassword.vue')
+  },
+  {
+    name: 'Register',
+    path: '/register',
+    component: () => import('@/views/RegisterTab.vue')
   }
 ]
 
