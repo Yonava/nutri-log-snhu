@@ -152,14 +152,22 @@ export default defineComponent({
     // implemented. Normally, don't do this.
     const rerender = ref(true);
 
-    watch(store.getters.macroComponents, (newVal) => {
-      macroComponents.value = newVal.slice(0, 8);
+    watch(store.getters.macroComponents, () => {
+      setNewComponents()
+    });
+
+    watch(store.getters.caloriesHidden, () => {
+      setNewComponents()
+    });
+
+    function setNewComponents() {
+      macroComponents.value = store.getters.macroComponents.slice(0, 8);
       rerender.value = false;
       setTimeout(() => {
         rerender.value = true;
         activeSlide.value = 0;
       }, 100);
-    });
+    }
 
     watch(slideChangeDetector, async () => {
       activeSlide.value = await slider.value.$el.getActiveIndex();

@@ -77,7 +77,6 @@ export default defineComponent({
         text: () => `${store.getters.caloriesHidden ? "Show" : "Hide"} Calories`,
         action: () => {
           store.dispatch("toggleCaloriesHidden");
-          store.getters.macroComponents;
         }
       },
       { 
