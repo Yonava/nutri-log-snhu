@@ -63,7 +63,12 @@ onMounted(() => {
       color: 'var(--ion-color-tertiary)',
     }
   ];
-  chips.value = possibleChips.filter(chip => chip.value);
+  chips.value = possibleChips.filter(chip => {
+    if (store.getters.caloriesHidden) {
+      return chip.value !== props.item.calories + ' cals';
+    }
+    return chip.value;
+  });
 });
 
 const props = defineProps<{

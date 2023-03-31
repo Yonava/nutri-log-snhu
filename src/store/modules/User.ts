@@ -138,7 +138,13 @@ const User: Module<UserState, any> = {
     }
   },
   getters: {
-    macroComponents: state => state.macroDisplayComponents
+    macroComponents: (state, getters, rootState, rootGetters) => {
+      console.log(rootGetters.caloriesHidden)
+      if (rootGetters.caloriesHidden) {
+        return state.macroDisplayComponents.filter((component) => component.title !== "Calories");
+      }
+      return state.macroDisplayComponents;
+    }
   }
 }
 

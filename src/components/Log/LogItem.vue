@@ -62,7 +62,9 @@ import {
   computed,
   onMounted,
 } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const emit = defineEmits(['remove-item']);
 const removeButton = ref();
 const height = ref('59px');
@@ -126,6 +128,9 @@ const potentialChips = [
 
 onMounted(() => {
   potentialChips.forEach((chip) => {
+    if (store.getters.caloriesHidden) {
+      if (chip.label === 'cals') return;
+    }
     if (chip.value === 'Invalid Date') return;
     chips.value.push(chip);
   });
