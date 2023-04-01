@@ -156,10 +156,6 @@ export default defineComponent({
       setNewComponents()
     });
 
-    watch(store.getters.caloriesHidden, () => {
-      setNewComponents()
-    });
-
     function setNewComponents() {
       macroComponents.value = store.getters.macroComponents.slice(0, 8);
       rerender.value = false;

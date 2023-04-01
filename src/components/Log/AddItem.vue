@@ -5,10 +5,7 @@
       button
     >
       <div class="item-parent">
-        <div 
-          v-if="chips.length > 0"
-          class="chip-content"
-        >
+        <div class="chip-content">
           <div 
             v-for="chip in chips"
             :key="chip"
