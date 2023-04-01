@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Leave a comment
-        uses: peter-evans/create-pull-request-comment@v2
+        uses: Yonava/nutri-log-snhu
         with:
           message: "Good luck on the code review"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
