@@ -13,7 +13,7 @@ export default createStore<State>({
   state: {
     catalog: [],
     selectedCatalogItem: null,
-    caloriesHidden: false,
+    caloriesHidden: true,
 
     clientStore: null
   },

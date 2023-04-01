@@ -1,6 +1,6 @@
 <template>
   <CircularProgress 
-    :percent="percent"
+    :percent="store.getters.caloriesHidden ? 100 : percent"
     :color="color"
   />
   <div 

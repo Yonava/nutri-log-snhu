@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { IonItem, IonIcon } from '@ionic/vue';
 import { addCircleOutline, checkmarkCircleOutline } from 'ionicons/icons';
-import { defineProps, ref, computed, onMounted } from 'vue';
+import { defineProps, ref, computed, onMounted, watch } from 'vue';
 import { UnloggedItem } from '@/types/Log';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -48,7 +48,7 @@ const router = useRouter();
 const itemAdded = ref(false);
 const chips = ref<Chip[]>([]);
 
-onMounted(() => {
+function configChips() {
   const possibleChips = [
     {
       value: props.item.calories + ' cals',
@@ -65,10 +65,18 @@ onMounted(() => {
   ];
   chips.value = possibleChips.filter(chip => {
     if (store.getters.caloriesHidden) {
-      return chip.value !== props.item.calories + ' cals';
+      return chip.value !== props.item.calories + ' cals' && chip.value;
     }
     return chip.value;
   });
+}
+
+onMounted(() => {
+  configChips();
+});
+
+watch(() => store.getters.caloriesHidden, () => {
+  configChips();
 });
 
 const props = defineProps<{
