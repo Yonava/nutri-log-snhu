@@ -52,6 +52,12 @@ export function useRedrawObserver(
     }
   });
 
+  watch(() => store.getters.caloriesHidden, () => {
+    setTimeout(() => {
+      getNewData();
+    }, 100);
+  })
+
   setTimeout(() => {
     if (route.path.includes(homePath) && isActive.value) {
       getNewData();

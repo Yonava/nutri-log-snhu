@@ -1,6 +1,6 @@
 <template>
   <CircularProgress 
-    :percent="percent"
+    :percent="store.getters.caloriesHidden ? 100 : percent"
     :color="color"
   />
   <div 
@@ -9,8 +9,10 @@
   >
     <div style="font-weight: 700; font-size: 4.75rem">
       <AnimateCount
+        v-if="!store.getters.caloriesHidden"
         :number="currentData.total" 
       />
+      <span v-else>-</span>
     </div>
     <div style="font-weight: 200; font-size: 1.75rem">
       calories

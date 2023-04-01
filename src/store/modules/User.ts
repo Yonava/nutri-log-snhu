@@ -130,15 +130,22 @@ const User: Module<UserState, any> = {
     ]
   },
   mutations: {
-    swapMacroComponents(state, payload: { from: number, to: number }) {
+    swapMacroComponents: (state, payload: { from: number, to: number }) => {
       const { from, to } = payload;
       const temp = state.macroDisplayComponents[from];
       state.macroDisplayComponents[from] = state.macroDisplayComponents[to];
       state.macroDisplayComponents[to] = temp;
     }
   },
+  actions: {
+    swapMacroComponents: ({ commit }, payload: { from: number, to: number }) => {
+      commit("swapMacroComponents", payload);
+    }
+  },
   getters: {
-    macroComponents: state => state.macroDisplayComponents
+    macroComponents: (state) => {
+      return state.macroDisplayComponents;
+    }
   }
 }
 

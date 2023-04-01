@@ -92,6 +92,7 @@ const itemMoving = ref("");
 const tempDailyTargets = ref(structuredClone(store.getters.allDailyTargets));
 
 const targets = ref<Target[]>(store.getters.macroComponents.map((component: MacroDisplayComponent) => {
+  if (store.getters.caloriesHidden && component.title === "Calories") return null;
   const path = component.getters.get(component.target)
   return {
     title: component.title,
@@ -104,7 +105,7 @@ const targets = ref<Target[]>(store.getters.macroComponents.map((component: Macr
       max: store.getters.dailyTargetRange(path).max
     }
   }
-}));
+}).filter((item: Target) => item !== null));
 
 async function updateTempDailyTargets(path: string[], value: number) {
   let current = tempDailyTargets.value;

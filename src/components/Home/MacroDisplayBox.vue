@@ -12,7 +12,11 @@
         :style="{ fontSize: calculateFontSize }"
         class="number-text"
       >
+        <span v-if="store.getters.caloriesHidden && label === 'cals'">
+          -
+        </span>
         <AnimateCount 
+          v-else
           :number="displayValue"
           :unit="unit"
           :displayRaw="true"

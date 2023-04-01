@@ -76,5 +76,5 @@ const currentData = ref({
   trans: 0,
 });
 
-const { percent} = useRedrawObserver(props.getters, currentData, isActive, props.target);
+const { percent } = useRedrawObserver(props.getters, currentData, isActive, props.target);
 </script>
