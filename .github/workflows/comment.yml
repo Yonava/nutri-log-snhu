@@ -8,8 +8,15 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Leave a comment
-        uses: Yonava/nutri-log-snhu
-        with:
-          message: "Good luck on the code review"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Pull Request Add Comment
+      # You may pin to the exact commit or the version.
+      # uses: allthatjazzleo/actions-pull-request-add-comment@83b5c4e76e1fedc8c00e1877d85c9b953ba17c93
+      uses: allthatjazzleo/actions-pull-request-add-comment@v1
+      with:
+        # Message that should be printed in the pull request
+        message: "hi"
+        # Github token of the repository (automatically created by Github)
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      
