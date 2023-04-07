@@ -55,7 +55,7 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { defineComponent } from "vue";
+import { watch, ref, defineComponent } from "vue";
 
 import { IonPage, IonContent } from "@ionic/vue";
 
@@ -66,7 +66,66 @@ export default defineComponent({
     IonPage,
     IonContent
   },
-  data() {
+  setup() {
+    function matchPwd() {
+        return (this.firstPass == this.secondPass);
+    }
+
+    async function createAcct() {
+        try {
+            if (!this.matchPwd()) throw Error("Passwords do not match");
+
+            const user = await Auth.signUp(this.email, this.secondPass);
+            console.log(user);
+
+            this.registerUser = false;
+            this.confirmSignUp = true;
+        }
+        catch (err) {
+            const strErr = String(err);
+            this.registerErr = strErr.replace(/.+: /, "");
+            this.registerErr = this.registerErr.replace(/Username/, "Email");
+        }
+    }
+
+    async function confirmAcct() {
+        try {
+            await Auth.confirmSignUp(this.email, this.code);
+            this.$router.push({ path: '/tabs/home' });
+        }
+        catch (err) {
+            const strErr = String(err);
+            this.confirmErr = strErr.replace(/.+: /, "");
+            this.confirmErr = this.registerErr.replace(/Username/, "Email");
+        }
+    }
+
+    async function resendCode() {
+        try {
+            await Auth.resendSignUp(this.email);
+            this.sendLevel = "resent";
+        }
+        catch (err) {
+            const strErr = String(err);
+            this.confirmErr = strErr.replace(/.+: /, "");
+            this.confirmErr = this.confirmErr.replace(/Username/, "Email");
+        }
+    }
+
+    watch(this.firstPass, () => {
+        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
+        else this.registerErr = "";
+    });
+
+    watch(this.secondPass, () => {
+        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
+        else this.registerErr = "";
+    });
+
+    watch(this.code, () => {
+        if (this.code.length == 6) this.confirmAcct();
+    });
+
     return {
       fname: "",
       lname: "",
@@ -90,62 +149,6 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    matchPwd() {
-        return (this.firstPass == this.secondPass);
-    },
-    async createAcct() {
-        try {
-            if (!this.matchPwd()) throw Error("Passwords do not match");
-
-            const user = await Auth.signUp(this.email, this.secondPass);
-            console.log(user);
-
-            this.registerUser = false;
-            this.confirmSignUp = true;
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.registerErr = strErr.replace(/.+: /, "");
-            this.registerErr = this.registerErr.replace(/Username/, "Email");
-        }
-    },
-    async confirmAcct() {
-        try {
-            await Auth.confirmSignUp(this.email, this.code);
-            this.$router.push({ path: '/tabs/home' });
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.registerErr.replace(/Username/, "Email");
-        }
-    },
-    async resendCode() {
-        try {
-            await Auth.resendSignUp(this.email);
-            this.sendLevel = "resent";
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.confirmErr.replace(/Username/, "Email");
-        }
-    }
-  },
-  watch: {
-    firstPass() {
-        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
-        else this.registerErr = "";
-    },
-    secondPass() {
-        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
-        else this.registerErr = "";
-    },
-    code() {
-        if (this.code.length == 6) this.confirmAcct();
-    }
   }
 });
 </script>
