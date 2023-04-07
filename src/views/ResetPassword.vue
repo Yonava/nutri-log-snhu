@@ -89,27 +89,26 @@ export default defineComponent({
     }
 
     async function resetPassword() {
-        try {
-            if (!this.matchPwd()) throw Error("Passwords do not match");
+      try {
+        if (!this.matchPwd()) throw Error("Passwords do not match");
 
             await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
 
             this.$router.push({ path: '/tabs/home'});
         }
         catch (err) {
-            const strErr = String(err);
+          const strErr = String(err);
             this.resetErr = strErr.replace(/.+: /, "");
             this.resetErr = this.resetErr.replace(/Username/, "Email");
         }
     }
-
     watch(this.firstPass, () => {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+      if (!this.matchPwd()) this.resetErr = "Passwords do not match";
         else this.resetErr = "";
     });
     
     watch(this.secondPass, () => {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+      if (!this.matchPwd()) this.resetErr = "Passwords do not match";
         else this.resetErr = "";
     });
 
