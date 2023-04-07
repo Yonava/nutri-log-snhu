@@ -38,7 +38,30 @@ export default defineComponent({
     IonPage,
     IonContent
   },
-  data() {
+  setup() {
+    async function signIn() {
+      try {
+        if (this.email === "" || this.password === "") throw Error("Username and password cannot be empty");
+
+        const user = await Auth.signIn(this.email, this.password);
+        console.log(`User: ${user.username}`);
+        this.$router.push({ path: '/' });
+      } catch (err) {
+        const strErr = String(err); // make the error a string for printing
+        // Remove the error type from the string
+        if (strErr.includes("User does not exist")) {
+          this.loginErr = "Username or password is incorrect";
+          return;
+        }
+        this.loginErr = strErr.replace(/.+: /, "");
+      }
+    }
+
+    function tempSignIn(userId) {
+      localStorage.setItem("userId", userId);
+      window.location.replace("/");
+    }
+
     return {
       userId: "",
       tempUserList: [],
@@ -56,29 +79,6 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    async signIn() {
-      try {
-        if (this.email === "" || this.password === "") throw Error("Username and password cannot be empty");
-
-        const user = await Auth.signIn(this.email, this.password);
-        console.log(`User: ${user.username}`);
-        this.$router.push({ path: '/' });
-      } catch (err) {
-        const strErr = String(err); // make the error a string for printing
-        // Remove the error type from the string
-        if (strErr.includes("User does not exist")) {
-          this.loginErr = "Username or password is incorrect";
-          return;
-        }
-        this.loginErr = strErr.replace(/.+: /, "");
-      }
-    },
-    tempSignIn(userId) {
-      localStorage.setItem("userId", userId);
-      window.location.replace("/");
-    },
   }
 });
 </script>
