@@ -52,7 +52,7 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { defineComponent } from "vue";
+import { watch, defineComponent } from "vue";
 
 import { IonPage, IonContent } from "@ionic/vue";
 
@@ -63,7 +63,60 @@ export default defineComponent({
     IonPage,
     IonContent
   },
-  data() {
+  setup() {
+    async function sendReset() {
+        try {
+            await Auth.forgotPassword(this.email);
+            
+            this.enterEmail = false;
+            this.enterCode = true;
+        }
+        catch (err) {
+            const strErr = String(err);
+            this.emailErr = strErr.replace(/.+: /, "");
+            this.emailErr = this.emailErr.replace(/Username/, "Email");
+        }
+        
+    }
+
+    function confirmReset() {
+        this.enterCode = false;
+        this.enterNewPwd = true;
+    }
+
+    function matchPwd() {
+        return (this.firstPass == this.secondPass);
+    }
+
+    async function resetPassword() {
+        try {
+            if (!this.matchPwd()) throw Error("Passwords do not match");
+
+            await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
+
+            this.$router.push({ path: '/tabs/home'});
+        }
+        catch (err) {
+            const strErr = String(err);
+            this.resetErr = strErr.replace(/.+: /, "");
+            this.resetErr = this.resetErr.replace(/Username/, "Email");
+        }
+    }
+
+    watch(this.firstPass, () => {
+        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+        else this.resetErr = "";
+    });
+    
+    watch(this.secondPass, () => {
+        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
+        else this.resetErr = "";
+    });
+
+    watch(this.code, () => {
+        if (this.code.length == 6) this.confirmReset();
+    });
+
     return {
       userId: "",
       tempUserList: [],
@@ -87,56 +140,6 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    async sendReset() {
-        try {
-            await Auth.forgotPassword(this.email);
-            
-            this.enterEmail = false;
-            this.enterCode = true;
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.emailErr = strErr.replace(/.+: /, "");
-            this.emailErr = this.emailErr.replace(/Username/, "Email");
-        }
-        
-    },
-    confirmReset() {
-        this.enterCode = false;
-        this.enterNewPwd = true;
-    },
-    matchPwd() {
-        return (this.firstPass == this.secondPass);
-    },
-    async resetPassword() {
-        try {
-            if (!this.matchPwd()) throw Error("Passwords do not match");
-
-            await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
-
-            this.$router.push({ path: '/tabs/home'});
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.resetErr = strErr.replace(/.+: /, "");
-            this.resetErr = this.resetErr.replace(/Username/, "Email");
-        }
-    }
-  },
-  watch: {
-    firstPass() {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
-    },
-    secondPass() {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
-    },
-    code() {
-        if (this.code.length == 6) this.confirmReset();
-    }
   }
 });
 </script>

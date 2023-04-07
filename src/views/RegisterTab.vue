@@ -55,7 +55,7 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { watch, ref, defineComponent } from "vue";
+import { watch, defineComponent } from "vue";
 
 import { IonPage, IonContent } from "@ionic/vue";
 
