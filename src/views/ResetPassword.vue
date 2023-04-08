@@ -107,14 +107,14 @@ export default defineComponent({
       try {
         if (!matchPwd()) throw Error("Passwords do not match");
 
-            await Auth.forgotPasswordSubmit(email.value, code.value, secondPass.value);
+          await Auth.forgotPasswordSubmit(email.value, code.value, secondPass.value);
 
-            router.push({ path: '/tabs/home'});
+          router.push({ path: '/tabs/home'});
         }
         catch (err) {
           const strErr = String(err);
-            resetErr.value = strErr.replace(/.+: /, "");
-            resetErr.value = resetErr.value.replace(/Username/, "Email");
+          resetErr.value = strErr.replace(/.+: /, "");
+          resetErr.value = resetErr.value.replace(/Username/, "Email");
         }
     }
     watch(firstPass, () => {
