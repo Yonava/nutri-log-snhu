@@ -52,11 +52,14 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { watch, defineComponent } from "vue";
+import { watch, ref, defineComponent } from "vue";
+import { useRouter } from 'vue-router';
 
 import { IonPage, IonContent } from "@ionic/vue";
 
 import axios from "axios";
+
+const router = useRouter();
 
 export default defineComponent({
   components: {
@@ -64,70 +67,87 @@ export default defineComponent({
     IonContent
   },
   setup() {
+    const userId = ref("");
+    const tempUserList = ref([]);
+    const email = ref("");
+    const firstPass = ref("");
+    const secondPass = ref("");
+    const code = ref("");
+    const emailErr = ref("");
+    const codeErr = ref("");
+    const resetErr = ref("");
+    const enterEmail = ref(true);
+    const enterCode = ref(false);
+    const enterNewPwd = ref(false);
+
     async function sendReset() {
-        try {
-            await Auth.forgotPassword(this.email);
-            
-            this.enterEmail = false;
-            this.enterCode = true;
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.emailErr = strErr.replace(/.+: /, "");
-            this.emailErr = this.emailErr.replace(/Username/, "Email");
-        }
+      try {
+        await Auth.forgotPassword(email.value);
         
+        enterEmail.value = false;
+        enterCode.value = true;
+      }
+      catch (err) {
+        const strErr = String(err);
+        emailErr.value = strErr.replace(/.+: /, "");
+        emailErr.value = emailErr.value.replace(/Username/, "Email");
+      }
     }
 
     function confirmReset() {
-        this.enterCode = false;
-        this.enterNewPwd = true;
+        enterCode.value = false;
+        enterNewPwd.value = true;
     }
 
     function matchPwd() {
-        return (this.firstPass == this.secondPass);
+        return (firstPass.value == secondPass.value);
     }
 
     async function resetPassword() {
       try {
-        if (!this.matchPwd()) throw Error("Passwords do not match");
+        if (!matchPwd()) throw Error("Passwords do not match");
 
-            await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
+            await Auth.forgotPasswordSubmit(email.value, code.value, secondPass.value);
 
-            this.$router.push({ path: '/tabs/home'});
+            router.push({ path: '/tabs/home'});
         }
         catch (err) {
           const strErr = String(err);
-            this.resetErr = strErr.replace(/.+: /, "");
-            this.resetErr = this.resetErr.replace(/Username/, "Email");
+            resetErr.value = strErr.replace(/.+: /, "");
+            resetErr.value = resetErr.value.replace(/Username/, "Email");
         }
     }
-    watch(this.firstPass, () => {
-      if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
+    watch(firstPass, () => {
+      if (!matchPwd()) resetErr.value = "Passwords do not match";
+        else resetErr.value = "";
     });
     
-    watch(this.secondPass, () => {
-      if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
+    watch(secondPass, () => {
+      if (!matchPwd()) resetErr.value = "Passwords do not match";
+        else resetErr.value = "";
     });
 
-    watch(this.code, () => {
-        if (this.code.length == 6) this.confirmReset();
+    watch(code, () => {
+        if (code.value.length == 6) confirmReset();
     });
 
     return {
-      userId: "",
-      tempUserList: [],
-      email: "",
-      firstPass: "",
-      secondPass: "",
-      emailErr: "",
-      codeErr: "",
-      resetErr: "",
-      enterEmail: true,
-      enterCode: false,
-      enterNewPwd: false
+      userId,
+      tempUserList,
+      email,
+      firstPass,
+      secondPass,
+      code,
+      emailErr,
+      codeErr,
+      resetErr,
+      enterEmail,
+      enterCode,
+      enterNewPwd,
+      sendReset,
+      confirmReset,
+      matchPwd,
+      resetPassword
     }
   },
   created() {
