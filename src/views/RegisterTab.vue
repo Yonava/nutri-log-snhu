@@ -34,20 +34,10 @@
           <div class="subtext">Already have an account? <a class="subtext-link" @click="$router.back()">Sign In</a></div>
         </div>
       </div>
-      <div class="register-box" v-if="confirmSignUp">
-        <h1>Confirm Registration</h1>
-        <h5>A confirmation email was {{ sendLevel }} to {{ email }}</h5>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="code" @keyup.enter="confirmAcct" required>
-            <span></span>
-            <label>Confirmation Code</label>
-          </div>
-          <div class="register-err" v-if="confirmErr != ''">{{ confirmErr }}</div>
-          <div class="subtext">Didn't get an email? <button class="subtext-link" @click="resendCode">Resend Code</button></div>
-          <div class="subtext">Already have an account? <a class="subtext-link" @click="$router.back()">Sign In</a></div>
-        </div>
-      </div>
+      <VerificationCode
+        v-if="confirmSignUp"
+        @confirmCode="code.value = $event"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -57,17 +47,17 @@ import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { watch, ref, defineComponent } from "vue";
 import { useRouter } from 'vue-router';
-
 import { IonPage, IonContent } from "@ionic/vue";
-
 import axios from "axios";
+import VerificationCode from "../components/Login/VerificationCode.vue";
 
 const router = useRouter();
 
 export default defineComponent({
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    VerificationCode
   },
   setup() {
     const fname = ref("");

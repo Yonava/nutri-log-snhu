@@ -14,19 +14,10 @@
           <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
         </div>
       </div>
-      <div class="reset-box" v-if="enterCode">
-        <h1>Reset Code</h1>
-        <h5>If an account with that email exists, you will receive a confirmation code</h5>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="code" @keyup.enter="confirmReset" required>
-            <span></span>
-            <label>Confirmation Code</label>
-          </div>
-          <div class="reset-err" v-if="codeErr != ''">{{ codeErr }}</div>
-          <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
-        </div>
-      </div>
+      <VerificationCode
+        v-if="enterCode"
+        @confirmCode="code = $event"
+      />
       <div class="reset-box" v-if="enterNewPwd">
         <h1>Enter New Password</h1>
         <div class="form">
@@ -54,17 +45,17 @@ import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { watch, ref, defineComponent } from "vue";
 import { useRouter } from 'vue-router';
-
 import { IonPage, IonContent } from "@ionic/vue";
-
 import axios from "axios";
+import VerificationCode from "../components/Login/VerificationCode.vue";
 
 const router = useRouter();
 
 export default defineComponent({
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    VerificationCode
   },
   setup() {
     const userId = ref("");
