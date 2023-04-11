@@ -14,15 +14,15 @@
 			>
 					<div class="card-parent ion-padding">
 						<div class="card-content center">
-							<div style="font-weight: 700; font-size: 0.7rem; color: rgb(150, 150, 150)">
+							<div style="font-weight: 700; font-size: 0.8rem; color: rgb(150, 150, 150)">
 								{{ notif.date.toLocaleString() }}
 							</div>
-							<div style="margin-bottom: 15px; font-weight: 200; color: rgb(50, 50, 50)">
+							<div style="margin-top: 15px; font-weight: 200; color: rgb(50, 50, 50)">
 								{{ notif.content }}
 							</div>
 						</div>
-						<div>
-							dismiss
+						<div class="ion-float-right">
+							<button className="dismiss-link" @click="removeItem(notif._id)">DISMISS</button>
 						</div>
 					</div>
 				</div>
@@ -101,6 +101,12 @@ ion-icon {
 	border-radius: 10px;
 	justify-content: space-around;
 	flex-direction: row;
+}
+
+.dismiss-link{
+	background: none;
+	margin-bottom: 80;
+    color: #3880ff;
 }
 </style>
   
