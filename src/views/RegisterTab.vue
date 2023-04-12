@@ -36,7 +36,7 @@
       </div>
       <VerificationCode
         v-if="confirmSignUp"
-        @confirmCode="code.value = $event"
+        @confirmCode="code = $event"
       />
     </ion-content>
   </ion-page>
