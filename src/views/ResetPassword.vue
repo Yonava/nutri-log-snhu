@@ -17,6 +17,7 @@
       <VerificationCode
         v-if="enterCode"
         @confirmCode="code = $event"
+        :email="email"
       />
       <div class="reset-box" v-if="enterNewPwd">
         <h1>Enter New Password</h1>
@@ -65,7 +66,6 @@ export default defineComponent({
     const secondPass = ref("");
     const code = ref("");
     const emailErr = ref("");
-    const codeErr = ref("");
     const resetErr = ref("");
     const enterEmail = ref(true);
     const enterCode = ref(false);
@@ -130,7 +130,6 @@ export default defineComponent({
       secondPass,
       code,
       emailErr,
-      codeErr,
       resetErr,
       enterEmail,
       enterCode,

@@ -37,6 +37,7 @@
       <VerificationCode
         v-if="confirmSignUp"
         @confirmCode="code = $event"
+        :email="email"
       />
     </ion-content>
   </ion-page>
@@ -51,8 +52,6 @@ import { IonPage, IonContent } from "@ionic/vue";
 import axios from "axios";
 import VerificationCode from "../components/Login/VerificationCode.vue";
 
-const router = useRouter();
-
 export default defineComponent({
   components: {
     IonPage,
@@ -60,6 +59,7 @@ export default defineComponent({
     VerificationCode
   },
   setup() {
+    const router = useRouter();
     const fname = ref("");
     const lname = ref("");
     const email = ref("");
@@ -96,24 +96,12 @@ export default defineComponent({
     async function confirmAcct() {
         try {
             await Auth.confirmSignUp(email.value, code.value);
-            router.push({ path: '/tabs/home' });
+            router.push({ path: '/' });
         }
         catch (err) {
             const strErr = String(err);
             confirmErr.value = strErr.replace(/.+: /, "");
             confirmErr.value = registerErr.value.replace(/Username/, "Email");
-        }
-    }
-
-    async function resendCode() {
-        try {
-            await Auth.resendSignUp(email.value);
-            sendLevel.value = "resent";
-        }
-        catch (err) {
-            const strErr = String(err);
-            confirmErr.value = strErr.replace(/.+: /, "");
-            confirmErr.value = confirmErr.value.replace(/Username/, "Email");
         }
     }
 
@@ -145,8 +133,7 @@ export default defineComponent({
       sendLevel,
       matchPwd,
       createAcct,
-      confirmAcct,
-      resendCode
+      confirmAcct
     }
   },
   created() {

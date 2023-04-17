@@ -5,17 +5,17 @@
         <h1>Login</h1>
         <div class="form">
           <div class="text-field">
-            <input type="text" v-model="email" @keyup.enter="signIn" required>
+            <input type="text" v-model="email" @keyup.enter="login" required>
             <span></span>
             <label>Email</label>
           </div>
           <div class="text-field">
-            <input type="password" v-model="password" @keyup.enter="signIn" required>
+            <input type="password" v-model="password" @keyup.enter="login" required>
             <span></span>
             <label>Password</label>
           </div>
           <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
-          <input type="submit" value="Login" @click="signIn">
+          <input type="submit" value="Login" @click="login">
           <div class="pass-reset"><router-link class="reset-link" to="/reset-password">Forgot Password?</router-link></div>
           <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
@@ -27,11 +27,12 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { defineComponent } from "vue";
+import { ref, defineComponent } from "vue";
+import { useRouter } from 'vue-router';
 
 import { IonPage, IonContent } from "@ionic/vue";
 
-import axios from "axios";
+// import axios from "axios";
 
 export default defineComponent({
   components: {
@@ -39,46 +40,37 @@ export default defineComponent({
     IonContent
   },
   setup() {
-    async function signIn() {
-      try {
-        if (this.email === "" || this.password === "") throw Error("Username and password cannot be empty");
+    const router = useRouter();
+    const userId = ref("");
+    const email = ref("");
+    const password = ref("");
+    const loginErr = ref("");
 
-        const user = await Auth.signIn(this.email, this.password);
+    async function login() {
+      try {
+        if (email.value === "" || password.value === "") throw Error("Username and password cannot be empty");
+
+        const user = await Auth.signIn(email.value, password.value);
         console.log(`User: ${user.username}`);
-        this.$router.push({ path: '/' });
+        router.push({ path: '/' });
       } catch (err) {
         const strErr = String(err); // make the error a string for printing
         // Remove the error type from the string
         if (strErr.includes("User does not exist")) {
-          this.loginErr = "Username or password is incorrect";
+          loginErr.value = "Username or password is incorrect";
           return;
         }
-        this.loginErr = strErr.replace(/.+: /, "");
+        loginErr.value = strErr.replace(/.+: /, "");
       }
     }
 
-    function tempSignIn(userId) {
-      localStorage.setItem("userId", userId);
-      window.location.replace("/");
-    }
-
     return {
-      userId: "",
-      tempUserList: [],
-      email: "",
-      password: "",
-      loginErr: ""
+      userId,
+      email,
+      password,
+      loginErr,
+      login
     }
-  },
-  created() {
-    axios
-      .get("/users")
-      .then((res) => {
-        this.tempUserList = res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 });
 </script>

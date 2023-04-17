@@ -1,32 +1,54 @@
 <template>
-<div class="reset-box">
-        <h1>Reset Code</h1>
-        <h5>If an account with that email exists, you will receive a confirmation code</h5>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="code" @keyup.enter="confirmReset" required>
-            <span></span>
-            <label>Confirmation Code</label>
-          </div>
-          <div class="reset-err" v-if="codeErr != ''">{{ codeErr }}</div>
-          <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
-        </div>
+  <div class="reset-box">
+    <h1>Reset Code</h1>
+    <h5>A confirmation code was {{ sendLevel }} to {{ email }}</h5>
+    <div class="form">
+      <div class="text-field">
+        <input type="text" v-model="code" @keyup.enter="confirmReset" required>
+        <span></span>
+        <label>Confirmation Code</label>
       </div>
+      <div class="reset-err" v-if="codeErr != ''">{{ codeErr }}</div>
+      <div class="register">Didn't receive an email? <div class="register-link" @click="resendCode">Resend Code</div></div>
+      <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { watch, ref, defineEmits } from 'vue';
+import { watch, ref, defineEmits, defineProps } from 'vue';
+import { Auth } from 'aws-amplify';
+
+const props = defineProps({
+  email: {
+    type: String,
+    required: true
+  }
+});
 
 const emit = defineEmits(['confirmCode']);
 const code = ref("");
 const codeErr = ref("");
+const sendLevel = ref("sent");
 
 function confirmReset() {
   if (code.value.length == 6) emit('confirmCode', code.value);
 }
 
+async function resendCode() {
+  try {
+    await Auth.resendSignUp(props.email);
+    sendLevel.value = "resent";
+  }
+  catch (err) {
+    const strErr = String(err);
+    codeErr.value = strErr.replace(/.+: /, "");
+    codeErr.value = codeErr.value.replace(/Username/, "Email");
+  }
+}
+
 watch(code, () => {
-    confirmReset();
+  confirmReset();
 })
 </script>
 
@@ -150,5 +172,10 @@ input[type="submit"]:hover {
 .register-link {
   color: #2691d9;
   text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
