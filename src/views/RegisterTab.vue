@@ -151,6 +151,10 @@ export default defineComponent({
 
 <style scoped>
 /* page */
+body {
+  position: relative;
+}
+
 ion-content {
   --background: linear-gradient(-45deg, rgba(0,34,50,1) 0%, rgba(11,80,98,1) 54%, rgba(38,193,217,1) 100%);
 }
@@ -158,10 +162,10 @@ ion-content {
 /* Register box */
 .register-box {
   position: absolute;
-  top: 70%;
+  top: 77%;
   left: 50%;
   transform: translate(-50%, -80%);
-  width: 350px;
+  scale: 30%;
   background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }

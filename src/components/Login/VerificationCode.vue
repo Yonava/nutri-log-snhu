@@ -57,7 +57,7 @@ watch(code, () => {
 /* Login box */
 .reset-box {
   position: absolute;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -80%);
   width: 390px;

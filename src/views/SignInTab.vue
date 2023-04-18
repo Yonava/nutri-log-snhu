@@ -84,9 +84,10 @@ ion-content {
 /* Login box */
 .login-box {
   position: absolute;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -80%);
+  height: 400px;
   width: 350px;
   background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
