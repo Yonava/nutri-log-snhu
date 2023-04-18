@@ -28,6 +28,7 @@
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { ref, defineComponent } from "vue";
+import { init } from '../initState'
 import { useRouter } from 'vue-router';
 
 import { IonPage, IonContent } from "@ionic/vue";
@@ -50,8 +51,9 @@ export default defineComponent({
       try {
         if (email.value === "" || password.value === "") throw Error("Username and password cannot be empty");
 
-        const user = await Auth.signIn(email.value, password.value);
-        console.log(`User: ${user.username}`);
+        await Auth.signIn(email.value, password.value);
+        localStorage.setItem('email', email.value);
+        init();
         router.push({ path: '/' });
       } catch (err) {
         const strErr = String(err); // make the error a string for printing

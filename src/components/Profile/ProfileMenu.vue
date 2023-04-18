@@ -29,7 +29,7 @@
           </div>
           <div class="center">
             <ion-button
-              @click="$router.push({ name: 'SignIn' })"
+              @click="logout"
               color="danger" 
               style="width: 90%"
             >Logout</ion-button>
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed } from "vue";
 import {
   IonContent,
   IonButton,
@@ -50,6 +50,7 @@ import {
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { Auth } from 'aws-amplify';
 
 export default defineComponent({
   components: {
@@ -60,6 +61,17 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+
+    async function logout() {
+      try {
+        await Auth.signOut();
+        router.push({ path: '/signin' });
+        localStorage.setItem('email', '');
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
 
     const firstName = computed(() => {
       return store.getters.isLoggedIn ? store.getters.user.firstName : "";
@@ -91,7 +103,8 @@ export default defineComponent({
     return {
       firstName,
       store,
-      buttons
+      buttons,
+      logout
     };
   }
 });

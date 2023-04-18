@@ -49,6 +49,7 @@ import "@aws-amplify/ui-vue/styles.css";
 import { watch, ref, defineComponent } from "vue";
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from "@ionic/vue";
+import { init } from '../initState'
 import axios from "axios";
 import VerificationCode from "../components/Login/VerificationCode.vue";
 
@@ -96,6 +97,38 @@ export default defineComponent({
     async function confirmAcct() {
         try {
             await Auth.confirmSignUp(email.value, code.value);
+            await Auth.signIn(email.value, secondPass.value);
+            localStorage.setItem('email', email.value);
+
+            await axios.post(`/users`, {
+              log: [],
+              email: email.value,
+              firstName: fname.value,
+              lastName: lname.value,
+              dailyTargets: {
+                calories: 2000,
+                macro: {
+                  carbohydrates: {total: 300, added_sugars: 50, sugars: 50},
+                  fat: {total: 65, saturated: 20, trans: 2},
+                  protein: 50,
+                  fiber: 25,
+                  sodium: 2300,
+                  cholesterol: 300,
+                  calcium: 1000,
+                  potassium: 3500,
+                  iron: 18
+                }
+              },
+              customItems: []
+            })
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err.response.data);
+            });
+
+            init();
             router.push({ path: '/' });
         }
         catch (err) {
@@ -165,7 +198,7 @@ ion-content {
   top: 77%;
   left: 50%;
   transform: translate(-50%, -80%);
-  scale: 30%;
+  width: 350px;
   background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }

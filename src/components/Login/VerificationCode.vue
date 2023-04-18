@@ -1,6 +1,6 @@
 <template>
   <div class="reset-box">
-    <h1>Reset Code</h1>
+    <h1>Confirmation Code</h1>
     <h5>A confirmation code was {{ sendLevel }} to {{ email }}</h5>
     <div class="form">
       <div class="text-field">

@@ -11,10 +11,17 @@ export async function init() {
 
   await vuexStore.dispatch("configClientStore");
 
-  if (localStorage.getItem("userId")) {
-    let user;
+  if (localStorage.getItem('email') != '') {
+    let response, user;
+    const userEmail = localStorage.getItem('email');
     try {
-      user = await axios.get(`/users/${localStorage.getItem("userId")}`);
+      response = await axios.get(`/users`)
+      .then(response => response.data);
+
+      response.forEach((element: any) => {
+        if (element.email == userEmail) user = element;
+      });
+      if (user === undefined) return;
       const { 
         log, 
         email, 
@@ -23,7 +30,7 @@ export async function init() {
         dailyTargets, 
         customItems,
         _id
-      } = user.data;
+      } = user;
       vuexStore.commit("setUser", { email, firstName, lastName, _id });
       vuexStore.commit("setLog", log);
       vuexStore.commit("setCustomItems", customItems);
