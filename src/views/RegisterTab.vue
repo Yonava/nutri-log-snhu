@@ -31,23 +31,14 @@
           </div>
           <div class="register-err" v-if="registerErr != ''">{{ registerErr }}</div>
           <input type="submit" value="Create Account" @click="createAcct">
-          <div class="subtext">Already have an account? <router-link class="subtext-link" to="/signin">Sign In</router-link></div>
+          <div class="subtext">Already have an account? <a class="subtext-link" @click="$router.back()">Sign In</a></div>
         </div>
       </div>
-      <div class="register-box" v-if="confirmSignUp">
-        <h1>Confirm Registration</h1>
-        <h5>A confirmation email was {{ sendLevel }} to {{ email }}</h5>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="code" @keyup.enter="confirmAcct" required>
-            <span></span>
-            <label>Confirmation Code</label>
-          </div>
-          <div class="register-err" v-if="confirmErr != ''">{{ confirmErr }}</div>
-          <div class="subtext">Didn't get an email? <button class="subtext-link" @click="resendCode">Resend Code</button></div>
-          <div class="subtext">Already have an account? <router-link class="subtext-link" to="/signin">Sign In</router-link></div>
-        </div>
-      </div>
+      <VerificationCode
+        v-if="confirmSignUp"
+        @confirmCode="code = $event"
+        :email="email"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -55,30 +46,127 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { defineComponent } from "vue";
-
+import { watch, ref, defineComponent } from "vue";
+import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from "@ionic/vue";
-
+import { init } from '../initState'
 import axios from "axios";
+import VerificationCode from "../components/Login/VerificationCode.vue";
 
 export default defineComponent({
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    VerificationCode
   },
-  data() {
+  setup() {
+    const router = useRouter();
+    const fname = ref("");
+    const lname = ref("");
+    const email = ref("");
+    const firstPass = ref("");
+    const secondPass = ref("");
+    const code = ref("");
+    const registerErr = ref("");
+    const confirmErr = ref("");
+    const registerUser = ref(true);
+    const confirmSignUp = ref(false);
+    const sendLevel = ref("sent");
+    
+    function matchPwd() {
+        return (firstPass.value == secondPass.value);
+    }
+
+    async function createAcct() {
+        try {
+            if (!matchPwd()) throw Error("Passwords do not match");
+
+            const user = await Auth.signUp(email.value, secondPass.value);
+            console.log(user);
+
+            registerUser.value = false;
+            confirmSignUp.value = true;
+        }
+        catch (err) {
+            const strErr = String(err);
+            registerErr.value = strErr.replace(/.+: /, "");
+            registerErr.value = registerErr.value.replace(/Username/, "Email");
+        }
+    }
+
+    async function confirmAcct() {
+        try {
+            await Auth.confirmSignUp(email.value, code.value);
+            await Auth.signIn(email.value, secondPass.value);
+            localStorage.setItem('email', email.value);
+
+            await axios.post(`/users`, {
+              log: [],
+              email: email.value,
+              firstName: fname.value,
+              lastName: lname.value,
+              dailyTargets: {
+                calories: 2000,
+                macro: {
+                  carbohydrates: {total: 300, added_sugars: 50, sugars: 50},
+                  fat: {total: 65, saturated: 20, trans: 2},
+                  protein: 50,
+                  fiber: 25,
+                  sodium: 2300,
+                  cholesterol: 300,
+                  calcium: 1000,
+                  potassium: 3500,
+                  iron: 18
+                }
+              },
+              customItems: []
+            })
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err.response.data);
+            });
+
+            init();
+            router.push({ path: '/' });
+        }
+        catch (err) {
+            const strErr = String(err);
+            confirmErr.value = strErr.replace(/.+: /, "");
+            confirmErr.value = registerErr.value.replace(/Username/, "Email");
+        }
+    }
+
+    watch(firstPass, () => {
+        if (!matchPwd()) registerErr.value = "Passwords do not match";
+        else registerErr.value = "";
+    });
+
+    watch(secondPass, () => {
+        if (!matchPwd()) registerErr.value = "Passwords do not match";
+        else registerErr.value = "";
+    });
+
+    watch(code, () => {
+        if (code.value.length == 6) confirmAcct();
+    });
+
     return {
-      fname: "",
-      lname: "",
-      email: "",
-      firstPass: "",
-      secondPass: "",
-      code: "",
-      registerErr: "",
-      confirmErr: "",
-      registerUser: true,
-      confirmSignUp: false,
-      sendLevel: "sent"
+      fname,
+      lname,
+      email,
+      firstPass,
+      secondPass,
+      code,
+      registerErr,
+      confirmErr,
+      registerUser,
+      confirmSignUp,
+      sendLevel,
+      matchPwd,
+      createAcct,
+      confirmAcct
     }
   },
   created() {
@@ -90,68 +178,16 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    matchPwd() {
-        return (this.firstPass == this.secondPass);
-    },
-    async createAcct() {
-        try {
-            if (!this.matchPwd()) throw Error("Passwords do not match");
-
-            const user = await Auth.signUp(this.email, this.secondPass);
-            console.log(user);
-
-            this.registerUser = false;
-            this.confirmSignUp = true;
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.registerErr = strErr.replace(/.+: /, "");
-            this.registerErr = this.registerErr.replace(/Username/, "Email");
-        }
-    },
-    async confirmAcct() {
-        try {
-            await Auth.confirmSignUp(this.email, this.code);
-            this.$router.push({ path: '/tabs/home' });
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.registerErr.replace(/Username/, "Email");
-        }
-    },
-    async resendCode() {
-        try {
-            await Auth.resendSignUp(this.email);
-            this.sendLevel = "resent";
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.confirmErr = strErr.replace(/.+: /, "");
-            this.confirmErr = this.confirmErr.replace(/Username/, "Email");
-        }
-    }
-  },
-  watch: {
-    firstPass() {
-        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
-        else this.registerErr = "";
-    },
-    secondPass() {
-        if (!this.matchPwd()) this.registerErr = "Passwords do not match";
-        else this.registerErr = "";
-    },
-    code() {
-        if (this.code.length == 6) this.confirmAcct();
-    }
   }
 });
 </script>
 
 <style scoped>
 /* page */
+body {
+  position: relative;
+}
+
 ion-content {
   --background: linear-gradient(-45deg, rgba(0,34,50,1) 0%, rgba(11,80,98,1) 54%, rgba(38,193,217,1) 100%);
 }
@@ -159,7 +195,7 @@ ion-content {
 /* Register box */
 .register-box {
   position: absolute;
-  top: 70%;
+  top: 77%;
   left: 50%;
   transform: translate(-50%, -80%);
   width: 350px;

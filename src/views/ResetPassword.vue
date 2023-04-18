@@ -14,19 +14,11 @@
           <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
         </div>
       </div>
-      <div class="reset-box" v-if="enterCode">
-        <h1>Reset Code</h1>
-        <h5>If an account with that email exists, you will receive a confirmation code</h5>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="code" @keyup.enter="confirmReset" required>
-            <span></span>
-            <label>Confirmation Code</label>
-          </div>
-          <div class="reset-err" v-if="codeErr != ''">{{ codeErr }}</div>
-          <div class="register">Back to <router-link class="register-link" to="/signin">Sign-In</router-link></div>
-        </div>
-      </div>
+      <VerificationCode
+        v-if="enterCode"
+        @confirmCode="code = $event"
+        :email="email"
+      />
       <div class="reset-box" v-if="enterNewPwd">
         <h1>Enter New Password</h1>
         <div class="form">
@@ -52,30 +44,100 @@
 <script>
 import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
-import { defineComponent } from "vue";
-
+import { watch, ref, defineComponent } from "vue";
+import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from "@ionic/vue";
-
 import axios from "axios";
+import VerificationCode from "../components/Login/VerificationCode.vue";
+
+const router = useRouter();
 
 export default defineComponent({
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    VerificationCode
   },
-  data() {
+  setup() {
+    const userId = ref("");
+    const tempUserList = ref([]);
+    const email = ref("");
+    const firstPass = ref("");
+    const secondPass = ref("");
+    const code = ref("");
+    const emailErr = ref("");
+    const resetErr = ref("");
+    const enterEmail = ref(true);
+    const enterCode = ref(false);
+    const enterNewPwd = ref(false);
+
+    async function sendReset() {
+      try {
+        await Auth.forgotPassword(email.value);
+        
+        enterEmail.value = false;
+        enterCode.value = true;
+      }
+      catch (err) {
+        const strErr = String(err);
+        emailErr.value = strErr.replace(/.+: /, "");
+        emailErr.value = emailErr.value.replace(/Username/, "Email");
+      }
+    }
+
+    function confirmReset() {
+        enterCode.value = false;
+        enterNewPwd.value = true;
+    }
+
+    function matchPwd() {
+        return (firstPass.value == secondPass.value);
+    }
+
+    async function resetPassword() {
+      try {
+        if (!matchPwd()) throw Error("Passwords do not match");
+
+          await Auth.forgotPasswordSubmit(email.value, code.value, secondPass.value);
+
+          router.push({ path: '/tabs/home'});
+        }
+        catch (err) {
+          const strErr = String(err);
+          resetErr.value = strErr.replace(/.+: /, "");
+          resetErr.value = resetErr.value.replace(/Username/, "Email");
+        }
+    }
+    watch(firstPass, () => {
+      if (!matchPwd()) resetErr.value = "Passwords do not match";
+        else resetErr.value = "";
+    });
+    
+    watch(secondPass, () => {
+      if (!matchPwd()) resetErr.value = "Passwords do not match";
+        else resetErr.value = "";
+    });
+
+    watch(code, () => {
+        if (code.value.length == 6) confirmReset();
+    });
+
     return {
-      userId: "",
-      tempUserList: [],
-      email: "",
-      firstPass: "",
-      secondPass: "",
-      emailErr: "",
-      codeErr: "",
-      resetErr: "",
-      enterEmail: true,
-      enterCode: false,
-      enterNewPwd: false
+      userId,
+      tempUserList,
+      email,
+      firstPass,
+      secondPass,
+      code,
+      emailErr,
+      resetErr,
+      enterEmail,
+      enterCode,
+      enterNewPwd,
+      sendReset,
+      confirmReset,
+      matchPwd,
+      resetPassword
     }
   },
   created() {
@@ -87,56 +149,6 @@ export default defineComponent({
       .catch((err) => {
         console.log(err);
       });
-  },
-  methods: {
-    async sendReset() {
-        try {
-            await Auth.forgotPassword(this.email);
-            
-            this.enterEmail = false;
-            this.enterCode = true;
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.emailErr = strErr.replace(/.+: /, "");
-            this.emailErr = this.emailErr.replace(/Username/, "Email");
-        }
-        
-    },
-    confirmReset() {
-        this.enterCode = false;
-        this.enterNewPwd = true;
-    },
-    matchPwd() {
-        return (this.firstPass == this.secondPass);
-    },
-    async resetPassword() {
-        try {
-            if (!this.matchPwd()) throw Error("Passwords do not match");
-
-            await Auth.forgotPasswordSubmit(this.email, this.code, this.secondPass);
-
-            this.$router.push({ path: '/tabs/home'});
-        }
-        catch (err) {
-            const strErr = String(err);
-            this.resetErr = strErr.replace(/.+: /, "");
-            this.resetErr = this.resetErr.replace(/Username/, "Email");
-        }
-    }
-  },
-  watch: {
-    firstPass() {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
-    },
-    secondPass() {
-        if (!this.matchPwd()) this.resetErr = "Passwords do not match";
-        else this.resetErr = "";
-    },
-    code() {
-        if (this.code.length == 6) this.confirmReset();
-    }
   }
 });
 </script>
@@ -150,7 +162,7 @@ ion-content {
 /* Login box */
 .reset-box {
   position: absolute;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -80%);
   width: 390px;
