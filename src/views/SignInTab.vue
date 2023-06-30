@@ -1,24 +1,36 @@
 <template>
   <ion-page>
     <ion-content :force-overscroll="false">
-      <div class="login-box">
-        <h1>Login</h1>
-        <div class="form">
-          <div class="text-field">
-            <input type="text" v-model="email" @keyup.enter="signIn" required>
-            <span></span>
-            <label>Email</label>
+      <div style="display: flex; justify-content: center; align-items: center; padding: 16px;">
+        <div
+          class="login-box"
+        >
+          <h1>Login</h1>
+          <div class="form">
+            <div class="text-field">
+              <input type="text" v-model="email" @keyup.enter="signIn" required>
+              <span></span>
+              <label>Email</label>
+            </div>
+            <div class="text-field">
+              <input type="password" v-model="password" @keyup.enter="signIn" required>
+              <span></span>
+              <label>Password</label>
+            </div>
+            <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
+            <div class="pass-reset"><router-link class="reset-link" to="/reset-password">Forgot Password?</router-link></div>
+            <input type="submit" value="Login" @click="signIn">
+            <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
           </div>
-          <div class="text-field">
-            <input type="password" v-model="password" @keyup.enter="signIn" required>
-            <span></span>
-            <label>Password</label>
-          </div>
-          <div class="login-err" v-if="loginErr != ''">{{ loginErr }}</div>
-          <div class="pass-reset"><router-link class="reset-link" to="/reset-password">Forgot Password?</router-link></div>
-          <input type="submit" value="Login" @click="signIn">
-          <div class="register">Don't have an account? <router-link class="register-link" to="/register">Register</router-link></div>
         </div>
+      </div>
+      <div style="padding: 0 16px 0 16px">
+        <IonButton
+          @click="tempSignIn('63fe6b98617bc5a755fc1bdd')"
+          style="width: 100%"
+        >
+          Continue As Yona
+        </IonButton>
       </div>
     </ion-content>
   </ion-page>
@@ -29,14 +41,15 @@ import { Auth } from "aws-amplify";
 import "@aws-amplify/ui-vue/styles.css";
 import { defineComponent } from "vue";
 
-import { IonPage, IonContent } from "@ionic/vue";
+import { IonPage, IonContent, IonButton } from "@ionic/vue";
 
 import axios from "axios";
 
 export default defineComponent({
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    IonButton
   },
   data() {
     return {
@@ -91,22 +104,16 @@ ion-content {
 
 /* Login box */
 .login-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -80%);
-  width: 350px;
+  width: 100%;
   background: rgba(9, 26, 63, 0.925);
   border-radius: 10px;
 }
 
 /* Login heading */
 .login-box h1 {
-  color: rgb(192, 185, 185);
-  font-size: 40px;
+  font-size: 44px;
+  font-weight: 600;
   text-align: center;
-  padding: 0 0 20px 0;
-  border-bottom: 1px solid rgb(192, 185, 185);
 }
 
 /* Adjust the contents of the login box */
